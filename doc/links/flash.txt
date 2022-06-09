@@ -1,0 +1,16 @@
+https://gist.github.com/TinyCircuits/8477e908a5dbdd99f03724b8e48ce397
+https://electronics.stackexchange.com/questions/439951/stm32-with-winbond-w25q80dv-write-data-issue
+
+
+2.3.7
+I2C1 with SPI1 remapped and used in master mode
+
+When the following conditions are met:
+ - I2C1 and SPI1 are clocked
+ - SPI1 is remapped
+I/O port pin PB5 is configured as an alternate function output
+    there is a conflict between the SPI1 MOSI and the I2C1 SMBA signals (even if SMBA is not used).
+
+Workaround
+Do not use SPI1 remapped in master mode and I2C1 together.
+When using SPI1 remapped, the I2C1 clock must be disabled.
