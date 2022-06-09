@@ -12,6 +12,8 @@ void Device::Init()
 
     Timer::Delay(500);
     
+    Beeper::Init();
+    
     Beeper::Run();
 }
 
