@@ -468,16 +468,6 @@
               <FileType>5</FileType>
               <FilePath>.\src\Device.h</FilePath>
             </File>
-            <File>
-              <FileName>Processor.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\Processor.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Processor.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\Processor.h</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -597,48 +587,9 @@
         </Group>
         <Group>
           <GroupName>Modules</GroupName>
-          <Files>
-            <File>
-              <FileName>ADC.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\Modules\ADC.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ADC.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\Modules\ADC.h</FilePath>
-            </File>
-            <File>
-              <FileName>Barrier.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\Modules\Barrier.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Barrier.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\Modules\Barrier.h</FilePath>
-            </File>
-          </Files>
         </Group>
         <Group>
           <GroupName>Utils</GroupName>
-          <Files>
-            <File>
-              <FileName>Math.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\Utils\Math.h</FilePath>
-            </File>
-            <File>
-              <FileName>Buffer.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\Utils\Buffer.h</FilePath>
-            </File>
-            <File>
-              <FileName>Math.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\Utils\Math.cpp</FilePath>
-            </File>
-          </Files>
         </Group>
       </Groups>
     </Target>
@@ -1104,16 +1055,6 @@
               <FileType>5</FileType>
               <FilePath>.\src\Device.h</FilePath>
             </File>
-            <File>
-              <FileName>Processor.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\Processor.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Processor.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\Processor.h</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -1233,48 +1174,9 @@
         </Group>
         <Group>
           <GroupName>Modules</GroupName>
-          <Files>
-            <File>
-              <FileName>ADC.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\Modules\ADC.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ADC.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\Modules\ADC.h</FilePath>
-            </File>
-            <File>
-              <FileName>Barrier.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\Modules\Barrier.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Barrier.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\Modules\Barrier.h</FilePath>
-            </File>
-          </Files>
         </Group>
         <Group>
           <GroupName>Utils</GroupName>
-          <Files>
-            <File>
-              <FileName>Math.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\Utils\Math.h</FilePath>
-            </File>
-            <File>
-              <FileName>Buffer.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\Utils\Buffer.h</FilePath>
-            </File>
-            <File>
-              <FileName>Math.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\Utils\Math.cpp</FilePath>
-            </File>
-          </Files>
         </Group>
       </Groups>
     </Target>
