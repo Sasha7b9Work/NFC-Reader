@@ -501,61 +501,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Hardware/CDC</GroupName>
-          <Files>
-            <File>
-              <FileName>usbd_conf.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\Hardware\CDC\usbd_conf.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_conf.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\Hardware\CDC\usbd_conf.h</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_desc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\Hardware\CDC\usbd_desc.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_desc.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\Hardware\CDC\usbd_desc.h</FilePath>
-            </File>
-            <File>
-              <FileName>CDC.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\Hardware\CDC\CDC.h</FilePath>
-            </File>
-            <File>
-              <FileName>CDC.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\Hardware\CDC\CDC.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_core.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\common\STM32Cube_F1\Middlewares\ST\STM32_USB_Device_Library\Core\Src\usbd_core.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_ioreq.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\common\STM32Cube_F1\Middlewares\ST\STM32_USB_Device_Library\Core\Src\usbd_ioreq.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_cdc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\common\STM32Cube_F1\Middlewares\ST\STM32_USB_Device_Library\Class\CDC\Src\usbd_cdc.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_ctlreq.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\common\STM32Cube_F1\Middlewares\ST\STM32_USB_Device_Library\Core\Src\usbd_ctlreq.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>Hardware/HAL</GroupName>
           <Files>
             <File>
@@ -569,27 +514,16 @@
               <FilePath>.\src\Hardware\HAL\HAL.h</FilePath>
             </File>
             <File>
-              <FileName>HAL_I2C.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\Hardware\HAL\HAL_I2C.cpp</FilePath>
-            </File>
-            <File>
               <FileName>HAL_IT.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\src\Hardware\HAL\HAL_IT.cpp</FilePath>
             </File>
             <File>
-              <FileName>HAL_CONF.h</FileName>
+              <FileName>stm32f1xx_hal_conf.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\src\Hardware\HAL\HAL_CONF.h</FilePath>
+              <FilePath>.\src\Hardware\HAL\stm32f1xx_hal_conf.h</FilePath>
             </File>
           </Files>
-        </Group>
-        <Group>
-          <GroupName>Modules</GroupName>
-        </Group>
-        <Group>
-          <GroupName>Utils</GroupName>
         </Group>
       </Groups>
     </Target>
@@ -1088,61 +1022,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Hardware/CDC</GroupName>
-          <Files>
-            <File>
-              <FileName>usbd_conf.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\Hardware\CDC\usbd_conf.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_conf.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\Hardware\CDC\usbd_conf.h</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_desc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\Hardware\CDC\usbd_desc.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_desc.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\Hardware\CDC\usbd_desc.h</FilePath>
-            </File>
-            <File>
-              <FileName>CDC.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\Hardware\CDC\CDC.h</FilePath>
-            </File>
-            <File>
-              <FileName>CDC.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\Hardware\CDC\CDC.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_core.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\common\STM32Cube_F1\Middlewares\ST\STM32_USB_Device_Library\Core\Src\usbd_core.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_ioreq.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\common\STM32Cube_F1\Middlewares\ST\STM32_USB_Device_Library\Core\Src\usbd_ioreq.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_cdc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\common\STM32Cube_F1\Middlewares\ST\STM32_USB_Device_Library\Class\CDC\Src\usbd_cdc.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_ctlreq.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\common\STM32Cube_F1\Middlewares\ST\STM32_USB_Device_Library\Core\Src\usbd_ctlreq.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>Hardware/HAL</GroupName>
           <Files>
             <File>
@@ -1156,27 +1035,16 @@
               <FilePath>.\src\Hardware\HAL\HAL.h</FilePath>
             </File>
             <File>
-              <FileName>HAL_I2C.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\Hardware\HAL\HAL_I2C.cpp</FilePath>
-            </File>
-            <File>
               <FileName>HAL_IT.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\src\Hardware\HAL\HAL_IT.cpp</FilePath>
             </File>
             <File>
-              <FileName>HAL_CONF.h</FileName>
+              <FileName>stm32f1xx_hal_conf.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\src\Hardware\HAL\HAL_CONF.h</FilePath>
+              <FilePath>.\src\Hardware\HAL\stm32f1xx_hal_conf.h</FilePath>
             </File>
           </Files>
-        </Group>
-        <Group>
-          <GroupName>Modules</GroupName>
-        </Group>
-        <Group>
-          <GroupName>Utils</GroupName>
         </Group>
       </Groups>
     </Target>

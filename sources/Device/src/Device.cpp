@@ -2,7 +2,6 @@
 #include "defines.h"
 #include "Device.h"
 #include "Hardware/HAL/HAL.h"
-#include "Hardware/CDC/CDC.h"
 #include "Hardware/Timer.h"
 
 

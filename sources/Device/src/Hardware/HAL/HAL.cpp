@@ -1,7 +1,6 @@
 // (c) Aleksandr Shevchenko e-mail : Sasha7b9@tut.by
 #include "defines.h"
 #include "Hardware/HAL/HAL.h"
-#include "Hardware/CDC/CDC.h"
 #include <stm32f1xx_hal.h>
 
 
@@ -18,17 +17,7 @@ void HAL::Init()
 
     __HAL_RCC_GPIOA_CLK_ENABLE();
     __HAL_RCC_GPIOB_CLK_ENABLE();
-    __HAL_RCC_GPIOC_CLK_ENABLE();
-
-    HAL_I2C1::Init();
-
-    CDC::Init();
-}
-
-
-void HAL::Delay(unsigned int timeMS)
-{
-    HAL_Delay(timeMS);
+    __HAL_RCC_GPIOD_CLK_ENABLE();
 }
 
 
