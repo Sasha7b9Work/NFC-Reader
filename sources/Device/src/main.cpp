@@ -2,13 +2,6 @@
 #include "Device.h"
 
 
-/*
-* B8, B9 - мотор
-* B6 - сброс напряжения
-*/
-
-
-
 int main(void)
 {
     Device::Init();

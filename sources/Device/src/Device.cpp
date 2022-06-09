@@ -3,6 +3,7 @@
 #include "Device.h"
 #include "Hardware/HAL/HAL.h"
 #include "Hardware/Timer.h"
+#include "Hardware/Beeper.h"
 
 
 void Device::Init()
@@ -10,9 +11,12 @@ void Device::Init()
     HAL::Init();
 
     Timer::Delay(500);
+    
+    Beeper::Run();
 }
 
 
 void Device::Update()
 {
+    Beeper::Update();
 }

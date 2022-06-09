@@ -483,6 +483,16 @@
               <FileType>5</FileType>
               <FilePath>.\src\Hardware\Timer.h</FilePath>
             </File>
+            <File>
+              <FileName>Beeper.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\Hardware\Beeper.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Beeper.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\Hardware\Beeper.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -573,7 +583,7 @@
           <OutputName>Device</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
-          <CreateHexFile>0</CreateHexFile>
+          <CreateHexFile>1</CreateHexFile>
           <DebugInformation>1</DebugInformation>
           <BrowseInformation>0</BrowseInformation>
           <ListingPath>.\Listings\</ListingPath>
@@ -1003,6 +1013,16 @@
               <FileName>Timer.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\src\Hardware\Timer.h</FilePath>
+            </File>
+            <File>
+              <FileName>Beeper.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\Hardware\Beeper.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Beeper.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\Hardware\Beeper.h</FilePath>
             </File>
           </Files>
         </Group>
