@@ -2,6 +2,7 @@
 #include "defines.h"
 #include "Modules/W25Q80DV/W25Q80DV.h"
 #include "Hardware/HAL/HAL.h"
+#include "Utils/Buffer.h"
 
 
 /*
@@ -28,41 +29,46 @@ namespace W25Q80DV
 }
 
 
-void W25Q80DV::Write256bytes(uint8 *buffer)
+void W25Q80DV::Write1024bytes(const uint8 *buffer, int size)
 {
     HAL_SPI::Init();
 
+    WaitRelease();
+
     HAL_SPI::Write(WRITE_ENABLE);
 
-    Write24bit(SECTOR_ERASE, 0);
+    Write24bit(SECTOR_ERASE, 0x000000);
 
     HAL_SPI::Write(WRITE_DISABLE);
 
+    WaitRelease();
+
     HAL_SPI::Write(WRITE_ENABLE);
 
-    int size = 1 + 3 + 256;
-
-    uint8 data[1 + 3 + 256];
+    Buffer<uint8, 1024> data;
 
     data[0] = PROGRAM_PAGE;
     data[1] = 0;
     data[2] = 0;
     data[3] = 0;
 
-    for (int i = 0; i < 256; i++)
+    for (int i = 0; i < size; i++)
     {
         data[4 + i] = buffer[i];
     }
 
-    HAL_SPI::Write(data, size);
+    //                                команда адрес
+    HAL_SPI::Write(data.Data(), size +   1   +  3);
 
     HAL_SPI::Write(WRITE_DISABLE);
 }
 
 
-void W25Q80DV::Read256bytes(uint8 *)
+void W25Q80DV::Read1024bytes(uint8 *buffer, int size)
 {
+    HAL_SPI::Init();
 
+    WaitRelease();
 }
 
 

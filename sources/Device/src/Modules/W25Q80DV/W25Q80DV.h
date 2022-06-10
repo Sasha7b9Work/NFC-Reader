@@ -4,7 +4,9 @@
 
 namespace W25Q80DV
 {
-    void Write256bytes(uint8 *buffer256);
+    // Размер буфера ограничен 1024 байтами
+    void Write1024bytes(const uint8 *buffer, int size);
 
-    void Read256bytes(uint8 *buffer256);
+    // Размер буфера ограничен 1024 байтами
+    void Read1024bytes(uint8 *buffer, int size);
 }

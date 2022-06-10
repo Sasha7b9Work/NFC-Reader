@@ -9,8 +9,7 @@
 #include <cstring>
 
 
-static uint8 buffer_write[256];
-static uint8 buffer_read[256];
+static bool TestFlashMemory();
 
 
 void Device::Init()
@@ -29,16 +28,7 @@ void Device::Init()
         Beeper::Update();
     }
 
-    for (int i = 0; i < 256; i++)
-    {
-        buffer_write[i] = (uint8)std::rand();
-    }
-
-    W25Q80DV::Write256bytes(buffer_write);
-
-    W25Q80DV::Read256bytes(buffer_read);
-
-    if (std::memcmp(buffer_write, buffer_read, 256) != 0)
+    if (!TestFlashMemory())
     {
         Beeper::Stop();
     }
@@ -48,4 +38,22 @@ void Device::Init()
 void Device::Update()
 {
     Beeper::Update();
+}
+
+
+static bool TestFlashMemory()
+{
+    static uint8 buffer_write[256];
+    static uint8 buffer_read[256];
+
+    for (int i = 0; i < 256; i++)
+    {
+        buffer_write[i] = (uint8)std::rand();
+    }
+
+    W25Q80DV::Write1024bytes(buffer_write, 256);
+
+    W25Q80DV::Read1024bytes(buffer_read, 256);
+
+    return (std::memcmp(buffer_write, buffer_read, 256) == 0);
 }

@@ -550,6 +550,16 @@
             </File>
           </Files>
         </Group>
+        <Group>
+          <GroupName>Utils</GroupName>
+          <Files>
+            <File>
+              <FileName>Buffer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\Utils\Buffer.h</FilePath>
+            </File>
+          </Files>
+        </Group>
       </Groups>
     </Target>
     <Target>
@@ -1093,6 +1103,16 @@
               <FileName>W25Q80DV.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\src\Modules\W25Q80DV\W25Q80DV.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Utils</GroupName>
+          <Files>
+            <File>
+              <FileName>Buffer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\Utils\Buffer.h</FilePath>
             </File>
           </Files>
         </Group>
