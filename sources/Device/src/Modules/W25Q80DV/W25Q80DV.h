@@ -4,7 +4,7 @@
 
 namespace W25Q80DV
 {
-    void Write(void *buffer, int size);
+    void Write(uint8 *buffer256);
 
-    void Read(void *buffer, int size);
+    void Read(uint8 *buffer256);
 }

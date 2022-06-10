@@ -100,6 +100,16 @@ void HAL_SPI::Write(void *buffer, int size)
 }
 
 
+void HAL_SPI::Write(uint8 byte)
+{
+    CS::Low();
+
+    HAL_SPI_Transmit(&handle, &byte, 1, 100);
+
+    CS::Hi();
+}
+
+
 void HAL_SPI::Read(void *buffer, int size)
 {
     CS::Low();

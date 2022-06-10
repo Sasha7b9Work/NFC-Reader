@@ -19,19 +19,28 @@ void Device::Init()
 
     Timer::Delay(500);
 
+    Beeper::Init();
+    Beeper::Run();
+
+    TimeMeterMS meter;
+
+    while (meter.ElapsedTime() < 1000)
+    {
+        Beeper::Update();
+    }
+
     for (int i = 0; i < 256; i++)
     {
         buffer_write[i] = (uint8)std::rand();
     }
 
-    W25Q80DV::Write(buffer_write, 256);
+    W25Q80DV::Write(buffer_write);
 
-    W25Q80DV::Read(buffer_read, 256);
+    W25Q80DV::Read(buffer_read);
 
-    if (std::memcmp(buffer_write, buffer_read, 256) == 0)
+    if (std::memcmp(buffer_write, buffer_read, 256) != 0)
     {
-        Beeper::Init();
-        Beeper::Run();
+        Beeper::Stop();
     }
 }
 

@@ -43,6 +43,11 @@ void Beeper::Stop()
 
 void Beeper::Update()
 {
+    if (!running)
+    {
+        return;
+    }
+
     if(meter.ElapsedTime() > 0)
     {
         meter.Reset();
