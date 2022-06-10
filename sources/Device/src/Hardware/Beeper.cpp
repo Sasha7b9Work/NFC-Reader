@@ -1,3 +1,4 @@
+// 2022/6/10 9:08:09 (c) Aleksandr Shevchenko e-mail : Sasha7b9@tut.by
 #include "defines.h"
 #include "Hardware/Beeper.h"
 #include "Hardware/Timer.h"

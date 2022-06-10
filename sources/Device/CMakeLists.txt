@@ -34,19 +34,15 @@ file(GLOB STM32F1             ../common/STM32Cube_F1/Drivers/STM32F1xx_HAL_Drive
 file(GLOB SRC                 src/*.*)
 file(GLOB HARDWARE            src/Hardware/*.*)
 file(GLOB HARDWARE_CMSIS      src/Hardware/CMSIS/*.*)
-file(GLOB HARDWARE_CDC        src/Hardware/CDC/*.*)
 file(GLOB HARDWARE_HAL        src/Hardware/HAL/*.*)
-file(GLOB MODULES             src/Modules/*.*)
-file(GLOB UTILS               src/Utils/*.*)
+file(GLOB MODULES_W25Q80DV    src/Modules/W25Q80DV/*.*)
 
 source_group(STM32F1          FILES ${STM32F1})
 source_group(src              FILES ${SRC})
 source_group(Hardware         FILES ${HARDWARE})
 source_group(Hardware/CMSIS   FILES ${HARDWARE_CMSIS})
-source_group(Hardware/CDC     FILES ${HARDWARE_CDC})
 source_group(Hardware/HAL     FILES ${HARDWARE_HAL})
-source_group(Modules          FILES ${MODULES})
-source_group(Utils            FILES ${UTILS})
+source_group(Modules/W25Q80DV FILES ${MODULES_W25Q80DV})
 
 set_source_files_properties(${STM32F1} ${HARDWARE_CMSIS}
                             src/Hardware/CDC/usbd_desc.c
@@ -59,8 +55,6 @@ add_library(${PROJECT_NAME}
             ${SRC}
             ${HARDWARE}
             ${HARDWARE_CMSIS}
-            ${HARDWARE_CDC}
             ${HARDWARE_HAL}
-            ${MODULES}
-            ${UTILS}
+            ${MODULES_W25Q80DV}
             )

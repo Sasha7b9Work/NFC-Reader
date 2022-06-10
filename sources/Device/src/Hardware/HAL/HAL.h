@@ -8,6 +8,22 @@ namespace HAL
 }
 
 
+namespace HAL_SPI
+{
+    void Init();
+
+    void DeInit();
+}
+
+
+namespace HAL_I2C
+{
+    void Init();
+
+    void DeInit();
+}
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif 
