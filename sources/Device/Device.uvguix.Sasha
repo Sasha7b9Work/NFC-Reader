@@ -6,7 +6,7 @@
   <Header>### uVision Project, (C) Keil Software</Header>
 
   <PrjGuiSettings>
-    <LastAddFilePath>D:\Projects\NFC-Reader\sources\Device\src\Utils</LastAddFilePath>
+    <LastAddFilePath>D:\Projects\NFC-Reader\sources\Device\src\Hardware\HAL</LastAddFilePath>
   </PrjGuiSettings>
 
   <ViewPool/>
