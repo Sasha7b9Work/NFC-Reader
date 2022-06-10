@@ -50,6 +50,8 @@ void HAL_SPI::Init()
         return;
     }
 
+    initialized = true;
+
     HAL_I2C::DeInit();
 
     __HAL_RCC_SPI1_CLK_ENABLE();

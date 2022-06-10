@@ -28,9 +28,11 @@ void Device::Init()
         Beeper::Update();
     }
 
-    if (!TestFlashMemory())
+    while (!TestFlashMemory())
     {
         Beeper::Stop();
+
+        Timer::Delay(1000);
     }
 }
 
@@ -43,17 +45,12 @@ void Device::Update()
 
 static bool TestFlashMemory()
 {
-    static uint8 buffer_write[256];
-    static uint8 buffer_read[256];
+    uint8 out[256] = { 0x55 };
+    uint8 in[256] = { 0x00 };
 
-    for (int i = 0; i < 256; i++)
-    {
-        buffer_write[i] = (uint8)std::rand();
-    }
+    W25Q80DV::Write1024bytes(out, 1);
 
-    W25Q80DV::Write1024bytes(buffer_write, 256);
+    W25Q80DV::Read1024bytes(in, 1);
 
-    W25Q80DV::Read1024bytes(buffer_read, 256);
-
-    return (std::memcmp(buffer_write, buffer_read, 256) == 0);
+    return (std::memcmp(out, in, 1) == 0);
 }

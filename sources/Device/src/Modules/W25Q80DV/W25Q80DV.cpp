@@ -12,11 +12,12 @@
 */
 
 //                            page
+#define PROGRAM_PAGE  0x02  /* 34 */
+#define READ_DATA     0x03  /* 26 */
+#define WRITE_DISABLE 0x04  /* 23 */
+#define READ_STATUS_1 0x05  /* 24 */
 #define WRITE_ENABLE  0x06  /* 22 */
 #define SECTOR_ERASE  0x20  /* 36 */
-#define WRITE_DISABLE 0x04  /* 23 */
-#define PROGRAM_PAGE  0x02  /* 34 */
-#define READ_STATUS_1 0x05  /* 24 */
 
 
 namespace W25Q80DV
@@ -35,15 +36,15 @@ void W25Q80DV::Write1024bytes(const uint8 *buffer, int size)
 
     WaitRelease();
 
-    HAL_SPI::Write(WRITE_ENABLE);
+    HAL_SPI::Write(WRITE_ENABLE);               // Write enable
 
-    Write24bit(SECTOR_ERASE, 0x000000);
+    Write24bit(SECTOR_ERASE, 0x000000);         // Sector erase
 
-    HAL_SPI::Write(WRITE_DISABLE);
+    HAL_SPI::Write(WRITE_DISABLE);              // Write disable
 
     WaitRelease();
 
-    HAL_SPI::Write(WRITE_ENABLE);
+    HAL_SPI::Write(WRITE_ENABLE);               // Write enable
 
     Buffer<uint8, 1024> data;
 
@@ -58,9 +59,9 @@ void W25Q80DV::Write1024bytes(const uint8 *buffer, int size)
     }
 
     //                                команда адрес
-    HAL_SPI::Write(data.Data(), size +   1   +  3);
+    HAL_SPI::Write(data.Data(), size +   1   +  3);     // Page program
 
-    HAL_SPI::Write(WRITE_DISABLE);
+    HAL_SPI::Write(WRITE_DISABLE);              // Write disable
 }
 
 
@@ -69,6 +70,22 @@ void W25Q80DV::Read1024bytes(uint8 *buffer, int size)
     HAL_SPI::Init();
 
     WaitRelease();
+
+    Buffer<uint8, 1024> out;
+
+    out[0] = READ_DATA;
+    out[1] = 0;
+    out[2] = 0;
+    out[3] = 0;
+
+    Buffer<uint8, 1024> in;
+
+    HAL_SPI::WriteRead(out.Data(), in.Data(), size + 1 + 3);
+
+    for (int i = 0; i < size; i++)
+    {
+        buffer[i] = in[4 + i];
+    }
 }
 
 
