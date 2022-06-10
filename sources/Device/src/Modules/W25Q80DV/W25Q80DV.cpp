@@ -10,11 +10,11 @@
 *   Адреса 000000h - 0000FFh
 */
 
-
-#define WRITE_ENABLE  0x06
-#define SECTOR_ERASE  0x20
-#define WRITE_DISABLE 0x04
-#define PROGRAM_PAGE  0x02
+//                            page
+#define WRITE_ENABLE  0x06  /* 22 */
+#define SECTOR_ERASE  0x20  /* 36 */
+#define WRITE_DISABLE 0x04  /* 23 */
+#define PROGRAM_PAGE  0x02  /* 34 */
 #define READ_STATUS_1 0x05  /* 24 */
 
 
@@ -23,17 +23,14 @@ namespace W25Q80DV
     void Write24bit(uint8, uint);
 
     bool IsBusy();
+
+    void WaitRelease();
 }
 
 
-void W25Q80DV::Write(uint8 *buffer)
+void W25Q80DV::Write256bytes(uint8 *buffer)
 {
-    /*
-    *   20h   Sector erase   36
-    *   06h   Write Enable   22
-    *   02h   Page Program   34
-    *   04h   Write Disable  23
-    */
+    HAL_SPI::Init();
 
     HAL_SPI::Write(WRITE_ENABLE);
 
@@ -63,7 +60,7 @@ void W25Q80DV::Write(uint8 *buffer)
 }
 
 
-void W25Q80DV::Read(uint8 *buffer)
+void W25Q80DV::Read256bytes(uint8 *)
 {
 
 }
@@ -84,5 +81,18 @@ void W25Q80DV::Write24bit(uint8 command, uint bits24)
 
 bool W25Q80DV::IsBusy()
 {
+    static const uint8 out[2] = { READ_STATUS_1, 0 };
+    static uint8 in[2] = { 0, 0 };
 
+    HAL_SPI::WriteRead(out, in, 2);
+
+    return (in[1] & 0x01);
+}
+
+
+void W25Q80DV::WaitRelease()
+{
+    while (IsBusy())
+    {
+    }
 }

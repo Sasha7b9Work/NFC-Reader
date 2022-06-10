@@ -74,7 +74,7 @@ void HAL_SPI::Init()
     handle.Init.CLKPolarity = SPI_POLARITY_LOW;
     handle.Init.CLKPhase = SPI_PHASE_1EDGE;
     handle.Init.NSS = SPI_NSS_SOFT;
-    handle.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+    handle.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_128;
     handle.Init.FirstBit = SPI_FIRSTBIT_MSB;
     handle.Init.TIMode = SPI_TIMODE_DISABLE;
     handle.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -90,7 +90,7 @@ void HAL_SPI::DeInit()
 }
 
 
-void HAL_SPI::Write(void *buffer, int size)
+void HAL_SPI::Write(const void *buffer, int size)
 {
     CS::Low();
 
@@ -110,11 +110,21 @@ void HAL_SPI::Write(uint8 byte)
 }
 
 
-void HAL_SPI::Read(void *buffer, int size)
+void HAL_SPI::Read(const void *buffer, int size)
 {
     CS::Low();
 
     HAL_SPI_Receive(&handle, (uint8 *)buffer, (uint16)size, 100);
+
+    CS::Hi();
+}
+
+
+void HAL_SPI::WriteRead(const void *out, void *in, int size)
+{
+    CS::Low();
+
+    HAL_SPI_TransmitReceive(&handle, (uint8 *)out, (uint8 *)in, (uint16)size, 100);
 
     CS::Hi();
 }

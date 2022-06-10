@@ -34,9 +34,9 @@ void Device::Init()
         buffer_write[i] = (uint8)std::rand();
     }
 
-    W25Q80DV::Write(buffer_write);
+    W25Q80DV::Write256bytes(buffer_write);
 
-    W25Q80DV::Read(buffer_read);
+    W25Q80DV::Read256bytes(buffer_read);
 
     if (std::memcmp(buffer_write, buffer_read, 256) != 0)
     {
