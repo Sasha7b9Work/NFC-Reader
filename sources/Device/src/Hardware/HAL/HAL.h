@@ -13,6 +13,9 @@ namespace HAL_SPI
     void Init();
 
     void DeInit();
+
+    void Write(void *buffer, int size);
+    void Read(void *buffer, int size);
 }
 
 

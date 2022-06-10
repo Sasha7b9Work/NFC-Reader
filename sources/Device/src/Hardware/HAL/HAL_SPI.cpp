@@ -67,11 +67,44 @@ void HAL_SPI::Init()
 
     HAL_GPIO_Init(GPIOB, &is);
 
-    handle.Instance = SPI1;
+    handle.Instance = SPI2;
+    handle.Init.Mode = SPI_MODE_MASTER;
+    handle.Init.Direction = SPI_DIRECTION_2LINES;
+    handle.Init.DataSize = SPI_DATASIZE_8BIT;
+    handle.Init.CLKPolarity = SPI_POLARITY_LOW;
+    handle.Init.CLKPhase = SPI_PHASE_1EDGE;
+    handle.Init.NSS = SPI_NSS_SOFT;
+    handle.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+    handle.Init.FirstBit = SPI_FIRSTBIT_MSB;
+    handle.Init.TIMode = SPI_TIMODE_DISABLE;
+    handle.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+    handle.Init.CRCPolynomial = 10;
+
+    HAL_SPI_Init(&handle);
 }
 
 
 void HAL_SPI::DeInit()
 {
     initialized = false;
+}
+
+
+void HAL_SPI::Write(void *buffer, int size)
+{
+    CS::Low();
+
+    HAL_SPI_Transmit(&handle, (uint8 *)buffer, (uint16)size, 100);
+
+    CS::Hi();
+}
+
+
+void HAL_SPI::Read(void *buffer, int size)
+{
+    CS::Low();
+
+    HAL_SPI_Receive(&handle, (uint8 *)buffer, (uint16)size, 100);
+
+    CS::Hi();
 }
