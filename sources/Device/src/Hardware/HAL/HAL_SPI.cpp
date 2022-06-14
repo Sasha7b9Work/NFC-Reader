@@ -69,7 +69,7 @@ void HAL_SPI::Init()
 
     HAL_GPIO_Init(GPIOB, &is);
 
-    handle.Instance = SPI2;
+    handle.Instance = SPI1;
     handle.Init.Mode = SPI_MODE_MASTER;
     handle.Init.Direction = SPI_DIRECTION_2LINES;
     handle.Init.DataSize = SPI_DATASIZE_8BIT;

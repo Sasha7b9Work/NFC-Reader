@@ -449,6 +449,11 @@
           <GroupName>src</GroupName>
           <Files>
             <File>
+              <FileName>HAL_SPI.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\Hardware\HAL\HAL_SPI.cpp</FilePath>
+            </File>
+            <File>
               <FileName>main.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\src\main.cpp</FilePath>
@@ -537,11 +542,6 @@
               <FileName>HAL_I2C.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\src\Hardware\HAL\HAL_I2C.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>HAL_SPI.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\Hardware\HAL\HAL_SPI.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -1015,6 +1015,11 @@
           <GroupName>src</GroupName>
           <Files>
             <File>
+              <FileName>HAL_SPI.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\Hardware\HAL\HAL_SPI.cpp</FilePath>
+            </File>
+            <File>
               <FileName>main.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\src\main.cpp</FilePath>
@@ -1103,11 +1108,6 @@
               <FileName>HAL_I2C.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\src\Hardware\HAL\HAL_I2C.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>HAL_SPI.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\Hardware\HAL\HAL_SPI.cpp</FilePath>
             </File>
           </Files>
         </Group>
