@@ -22,7 +22,8 @@
 
 namespace W25Q80DV
 {
-    void Write24bit(uint8, uint);
+    // Записывает uin8, а затем младшие 3 байта из второго значения
+    void Write32bit(uint8, uint);
 
     bool IsBusy();
 
@@ -38,7 +39,7 @@ void W25Q80DV::Write1024bytes(const uint8 *buffer, int size)
 
     HAL_SPI::Write(WRITE_ENABLE);               // Write enable
 
-    Write24bit(SECTOR_ERASE, 0x000000);         // Sector erase
+    Write32bit(SECTOR_ERASE, 0x000000);         // Sector erase
 
     HAL_SPI::Write(WRITE_DISABLE);              // Write disable
 
@@ -89,7 +90,7 @@ void W25Q80DV::Read1024bytes(uint8 *buffer, int size)
 }
 
 
-void W25Q80DV::Write24bit(uint8 command, uint bits24)
+void W25Q80DV::Write32bit(uint8 command, uint bits24)
 {
     uint8 data[4];
 
