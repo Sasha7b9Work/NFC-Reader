@@ -68,6 +68,8 @@ void HAL_SPI::Init()
     };
 
     HAL_GPIO_Init(GPIOB, &is);
+    
+    __HAL_AFIO_REMAP_SPI1_ENABLE();
 
     handle.Instance = SPI1;
     handle.Init.Mode = SPI_MODE_MASTER;
