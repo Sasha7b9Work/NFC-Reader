@@ -64,6 +64,7 @@ void HAL_SPI::Init()
         GPIO_PIN_5 |    // MOSI
         GPIO_PIN_3,     // SCK
         GPIO_MODE_AF_PP,
+        GPIO_PULLUP,
         GPIO_SPEED_FREQ_HIGH
     };
 
