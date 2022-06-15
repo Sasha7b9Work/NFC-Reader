@@ -14,6 +14,7 @@ namespace Timer
 
     void Delay(uint timeMS);
 
+    // WARNING !!! Максимальная задержка - 3500 нс
     void DelayNS(uint timeNS);
 }
 

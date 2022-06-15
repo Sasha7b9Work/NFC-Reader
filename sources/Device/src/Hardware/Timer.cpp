@@ -12,6 +12,8 @@ namespace Timer
 
 void Timer::Init()
 {
+    __HAL_RCC_TIM2_CLK_ENABLE();
+
     TIM_ClockConfigTypeDef sClockSourceConfig = { 0 };
     TIM_MasterConfigTypeDef sMasterConfig = { 0 };
 
@@ -37,7 +39,13 @@ void Timer::Init()
 
 void Timer::DelayNS(uint timeNS)
 {
+    TIM2->CNT = 0;
 
+    uint16 end = (uint16)(1e9 / 60e6 * timeNS);
+
+    while (TIM2->CNT < end)
+    {
+    }
 }
 
 
