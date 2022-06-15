@@ -5,6 +5,7 @@
 #include "Hardware/Timer.h"
 #include "Hardware/Beeper.h"
 #include "Modules/W25Q80DV/W25Q80DV.h"
+#include "Modules/WS2812B/WS2812B.h"
 #include <cstdlib>
 #include <cstring>
 
@@ -16,7 +17,11 @@ void Device::Init()
 {
     HAL::Init();
 
+    Timer::Init();
+
     Timer::Delay(500);
+
+    WS2812B::Init();
 
     Beeper::Init();
     Beeper::Run();
@@ -40,6 +45,8 @@ void Device::Init()
 void Device::Update()
 {
     Beeper::Update();
+
+    WS2812B::Update();
 }
 
 

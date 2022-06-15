@@ -8,9 +8,13 @@
 
 namespace Timer
 {
+    void Init();
+
     uint CurrentTime();
 
     void Delay(uint timeMS);
+
+    void DelayNS(uint timeNS);
 }
 
 
