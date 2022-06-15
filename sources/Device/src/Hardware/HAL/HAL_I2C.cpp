@@ -16,7 +16,7 @@ void HAL_I2C::Init()
         return;
     }
 
-    HAL_SPI::DeInit();
+//    HAL_SPI::DeInit();
 
 
 }
