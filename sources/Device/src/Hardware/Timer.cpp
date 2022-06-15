@@ -35,6 +35,12 @@ void Timer::Init()
 }
 
 
+void Timer::DelayNS(uint timeNS)
+{
+
+}
+
+
 uint Timer::CurrentTime()
 {
     return HAL_GetTick();
