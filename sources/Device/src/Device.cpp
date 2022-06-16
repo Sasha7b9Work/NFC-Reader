@@ -6,6 +6,7 @@
 #include "Hardware/Beeper.h"
 #include "Modules/W25Q80DV/W25Q80DV.h"
 #include "Modules/WS2812B/WS2812B.h"
+#include "Hardware/ADC.h"
 #include <cstdlib>
 #include <cstring>
 
@@ -26,6 +27,8 @@ void Device::Init()
     Beeper::Init();
     Beeper::Run();
 
+    ADC::Init();
+
     TimeMeterMS meter;
 
     while (meter.ElapsedTime() < 1000)
@@ -33,18 +36,17 @@ void Device::Init()
         Beeper::Update();
     }
 
-    while (!TestFlashMemory())
-    {
-        Beeper::Stop();
-
-        Timer::Delay(1000);
-    }
+    TestFlashMemory();
 }
 
 
 void Device::Update()
 {
     Beeper::Update();
+
+    uint16 value_adc = ADC::GetValue();
+
+
 
     //WS2812B::Update();
 }
