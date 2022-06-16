@@ -118,6 +118,8 @@ void HAL_SPI::Init()
 
     HAL_GPIO_Init(GPIOB, &is);
 
+    CS::Init();
+
     MOSI::SetForHiBit(0xff);
     CLK::Hi();
 }

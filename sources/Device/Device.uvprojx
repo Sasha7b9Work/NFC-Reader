@@ -443,6 +443,16 @@
               <FileType>1</FileType>
               <FilePath>..\common\STM32Cube_F1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_spi.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f1xx_hal_tim.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\common\STM32Cube_F1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f1xx_hal_tim_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\common\STM32Cube_F1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim_ex.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -557,6 +567,21 @@
               <FileName>W25Q80DV.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\src\Modules\W25Q80DV\W25Q80DV.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Modules/WS2812B</GroupName>
+          <Files>
+            <File>
+              <FileName>WS2812B.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\Modules\WS2812B\WS2812B.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>WS2812B.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\Modules\WS2812B\WS2812B.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -1009,6 +1034,16 @@
               <FileType>1</FileType>
               <FilePath>..\common\STM32Cube_F1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_spi.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f1xx_hal_tim.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\common\STM32Cube_F1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f1xx_hal_tim_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\common\STM32Cube_F1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim_ex.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1123,6 +1158,21 @@
               <FileName>W25Q80DV.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\src\Modules\W25Q80DV\W25Q80DV.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Modules/WS2812B</GroupName>
+          <Files>
+            <File>
+              <FileName>WS2812B.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\Modules\WS2812B\WS2812B.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>WS2812B.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\Modules\WS2812B\WS2812B.h</FilePath>
             </File>
           </Files>
         </Group>

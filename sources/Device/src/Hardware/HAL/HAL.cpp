@@ -10,6 +10,9 @@ static void SystemClock_Config();
 void HAL::Init()
 {
     HAL_Init();
+
+    __HAL_AFIO_REMAP_SWJ_NOJTAG();
+
     SystemClock_Config();
 
     __HAL_RCC_AFIO_CLK_ENABLE();

@@ -21,7 +21,7 @@ void Device::Init()
 
     Timer::Delay(500);
 
-    WS2812B::Init();
+    //WS2812B::Init();
 
     Beeper::Init();
     Beeper::Run();
@@ -46,7 +46,7 @@ void Device::Update()
 {
     Beeper::Update();
 
-    WS2812B::Update();
+    //WS2812B::Update();
 }
 
 
