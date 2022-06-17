@@ -8,6 +8,15 @@ namespace HAL
 }
 
 
+namespace HAL_ADC
+{
+    void Init();
+
+    // Возвращает 12-битное значение
+    uint GetValue();
+}
+
+
 namespace HAL_SPI
 {
     void Init();

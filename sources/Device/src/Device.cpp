@@ -6,7 +6,6 @@
 #include "Hardware/Beeper.h"
 #include "Modules/W25Q80DV/W25Q80DV.h"
 #include "Modules/WS2812B/WS2812B.h"
-#include "Hardware/ADC.h"
 #include <cstdlib>
 #include <cstring>
 #include <cstdio>
@@ -26,7 +25,7 @@ void Device::Init()
     Beeper::Init();
     Beeper::Run();
 
-    ADC::Init();
+    HAL_ADC::Init();
 
     TimeMeterMS meter;
 
@@ -56,7 +55,7 @@ void Device::Update()
 
         char message[100];
 
-        std::sprintf(message, "Value ADC : %d", ADC::GetValue());
+        std::sprintf(message, "Value ADC : %d", HAL_ADC::GetValue());
 
         HAL_USART2::Transmit(message);
     }

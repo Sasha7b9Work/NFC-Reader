@@ -1,16 +1,16 @@
 // 2022/6/17 0:37:41 (c) Aleksandr Shevchenko e-mail : Sasha7b9@tut.by
 #include "defines.h"
-#include "Hardware/ADC.h"
+#include "Hardware/HAL/HAL.h"
 #include <stm32f1xx_hal.h>
 
 
-namespace ADC
+namespace HAL_ADC
 {
     static ADC_HandleTypeDef handle;
 }
 
 
-void ADC::Init()
+void HAL_ADC::Init()
 {
     __HAL_RCC_ADC1_CLK_ENABLE();
 
@@ -45,7 +45,7 @@ void ADC::Init()
 }
 
 
-uint16 ADC::GetValue()
+uint HAL_ADC::GetValue()
 {
     HAL_ADC_Start(&handle);
 

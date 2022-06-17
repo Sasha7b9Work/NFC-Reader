@@ -513,16 +513,6 @@
               <FileType>5</FileType>
               <FilePath>.\src\Hardware\Beeper.h</FilePath>
             </File>
-            <File>
-              <FileName>ADC.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\Hardware\ADC.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ADC.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\Hardware\ADC.h</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -577,6 +567,11 @@
               <FileName>HAL_USART2.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\src\Hardware\HAL\HAL_USART2.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>HAL_ADC.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\Hardware\HAL\HAL_ADC.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -1129,16 +1124,6 @@
               <FileType>5</FileType>
               <FilePath>.\src\Hardware\Beeper.h</FilePath>
             </File>
-            <File>
-              <FileName>ADC.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\Hardware\ADC.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ADC.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\Hardware\ADC.h</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -1193,6 +1178,11 @@
               <FileName>HAL_USART2.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\src\Hardware\HAL\HAL_USART2.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>HAL_ADC.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\Hardware\HAL\HAL_ADC.cpp</FilePath>
             </File>
           </Files>
         </Group>
