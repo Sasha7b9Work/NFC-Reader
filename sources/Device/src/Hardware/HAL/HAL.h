@@ -29,6 +29,14 @@ namespace HAL_I2C
 }
 
 
+namespace HAL_USART2
+{
+    void Init();
+
+    void Transmit(char *);
+}
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif 

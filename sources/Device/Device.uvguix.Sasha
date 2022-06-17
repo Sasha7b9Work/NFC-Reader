@@ -6,7 +6,7 @@
   <Header>### uVision Project, (C) Keil Software</Header>
 
   <PrjGuiSettings>
-    <LastAddFilePath>D:\Sasha\My\work\NFC-Reader\sources\common\STM32Cube_F1\Drivers\STM32F1xx_HAL_Driver\Src</LastAddFilePath>
+    <LastAddFilePath>D:\Sasha\My\work\NFC-Reader\sources\Device\src\Hardware\HAL</LastAddFilePath>
   </PrjGuiSettings>
 
   <ViewPool/>

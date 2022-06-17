@@ -573,6 +573,11 @@
               <FileType>8</FileType>
               <FilePath>.\src\Hardware\HAL\HAL_SPI.cpp</FilePath>
             </File>
+            <File>
+              <FileName>HAL_USART2.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\Hardware\HAL\HAL_USART2.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1183,6 +1188,11 @@
               <FileName>HAL_SPI.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\src\Hardware\HAL\HAL_SPI.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>HAL_USART2.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\Hardware\HAL\HAL_USART2.cpp</FilePath>
             </File>
           </Files>
         </Group>

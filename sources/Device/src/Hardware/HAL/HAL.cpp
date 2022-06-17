@@ -21,6 +21,8 @@ void HAL::Init()
     __HAL_RCC_GPIOA_CLK_ENABLE();
     __HAL_RCC_GPIOB_CLK_ENABLE();
     __HAL_RCC_GPIOD_CLK_ENABLE();
+
+    HAL_USART2::Init();
 }
 
 
