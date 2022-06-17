@@ -9,6 +9,7 @@
 #include "Hardware/ADC.h"
 #include <cstdlib>
 #include <cstring>
+#include <cstdio>
 
 
 static bool TestFlashMemory();
@@ -53,7 +54,11 @@ void Device::Update()
 
         W25Q80DV::ReadID();
 
-        uint16 value_adc = ADC::GetValue();
+        char message[100];
+
+        std::sprintf(message, "Value ADC : %d", ADC::GetValue());
+
+        HAL_USART2::Transmit(message);
     }
 }
 
