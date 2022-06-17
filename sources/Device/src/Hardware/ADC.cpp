@@ -47,5 +47,9 @@ void ADC::Init()
 
 uint16 ADC::GetValue()
 {
-    return 0;
+    HAL_ADC_Start(&handle);
+
+    HAL_ADC_PollForConversion(&handle, 10);
+
+    return HAL_ADC_GetValue(&handle);
 }
