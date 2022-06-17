@@ -25,8 +25,6 @@ void Device::Init()
     Beeper::Init();
     Beeper::Run();
 
-    HAL_ADC::Init();
-
     TimeMeterMS meter;
 
     while (meter.ElapsedTime() < 1000)
@@ -47,7 +45,7 @@ void Device::Update()
 
     Beeper::Update();
 
-    if (meter.ElapsedTime() > 1000)
+    if (meter.ElapsedTime() > 999)
     {
         meter.Reset();
 

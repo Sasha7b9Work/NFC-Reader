@@ -23,6 +23,8 @@ void HAL::Init()
     __HAL_RCC_GPIOD_CLK_ENABLE();
 
     HAL_USART2::Init();
+
+    HAL_ADC::Init();
 }
 
 

@@ -42,6 +42,8 @@ void HAL_ADC::Init()
     sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
 
     HAL_ADC_ConfigChannel(&handle, &sConfig);
+
+    HAL_ADCEx_Calibration_Start(&handle);
 }
 
 
