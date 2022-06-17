@@ -22,8 +22,6 @@ void Device::Init()
 
     Timer::Delay(500);
 
-    //WS2812B::Init();
-
     Beeper::Init();
     Beeper::Run();
 
@@ -36,19 +34,27 @@ void Device::Init()
         Beeper::Update();
     }
 
-    TestFlashMemory();
+    if (!TestFlashMemory())
+    {
+        Beeper::Stop();
+    }
 }
 
 
 void Device::Update()
 {
+    static TimeMeterMS meter;
+
     Beeper::Update();
 
-    uint16 value_adc = ADC::GetValue();
+    if (meter.ElapsedTime() > 1000)
+    {
+        meter.Reset();
 
+        W25Q80DV::ReadID();
 
-
-    //WS2812B::Update();
+        uint16 value_adc = ADC::GetValue();
+    }
 }
 
 

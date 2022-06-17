@@ -120,3 +120,12 @@ void W25Q80DV::WaitRelease()
     {
     }
 }
+
+
+void W25Q80DV::ReadID()
+{
+    uint8 out[6] = { 0x90, 0, 0, 0, 0, 0 };
+    uint8 in[6] = { 0, 0, 0, 0, 0, 0 };
+
+    HAL_SPI::WriteRead(out, in, 6);
+}

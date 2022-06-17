@@ -9,4 +9,6 @@ namespace W25Q80DV
 
     // Размер буфера ограничен 1024 байтами
     void Read1024bytes(uint8 *buffer, int size);
+
+    void ReadID();
 }
