@@ -18,7 +18,7 @@ void Device::Init()
 {
     HAL::Init();
 
-    Timer::Init();
+//    Timer::Init();
 
     Timer::Delay(500);
 
