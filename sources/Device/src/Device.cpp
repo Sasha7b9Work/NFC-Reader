@@ -25,16 +25,14 @@ void Device::Init()
     Beeper::Init();
     Beeper::Run();
 
-    TimeMeterMS meter;
-
-    while (meter.ElapsedTime() < 1000)
+    if (TestFlashMemory())
     {
-        Beeper::Update();
-    }
+        TimeMeterMS meter;
 
-    if (!TestFlashMemory())
-    {
-        Beeper::Stop();
+        while (meter.ElapsedTime() < 1000)
+        {
+            Beeper::Update();
+        }
     }
 }
 
@@ -42,8 +40,6 @@ void Device::Init()
 void Device::Update()
 {
     static TimeMeterMS meter;
-
-    Beeper::Update();
 
     if (meter.ElapsedTime() > 999)
     {
