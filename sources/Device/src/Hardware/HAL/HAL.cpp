@@ -1,6 +1,7 @@
 // (c) Aleksandr Shevchenko e-mail : Sasha7b9@tut.by
 #include "defines.h"
 #include "Hardware/HAL/HAL.h"
+#include "Hardware/HAL/HAL_PINS.h"
 #include <stm32f1xx_hal.h>
 
 
@@ -18,9 +19,7 @@ void HAL::Init()
 
     __HAL_AFIO_REMAP_SWJ_NOJTAG();
 
-    __HAL_RCC_GPIOA_CLK_ENABLE();
-    __HAL_RCC_GPIOB_CLK_ENABLE();
-    __HAL_RCC_GPIOD_CLK_ENABLE();
+    HAL_PINS::Init();
 
     HAL_USART2::Init();
 
