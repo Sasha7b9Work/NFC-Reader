@@ -6,7 +6,7 @@
   <Header>### uVision Project, (C) Keil Software</Header>
 
   <PrjGuiSettings>
-    <LastAddFilePath>D:\Sasha\My\work\NFC-Reader\sources\Device\src\Hardware\HAL</LastAddFilePath>
+    <LastAddFilePath>D:\Sasha\My\work\NFC-Reader\sources\Device\src\Hardware</LastAddFilePath>
   </PrjGuiSettings>
 
   <ViewPool/>
@@ -93,8 +93,8 @@
       <flags>2</flags>
       <showCmd>3</showCmd>
       <MinPosition>
-        <xPos>-32000</xPos>
-        <yPos>-32000</yPos>
+        <xPos>-1</xPos>
+        <yPos>-1</yPos>
       </MinPosition>
       <MaxPosition>
         <xPos>-1</xPos>

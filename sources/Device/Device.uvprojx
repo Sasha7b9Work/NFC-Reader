@@ -513,6 +513,16 @@
               <FileType>5</FileType>
               <FilePath>.\src\Hardware\BeeperOLD.h</FilePath>
             </File>
+            <File>
+              <FileName>Beeper.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\Hardware\Beeper.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Beeper.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\Hardware\Beeper.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1133,6 +1143,16 @@
               <FileName>BeeperOLD.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\src\Hardware\BeeperOLD.h</FilePath>
+            </File>
+            <File>
+              <FileName>Beeper.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\Hardware\Beeper.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Beeper.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\Hardware\Beeper.h</FilePath>
             </File>
           </Files>
         </Group>
