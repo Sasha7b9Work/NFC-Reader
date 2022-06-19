@@ -3,6 +3,8 @@
 #include "Hardware/HAL/HAL.h"
 #include <stm32f1xx_hal.h>
 #include <cstring>
+#include <cctype>
+#include <cstdio>
 
 
     // PA2     ------> USART2_TX
@@ -11,7 +13,11 @@
 
 namespace HAL_USART2
 {
-    UART_HandleTypeDef handle;
+    UART_HandleTypeDef handleUART;
+
+    void *handle = (void *)&handleUART;
+
+    static uint8 data = 0;
 
     namespace Mode
     {
@@ -44,22 +50,26 @@ void HAL_USART2::Init()
     is.Speed = GPIO_SPEED_FREQ_HIGH;
     HAL_GPIO_Init(GPIOA, &is);
 
-    handle.Instance = USART2;
-    handle.Init.BaudRate = 115200;
-    handle.Init.WordLength = UART_WORDLENGTH_8B;
-    handle.Init.StopBits = UART_STOPBITS_1;
-    handle.Init.Parity = UART_PARITY_NONE;
-    handle.Init.Mode = UART_MODE_TX_RX;
-    handle.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-    handle.Init.OverSampling = UART_OVERSAMPLING_16;
+    handleUART.Instance = USART2;
+    handleUART.Init.BaudRate = 115200;
+    handleUART.Init.WordLength = UART_WORDLENGTH_8B;
+    handleUART.Init.StopBits = UART_STOPBITS_1;
+    handleUART.Init.Parity = UART_PARITY_NONE;
+    handleUART.Init.Mode = UART_MODE_TX_RX;
+    handleUART.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+    handleUART.Init.OverSampling = UART_OVERSAMPLING_16;
 
-    HAL_UART_Init(&handle);
+    HAL_UART_Init(&handleUART);
 
     is.Pin = GPIO_PIN_9;
     is.Mode = GPIO_MODE_OUTPUT_PP;
     is.Pull = GPIO_PULLUP;
 
     HAL_GPIO_Init(GPIOA, &is);
+
+    Mode::Receive();
+
+    HAL_UART_Receive_IT(&handleUART, &data, 1);
 }
 
 
@@ -67,5 +77,46 @@ void HAL_USART2::Transmit(char *message)
 {
     Mode::Transmit();
 
-    HAL_UART_Transmit(&handle, (uint8 *)message, (uint16)(std::strlen(message) + 1), 1000);
+    HAL_UART_Transmit(&handleUART, (uint8 *)message, (uint16)std::strlen(message), 1000);
+
+    Mode::Receive();
+}
+
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *)
+{
+    static char *request = "#MSR\x0D\x0A";
+
+    static int pointer = 0;
+
+    if (HAL_USART2::data == ' ')
+    {
+
+    }
+    else
+    {
+        int symbol = std::toupper((int)HAL_USART2::data);
+
+        if (request[pointer] == symbol)
+        {
+            pointer++;
+
+            if (pointer == (int)std::strlen(request))
+            {
+                char message[100];
+
+                std::sprintf(message, "OK-55h-%f\x0D\x0A", HAL_ADC::GetValue());
+
+                HAL_USART2::Transmit(message);
+
+                pointer = 0;
+            }
+        }
+        else
+        {
+            pointer = 0;
+        }
+    }
+
+    HAL_UART_Receive_IT(&HAL_USART2::handleUART, &HAL_USART2::data, 1);
 }

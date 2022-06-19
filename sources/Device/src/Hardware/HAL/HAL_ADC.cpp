@@ -7,6 +7,8 @@
 namespace HAL_ADC
 {
     static ADC_HandleTypeDef handle;
+
+    static uint value = 0;
 }
 
 
@@ -47,11 +49,17 @@ void HAL_ADC::Init()
 }
 
 
-uint HAL_ADC::GetValue()
+void HAL_ADC::Update()
 {
     HAL_ADC_Start(&handle);
 
     HAL_ADC_PollForConversion(&handle, 10);
 
-    return HAL_ADC_GetValue(&handle);
+    value = HAL_ADC_GetValue(&handle);
+}
+
+
+float HAL_ADC::GetValue()
+{
+    return 33.0f / (float)0xFFF * (float)value;
 }

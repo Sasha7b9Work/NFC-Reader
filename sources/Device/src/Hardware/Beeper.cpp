@@ -1,6 +1,7 @@
 // 2022/6/19 6:32:00 (c) Aleksandr Shevchenko e-mail : Sasha7b9@tut.by
 #include "defines.h"
 #include "Hardware/Beeper.h"
+#include "Hardware/Timer.h"
 #include <stm32f1xx_hal.h>
 
 
@@ -10,7 +11,7 @@ namespace Beeper
 }
 
 
-void Beeper::Init()
+void Beeper::Beep(int frequency, uint timeMS)
 {
     __HAL_RCC_TIM1_CLK_ENABLE();
 
@@ -19,9 +20,9 @@ void Beeper::Init()
     TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = { 0 };
 
     handle.Instance = TIM1;
-    handle.Init.Prescaler = 0;
-    handle.Init.CounterMode = TIM_COUNTERMODE_UP;
-    handle.Init.Period = 65535;
+    handle.Init.Prescaler = 100 - 1;
+    handle.Init.CounterMode = TIM_COUNTERMODE_DOWN;
+    handle.Init.Period = (uint)(300000 / frequency - 1);
     handle.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
     handle.Init.RepetitionCounter = 0;
     handle.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
@@ -64,10 +65,8 @@ void Beeper::Init()
     HAL_GPIO_Init(GPIOA, &is);
 
     __HAL_AFIO_REMAP_TIM1_PARTIAL();
-}
 
+    Timer::Delay(timeMS);
 
-void Beeper::Beep(int frequency, int timeMS, bool wait)
-{
-
+    __HAL_RCC_TIM1_CLK_DISABLE();
 }

@@ -22,15 +22,13 @@ void Device::Init()
 
     Timer::Delay(500);
 
-    Beeper::Init();
-
     if (TestFlashMemory())
     {
-        Beeper::Beep(2000, 500, true);
+        Beeper::Beep(2000, 500);
     }
     else
     {
-        Beeper::Beep(2000, 5000, true);
+        Beeper::Beep(2000, 5000);
     }
 }
 
@@ -39,11 +37,7 @@ void Device::Update()
 {
     W25Q80DV::ReadID();
 
-    char message[100];
-
-    std::sprintf(message, "Value ADC : %d", HAL_ADC::GetValue());
-
-    HAL_USART2::Transmit(message);
+    HAL_ADC::Update();
 }
 
 

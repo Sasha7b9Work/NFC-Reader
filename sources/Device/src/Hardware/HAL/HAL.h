@@ -12,8 +12,10 @@ namespace HAL_ADC
 {
     void Init();
 
-    // Возвращает 12-битное значение
-    uint GetValue();
+    void Update();
+
+    // Возвращает напряжение в вольтах
+    float GetValue();
 }
 
 
@@ -43,6 +45,8 @@ namespace HAL_USART2
     void Init();
 
     void Transmit(char *);
+
+    extern void *handle;       // UART_HandleTypeDef
 }
 
 
