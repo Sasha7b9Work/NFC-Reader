@@ -504,16 +504,6 @@
               <FilePath>.\src\Hardware\Timer.h</FilePath>
             </File>
             <File>
-              <FileName>BeeperOLD.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\Hardware\BeeperOLD.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>BeeperOLD.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\Hardware\BeeperOLD.h</FilePath>
-            </File>
-            <File>
               <FileName>Beeper.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\src\Hardware\Beeper.cpp</FilePath>
@@ -1133,16 +1123,6 @@
               <FileName>Timer.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\src\Hardware\Timer.h</FilePath>
-            </File>
-            <File>
-              <FileName>BeeperOLD.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\Hardware\BeeperOLD.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>BeeperOLD.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\Hardware\BeeperOLD.h</FilePath>
             </File>
             <File>
               <FileName>Beeper.cpp</FileName>
