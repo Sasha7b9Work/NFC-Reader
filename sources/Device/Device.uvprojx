@@ -504,14 +504,14 @@
               <FilePath>.\src\Hardware\Timer.h</FilePath>
             </File>
             <File>
-              <FileName>Beeper.cpp</FileName>
+              <FileName>BeeperOLD.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>.\src\Hardware\Beeper.cpp</FilePath>
+              <FilePath>.\src\Hardware\BeeperOLD.cpp</FilePath>
             </File>
             <File>
-              <FileName>Beeper.h</FileName>
+              <FileName>BeeperOLD.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\src\Hardware\Beeper.h</FilePath>
+              <FilePath>.\src\Hardware\BeeperOLD.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -572,6 +572,16 @@
               <FileName>HAL_ADC.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\src\Hardware\HAL\HAL_ADC.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>HAL_PINS.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\Hardware\HAL\HAL_PINS.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>HAL_PINS.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\Hardware\HAL\HAL_PINS.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -1115,14 +1125,14 @@
               <FilePath>.\src\Hardware\Timer.h</FilePath>
             </File>
             <File>
-              <FileName>Beeper.cpp</FileName>
+              <FileName>BeeperOLD.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>.\src\Hardware\Beeper.cpp</FilePath>
+              <FilePath>.\src\Hardware\BeeperOLD.cpp</FilePath>
             </File>
             <File>
-              <FileName>Beeper.h</FileName>
+              <FileName>BeeperOLD.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\src\Hardware\Beeper.h</FilePath>
+              <FilePath>.\src\Hardware\BeeperOLD.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -1183,6 +1193,16 @@
               <FileName>HAL_ADC.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\src\Hardware\HAL\HAL_ADC.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>HAL_PINS.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\Hardware\HAL\HAL_PINS.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>HAL_PINS.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\Hardware\HAL\HAL_PINS.h</FilePath>
             </File>
           </Files>
         </Group>

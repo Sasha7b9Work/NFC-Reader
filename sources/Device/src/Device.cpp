@@ -3,7 +3,7 @@
 #include "Device.h"
 #include "Hardware/HAL/HAL.h"
 #include "Hardware/Timer.h"
-#include "Hardware/Beeper.h"
+#include "Hardware/BeeperOLD.h"
 #include "Modules/W25Q80DV/W25Q80DV.h"
 #include "Modules/WS2812B/WS2812B.h"
 #include <cstdlib>
@@ -22,8 +22,8 @@ void Device::Init()
 
     Timer::Delay(500);
 
-    Beeper::Init();
-    Beeper::Run();
+    BeeperOLD::Init();
+    BeeperOLD::Run();
 
     if (TestFlashMemory())
     {
@@ -31,7 +31,7 @@ void Device::Init()
 
         while (meter.ElapsedTime() < 1000)
         {
-            Beeper::Update();
+            BeeperOLD::Update();
         }
     }
 }
@@ -39,20 +39,13 @@ void Device::Init()
 
 void Device::Update()
 {
-    static TimeMeterMS meter;
+    W25Q80DV::ReadID();
 
-    if (meter.ElapsedTime() > 999)
-    {
-        meter.Reset();
+    char message[100];
 
-        W25Q80DV::ReadID();
+    std::sprintf(message, "Value ADC : %d", HAL_ADC::GetValue());
 
-        char message[100];
-
-        std::sprintf(message, "Value ADC : %d", HAL_ADC::GetValue());
-
-        HAL_USART2::Transmit(message);
-    }
+    HAL_USART2::Transmit(message);
 }
 
 

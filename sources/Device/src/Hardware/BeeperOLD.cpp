@@ -1,11 +1,11 @@
 // 2022/6/10 9:08:09 (c) Aleksandr Shevchenko e-mail : Sasha7b9@tut.by
 #include "defines.h"
-#include "Hardware/Beeper.h"
+#include "Hardware/BeeperOLD.h"
 #include "Hardware/Timer.h"
 #include <stm32f1xx_hal.h>
 
 
-namespace Beeper
+namespace BeeperOLD
 {
     bool running = false;
     
@@ -15,7 +15,7 @@ namespace Beeper
 }
 
 
-void Beeper::Init()
+void BeeperOLD::Init()
 {
     GPIO_InitTypeDef is =
     {
@@ -29,19 +29,19 @@ void Beeper::Init()
 }
 
 
-void Beeper::Run()
+void BeeperOLD::Run()
 {
     running = true;
 }
 
 
-void Beeper::Stop()
+void BeeperOLD::Stop()
 {
     running = false;
 }
 
 
-void Beeper::Update()
+void BeeperOLD::Update()
 {
     if (!running)
     {
