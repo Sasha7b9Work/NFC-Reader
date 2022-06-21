@@ -6,4 +6,8 @@ namespace Beeper
 {
     // Если wait == true, то ожидать завершения звука
     void Beep(int frequency, uint timeMS);
+
+    void Start(int frequency);
+
+    void Stop();
 }

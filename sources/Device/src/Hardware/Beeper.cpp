@@ -13,6 +13,16 @@ namespace Beeper
 
 void Beeper::Beep(int frequency, uint timeMS)
 {
+    Start(frequency);
+
+    Timer::Delay(timeMS);
+
+    Stop();
+}
+
+
+void Beeper::Start(int frequency)
+{
     __HAL_RCC_TIM1_CLK_ENABLE();
 
     TIM_MasterConfigTypeDef sMasterConfig = { 0 };
@@ -68,9 +78,11 @@ void Beeper::Beep(int frequency, uint timeMS)
 
     HAL_TIM_PWM_Start_IT(&handle, TIM_CHANNEL_1);
     HAL_TIMEx_PWMN_Start(&handle, TIM_CHANNEL_1);
+}
 
-    Timer::Delay(timeMS);
 
+void Beeper::Stop()
+{
     HAL_TIM_PWM_Stop_IT(&handle, TIM_CHANNEL_1);
     HAL_TIMEx_PWMN_Stop(&handle, TIM_CHANNEL_1);
 
