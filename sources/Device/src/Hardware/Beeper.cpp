@@ -20,9 +20,9 @@ void Beeper::Beep(int frequency, uint timeMS)
     TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = { 0 };
 
     handle.Instance = TIM1;
-    handle.Init.Prescaler = 100 - 1;
+    handle.Init.Prescaler = (uint)(30000 / frequency);
     handle.Init.CounterMode = TIM_COUNTERMODE_DOWN;
-    handle.Init.Period = (uint)(300000 / frequency - 1);
+    handle.Init.Period = 1000;
     handle.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
     handle.Init.RepetitionCounter = 0;
     handle.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
@@ -35,7 +35,7 @@ void Beeper::Beep(int frequency, uint timeMS)
     HAL_TIMEx_MasterConfigSynchronization(&handle, &sMasterConfig);
 
     sConfigOC.OCMode = TIM_OCMODE_PWM1;
-    sConfigOC.Pulse = 0;
+    sConfigOC.Pulse = 500;
     sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
     sConfigOC.OCNPolarity = TIM_OCNPOLARITY_LOW;
     sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
