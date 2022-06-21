@@ -4,6 +4,11 @@
 #include <stm32f1xx_hal.h>
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 void NMI_Handler(void)
 {
 }
@@ -69,3 +74,7 @@ void USART2_IRQHandler(void)
 {
     HAL_UART_IRQHandler((UART_HandleTypeDef *)HAL_USART2::handle);
 }
+
+#ifdef __cplusplus
+}
+#endif
