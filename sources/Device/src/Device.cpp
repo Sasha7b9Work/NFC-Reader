@@ -6,6 +6,7 @@
 #include "Hardware/Beeper.h"
 #include "Modules/W25Q80DV/W25Q80DV.h"
 #include "Modules/WS2812B/WS2812B.h"
+#include <stm32f1xx_hal.h>
 #include <cstdlib>
 #include <cstring>
 #include <cstdio>
@@ -38,6 +39,15 @@ void Device::Update()
     W25Q80DV::ReadID();
 
     HAL_ADC::Update();
+
+    if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_11) == GPIO_PIN_RESET)
+    {
+        Beeper::Start(2000);
+    }
+    else
+    {
+        Beeper::Stop();
+    }
 }
 
 

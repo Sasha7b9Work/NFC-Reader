@@ -31,4 +31,14 @@ void HAL_PINS::Init()
     is.Pin = GPIO_PIN_All;
 
     HAL_GPIO_Init(GPIOD, &is);
+
+    GPIO_InitTypeDef is2 =
+    {
+        GPIO_PIN_11,
+        GPIO_MODE_INPUT,
+        GPIO_PULLUP,
+        GPIO_SPEED_HIGH
+    };
+
+    HAL_GPIO_Init(GPIOA, &is2);
 }

@@ -8,12 +8,14 @@
 namespace Beeper
 {
     TIM_HandleTypeDef handle;
+    int frequency = 0;          // Частота звучащего в данное время звука
+    bool running = false;       // Если true, то звук звучит
 }
 
 
-void Beeper::Beep(int frequency, uint timeMS)
+void Beeper::Beep(int _frequency, uint timeMS)
 {
-    Start(frequency);
+    Start(_frequency);
 
     Timer::Delay(timeMS);
 
@@ -21,8 +23,20 @@ void Beeper::Beep(int frequency, uint timeMS)
 }
 
 
-void Beeper::Start(int frequency)
+void Beeper::Start(int _frequency)
 {
+    if (running && (_frequency == frequency))
+    {
+        return;
+    }
+
+    if (running)
+    {
+        Stop();
+    }
+
+    frequency = _frequency;
+
     __HAL_RCC_TIM1_CLK_ENABLE();
 
     TIM_MasterConfigTypeDef sMasterConfig = { 0 };
@@ -76,15 +90,19 @@ void Beeper::Start(int frequency)
 
     __HAL_AFIO_REMAP_TIM1_PARTIAL();
 
-    HAL_TIM_PWM_Start_IT(&handle, TIM_CHANNEL_1);
+    HAL_TIM_PWM_Start(&handle, TIM_CHANNEL_1);
     HAL_TIMEx_PWMN_Start(&handle, TIM_CHANNEL_1);
+
+    running = true;
 }
 
 
 void Beeper::Stop()
 {
-    HAL_TIM_PWM_Stop_IT(&handle, TIM_CHANNEL_1);
+    HAL_TIM_PWM_Stop(&handle, TIM_CHANNEL_1);
     HAL_TIMEx_PWMN_Stop(&handle, TIM_CHANNEL_1);
 
     __HAL_RCC_TIM1_CLK_DISABLE();
+
+    running = false;
 }
