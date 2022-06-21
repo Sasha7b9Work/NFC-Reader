@@ -92,17 +92,6 @@ void HAL_USART2::Transmit(char *message)
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *)
 {
-    char message[2] = { (char)HAL_USART2::data, 0 };
-
-    HAL_USART2::Transmit(message);
-
-    HAL_UART_Receive_IT(&HAL_USART2::handleUART, &HAL_USART2::data, 1);
-}
-
-
-/*
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *)
-{
     static char *request = "#MSR\x0D\x0A";
 
     static int pointer = 0;
@@ -123,7 +112,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *)
             {
                 char message[100];
 
-                std::sprintf(message, "OK-55h-%f\x0D\x0A", HAL_ADC::GetValue());
+                std::sprintf(message, "OK-55h-%3.1fV\x0D\x0A", HAL_ADC::GetValue());
 
                 HAL_USART2::Transmit(message);
 
@@ -138,4 +127,3 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *)
 
     HAL_UART_Receive_IT(&HAL_USART2::handleUART, &HAL_USART2::data, 1);
 }
-*/
