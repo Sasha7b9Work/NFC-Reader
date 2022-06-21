@@ -34,10 +34,10 @@ void Beeper::Beep(int frequency, uint timeMS)
 
     HAL_TIMEx_MasterConfigSynchronization(&handle, &sMasterConfig);
 
-    sConfigOC.OCMode = TIM_OCMODE_TIMING;
+    sConfigOC.OCMode = TIM_OCMODE_PWM1;
     sConfigOC.Pulse = 500;
     sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-    sConfigOC.OCNPolarity = TIM_OCNPOLARITY_LOW;
+    sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
     sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
     sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
     sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
@@ -66,13 +66,13 @@ void Beeper::Beep(int frequency, uint timeMS)
 
     __HAL_AFIO_REMAP_TIM1_PARTIAL();
 
-    HAL_TIM_OC_Start_IT(&handle, TIM_CHANNEL_1);
-    HAL_TIMEx_OCN_Start_IT(&handle, TIM_CHANNEL_1);
+    HAL_TIM_PWM_Start_IT(&handle, TIM_CHANNEL_1);
+    HAL_TIMEx_PWMN_Start(&handle, TIM_CHANNEL_1);
 
     Timer::Delay(timeMS);
 
-    HAL_TIM_OC_Stop_IT(&handle, TIM_CHANNEL_1);
-    HAL_TIMEx_OCN_Stop_IT(&handle, TIM_CHANNEL_1);
+    HAL_TIM_PWM_Stop_IT(&handle, TIM_CHANNEL_1);
+    HAL_TIMEx_PWMN_Stop(&handle, TIM_CHANNEL_1);
 
     __HAL_RCC_TIM1_CLK_DISABLE();
 }
