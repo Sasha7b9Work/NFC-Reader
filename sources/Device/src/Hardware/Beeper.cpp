@@ -66,7 +66,11 @@ void Beeper::Beep(int frequency, uint timeMS)
 
     __HAL_AFIO_REMAP_TIM1_PARTIAL();
 
+    HAL_TIM_PWM_Start(&handle, TIM_CHANNEL_1);
+
     Timer::Delay(timeMS);
+
+    HAL_TIM_PWM_Stop(&handle, TIM_CHANNEL_1);
 
     __HAL_RCC_TIM1_CLK_DISABLE();
 }

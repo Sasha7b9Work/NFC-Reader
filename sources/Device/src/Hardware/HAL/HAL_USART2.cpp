@@ -44,10 +44,15 @@ void HAL_USART2::Init()
 
     GPIO_InitTypeDef is = { 0 };
 
-    is.Pin = GPIO_PIN_2 | GPIO_PIN_3;
+    is.Pin = GPIO_PIN_2;        // TX
     is.Mode = GPIO_MODE_AF_PP;
     is.Pull = GPIO_PULLUP;
     is.Speed = GPIO_SPEED_FREQ_HIGH;
+    HAL_GPIO_Init(GPIOA, &is);
+
+    is.Pin = GPIO_PIN_3;        // RX
+    is.Mode = GPIO_MODE_INPUT;
+    is.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(GPIOA, &is);
 
     handleUART.Instance = USART2;
@@ -68,6 +73,8 @@ void HAL_USART2::Init()
     HAL_GPIO_Init(GPIOA, &is);
 
     Mode::Receive();
+    HAL_NVIC_SetPriority(USART2_IRQn, 0, 1);
+    HAL_NVIC_EnableIRQ(USART2_IRQn);
 
     HAL_UART_Receive_IT(&handleUART, &data, 1);
 }
@@ -83,6 +90,17 @@ void HAL_USART2::Transmit(char *message)
 }
 
 
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *)
+{
+    char message[2] = { (char)HAL_USART2::data, 0 };
+
+    HAL_USART2::Transmit(message);
+
+    HAL_UART_Receive_IT(&HAL_USART2::handleUART, &HAL_USART2::data, 1);
+}
+
+
+/*
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *)
 {
     static char *request = "#MSR\x0D\x0A";
@@ -120,3 +138,4 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *)
 
     HAL_UART_Receive_IT(&HAL_USART2::handleUART, &HAL_USART2::data, 1);
 }
+*/
