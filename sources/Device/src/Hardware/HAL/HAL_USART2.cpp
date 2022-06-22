@@ -66,7 +66,7 @@ void HAL_USART2::Init()
 
     HAL_UART_Init(&handleUART);
 
-    is.Pin = GPIO_PIN_9;
+    is.Pin = GPIO_PIN_9;                    // Приём/передача
     is.Mode = GPIO_MODE_OUTPUT_PP;
     is.Pull = GPIO_PULLUP;
 

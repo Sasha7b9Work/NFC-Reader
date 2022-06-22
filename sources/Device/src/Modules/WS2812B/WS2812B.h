@@ -2,6 +2,11 @@
 #pragma once
 
 
+/*
+*   Индикаторы
+*/
+
+
 namespace WS2812B
 {
     void Init();

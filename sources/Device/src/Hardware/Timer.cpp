@@ -14,38 +14,15 @@ void Timer::Init()
 {
     __HAL_RCC_TIM2_CLK_ENABLE();
 
-    TIM_ClockConfigTypeDef sClockSourceConfig = { 0 };
-    TIM_MasterConfigTypeDef sMasterConfig = { 0 };
-
     handle.Instance = TIM2;
     handle.Init.Prescaler = 0;
     handle.Init.CounterMode = TIM_COUNTERMODE_UP;
     handle.Init.Period = 65535;
     handle.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-    handle.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
 
     HAL_TIM_Base_Init(&handle);
 
-    sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-
-    HAL_TIM_ConfigClockSource(&handle, &sClockSourceConfig);
-
-    sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-    sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-
-    HAL_TIMEx_MasterConfigSynchronization(&handle, &sMasterConfig);
-}
-
-
-void Timer::DelayNS(uint timeNS)
-{
-    TIM2->CNT = 0;
-
-    uint16 end = (uint16)(1e9 / 60e6 * timeNS);
-
-    while (TIM2->CNT < end)
-    {
-    }
+    HAL_TIM_Base_Start(&handle);
 }
 
 
@@ -89,4 +66,20 @@ void TimeMeterMS::Continue()
 uint TimeMeterMS::ElapsedTime()
 {
     return TIME_MS - time_reset;
+}
+
+
+void TimeMeterTics::Reset()
+{
+    TIM2->CR1 &= ~TIM_CR1_CEN;
+    TIM2->CNT = 0;
+    TIM2->CR1 |= TIM_CR1_CEN;
+}
+
+
+void TimeMeterTics::WaitFor(uint ticks)
+{
+    while (TIM2->CNT < ticks)
+    {
+    }
 }

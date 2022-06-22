@@ -34,11 +34,16 @@ void HAL_PINS::Init()
 
     GPIO_InitTypeDef is2 =
     {
-        GPIO_PIN_11,
+        GPIO_PIN_10 |               // Сигнал LR
+        GPIO_PIN_11,                // Сигнал SND
         GPIO_MODE_INPUT,
         GPIO_NOPULL,
         GPIO_SPEED_HIGH
     };
 
     HAL_GPIO_Init(GPIOA, &is2);
+
+    is2.Pin = GPIO_PIN_0;           // Сигнал LG
+
+    HAL_GPIO_Init(GPIOB, &is2);
 }

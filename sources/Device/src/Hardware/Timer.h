@@ -13,9 +13,6 @@ namespace Timer
     uint CurrentTime();
 
     void Delay(uint timeMS);
-
-    // WARNING !!! Максимальная задержка - 3500 нс
-    void DelayNS(uint timeNS);
 }
 
 
@@ -39,4 +36,18 @@ private:
 
     uint time_reset;        // От этого времени отсчитывается ElapsedTime()
     uint time_pause;        // В этот момент поставили на паузу
+};
+
+
+struct TimeMeterTics
+{
+    TimeMeterTics()
+    {
+        Reset();
+    }
+
+    void Reset();
+
+    // Ожидать до tics с момента последнего Reset()
+    void WaitFor(uint tics);
 };

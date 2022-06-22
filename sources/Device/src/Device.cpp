@@ -19,7 +19,7 @@ void Device::Init()
 {
     HAL::Init();
 
-//    Timer::Init();
+    Timer::Init();
 
     Timer::Delay(500);
 
@@ -39,6 +39,8 @@ void Device::Update()
     W25Q80DV::ReadID();
 
     HAL_ADC::Update();
+
+    WS2812B::Update();
 
     if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_11) == GPIO_PIN_RESET)
     {
