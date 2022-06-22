@@ -7,7 +7,7 @@
 
 namespace WS2812B
 {
-    uint dTOH = 18;     // В тактах
+    uint dT0H = 18;     // В тактах
     uint dT0L = 47;     // В тактах
     uint dT1H = 47;     // В тактах
     uint dT1L = 19;     // В тактах
@@ -103,6 +103,11 @@ void WS2812B::FireBLACK()
 }
 
 
+#define ADD_AND_WRITE(delta)        \
+    full_time += delta;             \
+    *time++ = full_time
+
+
 void WS2812B::Fire(uint8 red, uint8 green, uint8 blue)
 {
     /*
@@ -110,6 +115,35 @@ void WS2812B::Fire(uint8 red, uint8 green, uint8 blue)
     */
 
     uint value = (uint)((green << 16) | (red << 8) | blue);
+
+    uint bits[24 * 2 * 4 + 1];
+    uint *time = &bits[0];
+    uint full_time = 0;
+
+    for (int indicator = 0; indicator < 4; indicator++)
+    {
+        uint color = (value << 8);
+
+        for (int i = 0; i < 24; i++)
+        {
+            if (color & 0x80000000)     // единица
+            {
+                ADD_AND_WRITE(dT1H);
+                ADD_AND_WRITE(dT1L);
+            }
+            else                        // ноль
+            {
+                ADD_AND_WRITE(dT0H);
+                ADD_AND_WRITE(dT1L);
+            }
+
+            color <<= 1;
+        }
+    }
+
+    *time = 0;
+
+    DLED::WriteFullSequency(bits);
 }
 
 
