@@ -31,6 +31,8 @@ void Device::Init()
     {
         Beeper::Beep(2000, 5000);
     }
+
+    WS2812B::Init();
 }
 
 

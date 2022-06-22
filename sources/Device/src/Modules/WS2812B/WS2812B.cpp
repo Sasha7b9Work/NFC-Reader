@@ -32,6 +32,8 @@ namespace WS2812B
             };
 
             HAL_GPIO_Init(GPIOB, &is);
+
+            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, GPIO_PIN_RESET);
         }
 
         // «аписать полную последовательность бит в четыре индикатора
@@ -103,16 +105,15 @@ void WS2812B::FireBLACK()
 }
 
 
-#define ADD_AND_WRITE(delta)        \
-    full_time += delta;             \
-    *time++ = full_time
-
-
 void WS2812B::Fire(uint8 red, uint8 green, uint8 blue)
 {
     /*
     * ÷вет хранитс€ в формате GRB
     */
+
+#define ADD_AND_WRITE(delta)        \
+    full_time += delta;             \
+    *time++ = full_time
 
     uint value = (uint)((green << 16) | (red << 8) | blue);
 
