@@ -36,7 +36,7 @@ void HAL_PINS::Init()
     {
         GPIO_PIN_11,
         GPIO_MODE_INPUT,
-        GPIO_PULLUP,
+        GPIO_NOPULL,
         GPIO_SPEED_HIGH
     };
 
