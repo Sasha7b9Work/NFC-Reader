@@ -135,7 +135,7 @@ void WS2812B::Fire(uint8 red, uint8 green, uint8 blue)
             else                        // ноль
             {
                 ADD_AND_WRITE(dT0H);
-                ADD_AND_WRITE(dT1L);
+                ADD_AND_WRITE(dT0L);
             }
 
             color <<= 1;
