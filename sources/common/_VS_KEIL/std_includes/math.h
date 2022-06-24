@@ -8,5 +8,5 @@ float cosf(float);
 float sinf(float);
 bool isnan(float);
 float expf(float);
-void srand(uint);
+void srand(unsigned int);
 float powf(float, float);

@@ -111,8 +111,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *)
 
             if (pointer == (int)std::strlen(request))
             {
-                uint8 id0 = LIS2DH12::GetID(0x18);
-                uint8 id1 = LIS2DH12::GetID(0x19);
+                uint8 id0 = LIS2DH12::GetID();
+                uint8 id1 = LIS2DH12::GetID();
 
                 char message[100];
 
