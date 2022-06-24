@@ -39,7 +39,7 @@ namespace HAL_I2C1
     int8 Read(uint8 dev_id, uint8 reg_addr, uint8 *reg_data, uint16 len);
     int8 Read16(uint8 dev_id, uint8 *data);
 
-    int8 Write(uint8 dev_id, uint8 reg_addr, uint8 *reg_data, uint16 len);
+    int8 Write(uint8 dev_id, uint8 reg_addr, const uint8 *reg_data, uint16 len);
     int8 Write8(uint8 dev_id, uint8 data);
 }
 

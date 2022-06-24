@@ -99,26 +99,9 @@ void LIS2DH12::Update()
  * @param  len       number of consecutive register to write
  *
  */
-static int32_t LIS2DH12::platform_write(void * /*handle*/, uint8_t /*reg*/, const uint8_t * /*bufp*/, uint16_t /*len*/)
+static int32_t LIS2DH12::platform_write(void * /*handle*/, uint8_t reg, const uint8_t *buf, uint16_t len)
 {
-#if defined(NUCLEO_F411RE)
-    /* Write multiple command */
-    reg |= 0x80;
-    HAL_I2C_Mem_Write(handle, LIS2DH12_I2C_ADD_L, reg,
-        I2C_MEMADD_SIZE_8BIT, (uint8_t *)bufp, len, 1000);
-#elif defined(STEVAL_MKI109V3)
-    /* Write multiple command */
-    reg |= 0x40;
-    HAL_GPIO_WritePin(CS_up_GPIO_Port, CS_up_Pin, GPIO_PIN_RESET);
-    HAL_SPI_Transmit(handle, &reg, 1, 1000);
-    HAL_SPI_Transmit(handle, (uint8_t *)bufp, len, 1000);
-    HAL_GPIO_WritePin(CS_up_GPIO_Port, CS_up_Pin, GPIO_PIN_SET);
-#elif defined(SPC584B_DIS)
-    /* Write multiple command */
-    reg |= 0x80;
-    i2c_lld_write(handle, LIS2DH12_I2C_ADD_L & 0xFE, reg, (uint8_t *)bufp, len);
-#endif
-    return 0;
+    return (int)HAL_I2C1::Write(0x19, reg, buf, len);
 }
 
 
