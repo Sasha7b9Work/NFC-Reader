@@ -9,8 +9,6 @@
 
 namespace LIS2DH12
 {
-#define SENSOR_BUS hspi2
-
     // Initialize mems driver interface
     static stmdev_ctx_t dev_ctx;
 
@@ -30,7 +28,6 @@ void LIS2DH12::Init()
 {
     dev_ctx.write_reg = platform_write;
     dev_ctx.read_reg = platform_read;
-//    dev_ctx.handle = &SENSOR_BUS;
 
     // Check device ID
     uint8 whoamI = 0;
@@ -42,15 +39,19 @@ void LIS2DH12::Init()
         }
     }
 
-    /* Enable Block Data Update. */
+    // Enable Block Data Update.
     lis2dh12_block_data_update_set(&dev_ctx, PROPERTY_ENABLE);
-    /* Set Output Data Rate to 1Hz. */
+
+    // Set Output Data Rate to 1Hz.
     lis2dh12_data_rate_set(&dev_ctx, LIS2DH12_ODR_1Hz);
-    /* Set full scale to 2g. */
+
+    // Set full scale to 2g.
     lis2dh12_full_scale_set(&dev_ctx, LIS2DH12_2g);
-    /* Enable temperature sensor. */
+
+    // Enable temperature sensor.
     lis2dh12_temperature_meas_set(&dev_ctx, LIS2DH12_TEMP_ENABLE);
-    /* Set device in continuous mode with 12 bit resol. */
+
+    // Set device in continuous mode with 12 bit resol.
     lis2dh12_operating_mode_set(&dev_ctx, LIS2DH12_HR_12bit);
 }
 
