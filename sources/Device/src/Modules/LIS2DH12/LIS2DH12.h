@@ -7,4 +7,12 @@ namespace LIS2DH12
     void Init();
 
     void Update();
+
+    float GetAccelerationX();
+
+    float GetAccelerationY();
+
+    float GetAccelerationZ();
+
+    float GetTemperature();
 }
