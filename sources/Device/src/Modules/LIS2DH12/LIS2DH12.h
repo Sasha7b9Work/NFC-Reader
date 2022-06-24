@@ -4,5 +4,7 @@
 
 namespace LIS2DH12
 {
-    uint8 GetID();
+    void Init();
+
+    void Update();
 }

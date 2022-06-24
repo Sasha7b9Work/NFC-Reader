@@ -111,12 +111,9 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *)
 
             if (pointer == (int)std::strlen(request))
             {
-                uint8 id0 = LIS2DH12::GetID();
-                uint8 id1 = LIS2DH12::GetID();
-
                 char message[100];
 
-                std::sprintf(message, "OK-55h-%3.1fV-Address0:%2Xh-Address1:%2Xh\x0D\x0A", HAL_ADC::GetValue(), (int)id0, (int)id1);
+                std::sprintf(message, "OK-55h-%3.1fV\x0D\x0A", HAL_ADC::GetValue());
 
                 HAL_USART2::Transmit(message);
 

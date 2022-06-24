@@ -3,7 +3,13 @@
 #include "Modules/LIS2DH12/LIS2DH12.h"
 
 
-uint8 LIS2DH12::GetID()
+void LIS2DH12::Init()
 {
-    return 0;
+
+}
+
+
+void LIS2DH12::Update()
+{
+
 }

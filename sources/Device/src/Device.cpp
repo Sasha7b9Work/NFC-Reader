@@ -6,6 +6,7 @@
 #include "Hardware/Beeper.h"
 #include "Modules/W25Q80DV/W25Q80DV.h"
 #include "Modules/WS2812B/WS2812B.h"
+#include "Modules/LIS2DH12/LIS2DH12.h"
 #include <stm32f1xx_hal.h>
 #include <cstdlib>
 #include <cstring>
@@ -33,16 +34,20 @@ void Device::Init()
     }
 
     WS2812B::Init();
+
+    LIS2DH12::Init();
 }
 
 
 void Device::Update()
 {
-    W25Q80DV::ReadID();
+    W25Q80DV::ReadID();         // Флеш-память
 
     HAL_ADC::Update();
 
-    WS2812B::Update();
+    WS2812B::Update();          // Индикаторы
+
+    LIS2DH12::Update();
 
     if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_11) == GPIO_PIN_RESET)
     {
