@@ -24,6 +24,8 @@ void HAL::Init()
     HAL_USART2::Init();
 
     HAL_ADC::Init();
+
+    HAL_I2C1::Init();
 }
 
 

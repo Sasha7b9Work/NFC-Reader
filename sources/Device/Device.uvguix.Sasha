@@ -6,7 +6,7 @@
   <Header>### uVision Project, (C) Keil Software</Header>
 
   <PrjGuiSettings>
-    <LastAddFilePath>D:\Sasha\My\work\NFC-Reader\sources\Device\src\Hardware</LastAddFilePath>
+    <LastAddFilePath>D:\Sasha\My\work\NFC-Reader\sources\Device\src\Modules\LIS2DH12</LastAddFilePath>
   </PrjGuiSettings>
 
   <ViewPool/>

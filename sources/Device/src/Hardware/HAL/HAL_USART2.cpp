@@ -1,6 +1,7 @@
 // 2022/6/14 22:08:35 (c) Aleksandr Shevchenko e-mail : Sasha7b9@tut.by
 #include "defines.h"
 #include "Hardware/HAL/HAL.h"
+#include "Modules/LIS2DH12/LIS2DH12.h"
 #include <stm32f1xx_hal.h>
 #include <cstring>
 #include <cctype>
@@ -110,9 +111,12 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *)
 
             if (pointer == (int)std::strlen(request))
             {
+                uint8 id0 = LIS2DH12::GetID(0x18);
+                uint8 id1 = LIS2DH12::GetID(0x19);
+
                 char message[100];
 
-                std::sprintf(message, "OK-55h-%3.1fV\x0D\x0A", HAL_ADC::GetValue());
+                std::sprintf(message, "OK-55h-%3.1fV-Address0:%2Xh-Address1:%2Xh\x0D\x0A", HAL_ADC::GetValue(), (int)id0, (int)id1);
 
                 HAL_USART2::Transmit(message);
 

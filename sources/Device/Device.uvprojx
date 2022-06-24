@@ -586,6 +586,21 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>Modules/LIS2DH12</GroupName>
+          <Files>
+            <File>
+              <FileName>LIS2DH12.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\Modules\LIS2DH12\LIS2DH12.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>LIS2DH12.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\Modules\LIS2DH12\LIS2DH12.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>Modules/W25Q80DV</GroupName>
           <Files>
             <File>
@@ -1203,6 +1218,21 @@
               <FileName>HAL_PINS.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\src\Hardware\HAL\HAL_PINS.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Modules/LIS2DH12</GroupName>
+          <Files>
+            <File>
+              <FileName>LIS2DH12.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\Modules\LIS2DH12\LIS2DH12.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>LIS2DH12.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\Modules\LIS2DH12\LIS2DH12.h</FilePath>
             </File>
           </Files>
         </Group>
