@@ -2,6 +2,7 @@
 #include "defines.h"
 #include "Modules/LIS2DH12/LIS2DH12.h"
 #include "Modules/LIS2DH12/LIS2DH12_reg.h"
+#include "Hardware/HAL/HAL.h"
 #include <cstring>
 #include <cstdio>
 
@@ -19,8 +20,6 @@ namespace LIS2DH12
     static float temperature_degC;
     static uint8_t tx_buffer[1000];
 
-    static void platform_init();
-
     static int32_t platform_write(void *handle, uint8_t reg, const uint8_t *bufp, uint16_t len);
 
     static int32_t platform_read(void *handle, uint8_t reg, uint8_t *bufp, uint16_t len);
@@ -32,9 +31,6 @@ void LIS2DH12::Init()
     dev_ctx.write_reg = platform_write;
     dev_ctx.read_reg = platform_read;
 //    dev_ctx.handle = &SENSOR_BUS;
-
-    // Wait boot time and initialize platform specific hardware
-    platform_init();
 
     // Check device ID
     uint8 whoamI = 0;
@@ -133,42 +129,10 @@ static int32_t LIS2DH12::platform_write(void * /*handle*/, uint8_t /*reg*/, cons
  *                   order to select the correct sensor bus handler.
  * @param  reg       register to read
  * @param  bufp      pointer to buffer that store the data read
- * @param  len       number of consecutive register to read
+ * @param  len       number of consecutive register to reads
  *
  */
-static int32_t LIS2DH12::platform_read(void * /*handle*/, uint8_t /*reg*/, uint8_t * /*bufp*/, uint16_t /*len*/)
+static int32_t LIS2DH12::platform_read(void * /*handle*/, uint8_t reg, uint8_t *buf, uint16_t len)
 {
-#if defined(NUCLEO_F411RE)
-    /* Read multiple command */
-    reg |= 0x80;
-    HAL_I2C_Mem_Read(handle, LIS2DH12_I2C_ADD_L, reg,
-        I2C_MEMADD_SIZE_8BIT, bufp, len, 1000);
-#elif defined(STEVAL_MKI109V3)
-    /* Read multiple command */
-    reg |= 0x80;
-    HAL_GPIO_WritePin(CS_up_GPIO_Port, CS_up_Pin, GPIO_PIN_RESET);
-    HAL_SPI_Transmit(handle, &reg, 1, 1000);
-    HAL_SPI_Receive(handle, bufp, len, 1000);
-    HAL_GPIO_WritePin(CS_up_GPIO_Port, CS_up_Pin, GPIO_PIN_SET);
-#elif defined(SPC584B_DIS)
-    /* Read multiple command */
-    reg |= 0x80;
-    i2c_lld_read(handle, LIS2DH12_I2C_ADD_L & 0xFE, reg, bufp, len);
-#endif
-    return 0;
-}
-
-
-/*
- * @brief  platform specific initialization (platform dependent)
- */
-static void LIS2DH12::platform_init()
-{
-#if defined(STEVAL_MKI109V3)
-    TIM3->CCR1 = PWM_3V3;
-    TIM3->CCR2 = PWM_3V3;
-    HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
-    HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
-    HAL_Delay(1000);
-#endif
+    return (int)HAL_I2C1::Read(0x19, reg, buf, len);
 }
