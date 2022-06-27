@@ -18,6 +18,8 @@ namespace LIS2DH12
     static float acceleration_mg[3];
     static float temperature_degC;
 
+    uint8 byte = 0;
+
     static int32_t platform_write(void *handle, uint8_t reg, const uint8_t *bufp, uint16_t len);
 
     static int32_t platform_read(void *handle, uint8_t reg, uint8_t *bufp, uint16_t len);
@@ -66,27 +68,35 @@ void LIS2DH12::Init()
 
 void LIS2DH12::Update()
 {
-    if (HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_0) == GPIO_PIN_SET)
-    {
-        // Read accelerometer data
-        std::memset(data_raw_acceleration, 0x00, 3 * sizeof(int16_t));
-        lis2dh12_acceleration_raw_get(&dev_ctx, data_raw_acceleration);
-        acceleration_mg[0] = lis2dh12_from_fs2_hr_to_mg(data_raw_acceleration[0]);
-        acceleration_mg[1] = lis2dh12_from_fs2_hr_to_mg(data_raw_acceleration[1]);
-        acceleration_mg[2] = lis2dh12_from_fs2_hr_to_mg(data_raw_acceleration[2]);
-    }
+//    if (HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_0) == GPIO_PIN_SET)
+//    {
+//        // Read accelerometer data
+//        std::memset(data_raw_acceleration, 0x00, 3 * sizeof(int16_t));
+//        lis2dh12_acceleration_raw_get(&dev_ctx, data_raw_acceleration);
+//        acceleration_mg[0] = lis2dh12_from_fs2_hr_to_mg(data_raw_acceleration[0]);
+//        acceleration_mg[1] = lis2dh12_from_fs2_hr_to_mg(data_raw_acceleration[1]);
+//        acceleration_mg[2] = lis2dh12_from_fs2_hr_to_mg(data_raw_acceleration[2]);
+//    }
 
     lis2dh12_reg_t reg;
 
     lis2dh12_temp_data_ready_get(&dev_ctx, &reg.byte);
 
-    if (reg.byte)
-    {
-        // Read temperature data
-        std::memset(&data_raw_temperature, 0x00, sizeof(int16_t));
-        lis2dh12_temperature_raw_get(&dev_ctx, &data_raw_temperature);
-        temperature_degC = lis2dh12_from_lsb_hr_to_celsius(data_raw_temperature);
-    }
+    byte = reg.byte;
+
+//    if (reg.byte)
+//    {
+//        // Read temperature data
+//        std::memset(&data_raw_temperature, 0x00, sizeof(int16_t));
+//        lis2dh12_temperature_raw_get(&dev_ctx, &data_raw_temperature);
+//        temperature_degC = lis2dh12_from_lsb_hr_to_celsius(data_raw_temperature);
+//    }
+}
+
+
+uint8 LIS2DH12::GetByte()
+{
+    return byte;
 }
 
 

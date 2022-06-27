@@ -41,7 +41,7 @@ void Device::Init()
 
 void Device::Update()
 {
-    W25Q80DV::ReadID();         // Флеш-память
+//    W25Q80DV::ReadID();         // Флеш-память
 
     HAL_ADC::Update();
 

@@ -15,4 +15,6 @@ namespace LIS2DH12
     float GetAccelerationZ();
 
     float GetTemperature();
+
+    uint8 GetByte();
 }
