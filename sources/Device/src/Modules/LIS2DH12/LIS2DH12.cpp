@@ -65,6 +65,12 @@ void LIS2DH12::Init()
 
 void LIS2DH12::Update()
 {
+    uint8 b = (1 << 4);
+
+    lis2dh12_pin_int1_config_set(&dev_ctx, (lis2dh12_ctrl_reg3_t *)&b);
+
+    Timer::Delay(5);
+
     lis2dh12_reg_t reg;
     /* Read output only if new value available */
     lis2dh12_xl_data_ready_get(&dev_ctx, &reg.byte);
@@ -78,8 +84,6 @@ void LIS2DH12::Update()
         acceleration_mg[1] = lis2dh12_from_fs2_hr_to_mg(data_raw_acceleration[1]);
         acceleration_mg[2] = lis2dh12_from_fs2_hr_to_mg(data_raw_acceleration[2]);
     }
-
-    Timer::Delay(5);
 
     lis2dh12_temp_data_ready_get(&dev_ctx, &reg.byte);
 
