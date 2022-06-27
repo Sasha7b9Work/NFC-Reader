@@ -3,6 +3,7 @@
 #include "Modules/LIS2DH12/LIS2DH12.h"
 #include "Modules/LIS2DH12/LIS2DH12_reg.h"
 #include "Hardware/HAL/HAL.h"
+#include "Hardware/Timer.h"
 #include <stm32f1xx_hal.h>
 #include <cstring>
 #include <cstdio>
@@ -44,6 +45,10 @@ void LIS2DH12::Init()
     // Enable Block Data Update.
     lis2dh12_block_data_update_set(&dev_ctx, PROPERTY_ENABLE);
 
+    uint8 b = (1 << 4);
+
+    lis2dh12_pin_int1_config_set(&dev_ctx, (lis2dh12_ctrl_reg3_t *)&b);
+
     // Set Output Data Rate to 1Hz.
     lis2dh12_data_rate_set(&dev_ctx, LIS2DH12_ODR_1Hz);
 
@@ -55,42 +60,38 @@ void LIS2DH12::Init()
 
     // Set device in continuous mode with 12 bit resol.
     lis2dh12_operating_mode_set(&dev_ctx, LIS2DH12_HR_12bit);
-
-    lis2dh12_ctrl_reg3_t reg;
-
-    lis2dh12_pin_int1_config_get(&dev_ctx, &reg);
-
-    reg.i1_zyxda = 1;                               // Устанавливаем прерывание на int1 по новым данным
-
-    lis2dh12_pin_int1_config_set(&dev_ctx, &reg);
 }
 
 
 void LIS2DH12::Update()
 {
-//    if (HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_0) == GPIO_PIN_SET)
-//    {
-//        // Read accelerometer data
-//        std::memset(data_raw_acceleration, 0x00, 3 * sizeof(int16_t));
-//        lis2dh12_acceleration_raw_get(&dev_ctx, data_raw_acceleration);
-//        acceleration_mg[0] = lis2dh12_from_fs2_hr_to_mg(data_raw_acceleration[0]);
-//        acceleration_mg[1] = lis2dh12_from_fs2_hr_to_mg(data_raw_acceleration[1]);
-//        acceleration_mg[2] = lis2dh12_from_fs2_hr_to_mg(data_raw_acceleration[2]);
-//    }
-
     lis2dh12_reg_t reg;
+    /* Read output only if new value available */
+    lis2dh12_xl_data_ready_get(&dev_ctx, &reg.byte);
+
+    if (reg.byte || HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_0) == GPIO_PIN_SET)
+    {
+        // Read accelerometer data
+        std::memset(data_raw_acceleration, 0x00, 3 * sizeof(int16_t));
+        lis2dh12_acceleration_raw_get(&dev_ctx, data_raw_acceleration);
+        acceleration_mg[0] = lis2dh12_from_fs2_hr_to_mg(data_raw_acceleration[0]);
+        acceleration_mg[1] = lis2dh12_from_fs2_hr_to_mg(data_raw_acceleration[1]);
+        acceleration_mg[2] = lis2dh12_from_fs2_hr_to_mg(data_raw_acceleration[2]);
+    }
+
+    Timer::Delay(5);
 
     lis2dh12_temp_data_ready_get(&dev_ctx, &reg.byte);
 
     byte = reg.byte;
 
-//    if (reg.byte)
-//    {
-//        // Read temperature data
-//        std::memset(&data_raw_temperature, 0x00, sizeof(int16_t));
-//        lis2dh12_temperature_raw_get(&dev_ctx, &data_raw_temperature);
-//        temperature_degC = lis2dh12_from_lsb_hr_to_celsius(data_raw_temperature);
-//    }
+    if (reg.byte)
+    {
+        // Read temperature data
+        std::memset(&data_raw_temperature, 0x00, sizeof(int16_t));
+        lis2dh12_temperature_raw_get(&dev_ctx, &data_raw_temperature);
+        temperature_degC = lis2dh12_from_lsb_hr_to_celsius(data_raw_temperature);
+    }
 }
 
 
