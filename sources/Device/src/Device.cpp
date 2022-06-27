@@ -47,7 +47,7 @@ void Device::Update()
 
     WS2812B::Update();          // Индикаторы
 
-    LIS2DH12::Update();
+    LIS2DH12::Update();         // Акселерометр
 
     if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_11) == GPIO_PIN_RESET)
     {

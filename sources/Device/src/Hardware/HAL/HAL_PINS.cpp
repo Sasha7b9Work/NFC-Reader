@@ -46,4 +46,8 @@ void HAL_PINS::Init()
     is2.Pin = GPIO_PIN_0;           // Сигнал LG
 
     HAL_GPIO_Init(GPIOB, &is2);
+
+    is2.Pin = GPIO_PIN_0;
+
+    HAL_GPIO_Init(GPIOD, &is2);     // IRQ_SNS INT1 от акселерометра
 }

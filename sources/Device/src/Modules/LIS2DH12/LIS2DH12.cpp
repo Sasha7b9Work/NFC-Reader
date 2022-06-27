@@ -3,6 +3,7 @@
 #include "Modules/LIS2DH12/LIS2DH12.h"
 #include "Modules/LIS2DH12/LIS2DH12_reg.h"
 #include "Hardware/HAL/HAL.h"
+#include <stm32f1xx_hal.h>
 #include <cstring>
 #include <cstdio>
 
@@ -52,17 +53,20 @@ void LIS2DH12::Init()
 
     // Set device in continuous mode with 12 bit resol.
     lis2dh12_operating_mode_set(&dev_ctx, LIS2DH12_HR_12bit);
+
+    lis2dh12_ctrl_reg3_t reg;
+
+    lis2dh12_pin_int1_config_get(&dev_ctx, &reg);
+
+    reg.i1_zyxda = 1;                               // Устанавливаем прерывание на int1 по новым данным
+
+    lis2dh12_pin_int1_config_set(&dev_ctx, &reg);
 }
 
 
 void LIS2DH12::Update()
 {
-    lis2dh12_reg_t reg;
-
-    // Read output only if new value available
-    lis2dh12_xl_data_ready_get(&dev_ctx, &reg.byte);
-
-    if (reg.byte)
+    if (HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_0) == GPIO_PIN_SET)
     {
         // Read accelerometer data
         std::memset(data_raw_acceleration, 0x00, 3 * sizeof(int16_t));
@@ -71,6 +75,8 @@ void LIS2DH12::Update()
         acceleration_mg[1] = lis2dh12_from_fs2_hr_to_mg(data_raw_acceleration[1]);
         acceleration_mg[2] = lis2dh12_from_fs2_hr_to_mg(data_raw_acceleration[2]);
     }
+
+    lis2dh12_reg_t reg;
 
     lis2dh12_temp_data_ready_get(&dev_ctx, &reg.byte);
 
