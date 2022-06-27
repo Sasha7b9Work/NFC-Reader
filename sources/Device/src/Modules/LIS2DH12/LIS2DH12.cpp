@@ -45,7 +45,15 @@ void LIS2DH12::Init()
     // Enable Block Data Update.
     lis2dh12_block_data_update_set(&dev_ctx, PROPERTY_ENABLE);
 
-    uint8 b = (1 << 4);
+    lis2dh12_ctrl_reg3_t b;
+    b.not_used_01 = 0;
+    b.i1_overrun = 0;
+    b.i1_wtm = 0;
+    b.not_used_02 = 0;
+    b.i1_zyxda = 1;
+    b.i1_ia2 = 0;
+    b.i1_ia1 = 0;
+    b.i1_click = 0;
 
     lis2dh12_pin_int1_config_set(&dev_ctx, (lis2dh12_ctrl_reg3_t *)&b);
 
@@ -65,9 +73,17 @@ void LIS2DH12::Init()
 
 void LIS2DH12::Update()
 {
-    uint8 b = (1 << 4);
+    lis2dh12_ctrl_reg3_t b;
+    b.not_used_01 = 0;
+    b.i1_overrun = 0;
+    b.i1_wtm = 0;
+    b.not_used_02 = 0;
+    b.i1_zyxda = 1;
+    b.i1_ia2 = 0;
+    b.i1_ia1 = 0;
+    b.i1_click = 0;
 
-    lis2dh12_pin_int1_config_set(&dev_ctx, (lis2dh12_ctrl_reg3_t *)&b);
+    lis2dh12_pin_int1_config_set(&dev_ctx, &b);
 
     Timer::Delay(5);
 
