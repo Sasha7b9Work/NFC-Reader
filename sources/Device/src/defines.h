@@ -13,6 +13,7 @@ typedef unsigned char uchar;
 #ifndef WIN32
     #define nullptr 0
     #pragma diag_suppress 2748
+    #pragma anon_unions
 #endif
 
 

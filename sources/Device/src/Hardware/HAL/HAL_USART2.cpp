@@ -115,7 +115,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *)
 
                 StructDataRaw temp = LIS2DH12::GetRawTemperature();
 
-                std::sprintf(message, "OK-55h-%3.1fV-%3.2fg-%3.2fg-%3.2fg-%d/%d/%3.1fC-rate=%d\x0D\x0A",
+                std::sprintf(message, "OK-55h-%3.1fV-%3.2fg-%3.2fg-%3.2fg-%d/%d/%3.1fC\x0D\x0A",
                     HAL_ADC::GetValue(),
                     LIS2DH12::GetAccelerationX().ToAccelearation(),
                     LIS2DH12::GetAccelerationY().ToAccelearation(),

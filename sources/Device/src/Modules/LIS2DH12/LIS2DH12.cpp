@@ -52,38 +52,40 @@ void LIS2DH12::Init()
         }
     }
 
+    uint8 data = 0;
+    _SET_BIT(data, 4);                              // I1_ZYXDA = 1 - разрешаем прерывания INT1 по полученным измерениям
+    Write(LIS2DH12_CTRL_REG3, data);
+
     // Enable Block Data Update.
-//    lis2dh12_block_data_update_set(&dev_ctx, PROPERTY_ENABLE);
-    uint8 data = Read(LIS2DH12_CTRL_REG4);
-    data |= (1 << 7);
+    data = Read(LIS2DH12_CTRL_REG4);
+    data |= (1 << 7);                               // BDU = 1
     Write(LIS2DH12_CTRL_REG4, data);
 
     // Set Output Data Rate to 1Hz.
-//    lis2dh12_data_rate_set(&dev_ctx, LIS2DH12_ODR_1Hz);
     HAL_I2C1::Read(0x19, LIS2DH12_CTRL_REG1, &data, 1);
-    data |= (1 << 4);
+    data |= (1 << 4);                               // ODR = 0b0001, 1Hz
     HAL_I2C1::Write(0x19, LIS2DH12_CTRL_REG1, &data, 1);
 
     // Set full scale to 2g.
 //    lis2dh12_full_scale_set(&dev_ctx, LIS2DH12_2g);   Это значение по умолчанию
 
     // Enable temperature sensor.
-    //lis2dh12_temperature_meas_set(&dev_ctx, LIS2DH12_TEMP_ENABLE);
     data = 0xC0;
-    HAL_I2C1::Write(0x19, LIS2DH12_TEMP_CFG_REG, &data, 1);
+    HAL_I2C1::Write(0x19, LIS2DH12_TEMP_CFG_REG, &data, 1);     // TEMP_EN = 0b11
 
     // Set device in continuous mode with 12 bit resol.
-//    lis2dh12_operating_mode_set(&dev_ctx, LIS2DH12_HR_12bit);
     HAL_I2C1::Read(0x19, LIS2DH12_CTRL_REG4, &data, 1);
-    data |= (1 << 3);
+    data |= (1 << 3);                                           // HR = 1, (LPen = 0 - High resolution mode)
     Write(LIS2DH12_CTRL_REG4, data);
 }
 
 
 void LIS2DH12::Update()
 {
-    if (Read(LIS2DH12_STATUS_REG) & (1 << 3))           // ZYXDA
+    if (Read(LIS2DH12_STATUS_REG) & (1 << 3) || (HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_0) == GPIO_PIN_SET))           // ZYXDA
     {
+        Timer::Delay(1);
+
         raw_acce_x.lo = Read(LIS2DH12_OUT_X_L);
         raw_acce_x.hi = Read(LIS2DH12_OUT_X_H);
 
@@ -94,8 +96,12 @@ void LIS2DH12::Update()
         raw_acce_z.hi = Read(LIS2DH12_OUT_Z_H);
     }
 
+    Timer::Delay(5);
+
     if (Read(LIS2DH12_STATUS_REG_AUX) & (1 << 2))       // TDA
     {
+        Timer::Delay(1);
+
         raw_temp.lo = Read(LIS2DH12_OUT_TEMP_L);
         raw_temp.hi = Read(LIS2DH12_OUT_TEMP_H);
     }

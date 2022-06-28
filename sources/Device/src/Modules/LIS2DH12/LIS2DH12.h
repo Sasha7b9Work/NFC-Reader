@@ -2,17 +2,15 @@
 #pragma once
 
 
-struct StructDataRaw
+union StructDataRaw
 {
-    union
+    struct
     {
-        union
-        {
-            uint8 lo;
-            uint8 hi;
-        };
-        int16 raw;
+        uint8 lo;
+        uint8 hi;
     };
+
+    int16 raw;
 
     float ToTemperatrue()
     {
