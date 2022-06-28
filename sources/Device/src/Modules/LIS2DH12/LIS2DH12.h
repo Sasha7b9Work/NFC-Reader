@@ -2,6 +2,27 @@
 #pragma once
 
 
+struct StructRawTemp
+{
+    union
+    {
+        union
+        {
+            uint8 lo;
+            uint8 hi;
+        };
+        int16 raw;
+    };
+
+    float ToAbs()
+    {
+        return 25.0f + (float)hi + (float)lo / 256.0f;
+    }
+
+};
+
+
+
 namespace LIS2DH12
 {
     void Init();
@@ -14,7 +35,5 @@ namespace LIS2DH12
 
     float GetAccelerationZ();
 
-    float GetTemperature();
-
-    uint8 GetByte();
+    StructRawTemp GetRawTemperature();
 }
