@@ -2,7 +2,7 @@
 #pragma once
 
 
-struct StructRawTemp
+struct StructDataRaw
 {
     union
     {
@@ -14,11 +14,15 @@ struct StructRawTemp
         int16 raw;
     };
 
-    float ToAbs()
+    float ToTemperatrue()
     {
-        return 25.0f + (float)hi + (float)lo / 256.0f;
+        return 25.0f + (float)raw / 256.0f;
     }
 
+    float ToAccelearation()
+    {
+        return (float)raw / 16.0f;
+    }
 };
 
 
@@ -29,11 +33,11 @@ namespace LIS2DH12
 
     void Update();
 
-    float GetAccelerationX();
+    StructDataRaw GetAccelerationX();
 
-    float GetAccelerationY();
+    StructDataRaw GetAccelerationY();
 
-    float GetAccelerationZ();
+    StructDataRaw GetAccelerationZ();
 
-    StructRawTemp GetRawTemperature();
+    StructDataRaw GetRawTemperature();
 }

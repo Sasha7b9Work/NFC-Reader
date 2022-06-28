@@ -113,16 +113,16 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *)
             {
                 char message[100];
 
-                StructRawTemp temp = LIS2DH12::GetRawTemperature();
+                StructDataRaw temp = LIS2DH12::GetRawTemperature();
 
                 std::sprintf(message, "OK-55h-%3.1fV-%3.2fg-%3.2fg-%3.2fg-%d/%d/%3.1fC-rate=%d\x0D\x0A",
                     HAL_ADC::GetValue(),
-                    LIS2DH12::GetAccelerationX(),
-                    LIS2DH12::GetAccelerationY(),
-                    LIS2DH12::GetAccelerationZ(),
+                    LIS2DH12::GetAccelerationX().ToAccelearation(),
+                    LIS2DH12::GetAccelerationY().ToAccelearation(),
+                    LIS2DH12::GetAccelerationZ().ToAccelearation(),
                     temp.lo,
                     temp.hi,
-                    temp.ToAbs());
+                    temp.ToTemperatrue());
 
                 HAL_USART2::Transmit(message);
 

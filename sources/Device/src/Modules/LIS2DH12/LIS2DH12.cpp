@@ -11,14 +11,13 @@
 
 namespace LIS2DH12
 {
-    static StructRawTemp raw_temp;
+    static StructDataRaw raw_temp;
+    static StructDataRaw raw_acce_x;
+    static StructDataRaw raw_acce_y;
+    static StructDataRaw raw_acce_z;
 
     // Initialize mems driver interface
     static stmdev_ctx_t dev_ctx;
-
-    static int16_t data_raw_acceleration[3];
-    static int16_t data_raw_temperature;
-    static float acceleration_mg[3] = { 0.0f, 0.0f, 0.0f };
 
     static int32_t platform_write(void *handle, uint8_t reg, const uint8_t *bufp, uint16_t len);
 
@@ -27,6 +26,13 @@ namespace LIS2DH12
     static void Write(uint8 reg, uint8 data)
     {
         HAL_I2C1::Write(0x19, reg, &data, 1);
+    }
+
+    static uint8 Read(uint8 reg)
+    {
+        uint8 result = 0;
+        HAL_I2C1::Read(0x19, reg, &result, 1);
+        return result;
     }
 }
 
@@ -48,21 +54,18 @@ void LIS2DH12::Init()
 
     // Enable Block Data Update.
 //    lis2dh12_block_data_update_set(&dev_ctx, PROPERTY_ENABLE);
-
-    uint8 data = 0;
-    HAL_I2C1::Read(0x19, LIS2DH12_CTRL_REG4, &data, 1);
+    uint8 data = Read(LIS2DH12_CTRL_REG4);
     data |= (1 << 7);
-    HAL_I2C1::Write(0x19, LIS2DH12_CTRL_REG4, &data, 1);
+    Write(LIS2DH12_CTRL_REG4, data);
 
     // Set Output Data Rate to 1Hz.
 //    lis2dh12_data_rate_set(&dev_ctx, LIS2DH12_ODR_1Hz);
-
     HAL_I2C1::Read(0x19, LIS2DH12_CTRL_REG1, &data, 1);
     data |= (1 << 4);
     HAL_I2C1::Write(0x19, LIS2DH12_CTRL_REG1, &data, 1);
 
     // Set full scale to 2g.
-//    lis2dh12_full_scale_set(&dev_ctx, LIS2DH12_2g);
+//    lis2dh12_full_scale_set(&dev_ctx, LIS2DH12_2g);   Это значение по умолчанию
 
     // Enable temperature sensor.
     //lis2dh12_temperature_meas_set(&dev_ctx, LIS2DH12_TEMP_ENABLE);
@@ -71,7 +74,6 @@ void LIS2DH12::Init()
 
     // Set device in continuous mode with 12 bit resol.
 //    lis2dh12_operating_mode_set(&dev_ctx, LIS2DH12_HR_12bit);
-
     HAL_I2C1::Read(0x19, LIS2DH12_CTRL_REG4, &data, 1);
     data |= (1 << 3);
     Write(LIS2DH12_CTRL_REG4, data);
@@ -80,41 +82,47 @@ void LIS2DH12::Init()
 
 void LIS2DH12::Update()
 {
-    lis2dh12_reg_t reg;
-
-    lis2dh12_temp_data_ready_get(&dev_ctx, &reg.byte);
-
-    if (reg.byte)
+    if (Read(LIS2DH12_STATUS_REG) & (1 << 3))           // ZYXDA
     {
-        Timer::Delay(1);
+        raw_acce_x.lo = Read(LIS2DH12_OUT_X_L);
+        raw_acce_x.hi = Read(LIS2DH12_OUT_X_H);
 
-        HAL_I2C1::Read(0x19, LIS2DH12_OUT_TEMP_L, &raw_temp.lo, 1);
-        HAL_I2C1::Read(0x19, LIS2DH12_OUT_TEMP_H, &raw_temp.hi, 1);
+        raw_acce_y.lo = Read(LIS2DH12_OUT_Y_L);
+        raw_acce_y.hi = Read(LIS2DH12_OUT_Y_H);
+
+        raw_acce_z.lo = Read(LIS2DH12_OUT_Z_L);
+        raw_acce_z.hi = Read(LIS2DH12_OUT_Z_H);
+    }
+
+    if (Read(LIS2DH12_STATUS_REG_AUX) & (1 << 2))       // TDA
+    {
+        raw_temp.lo = Read(LIS2DH12_OUT_TEMP_L);
+        raw_temp.hi = Read(LIS2DH12_OUT_TEMP_H);
     }
 }
 
 
-StructRawTemp LIS2DH12::GetRawTemperature()
+StructDataRaw LIS2DH12::GetRawTemperature()
 {
     return raw_temp;
 }
 
 
-float LIS2DH12::GetAccelerationX()
+StructDataRaw LIS2DH12::GetAccelerationX()
 {
-    return acceleration_mg[0];
+    return raw_acce_x;
 }
 
 
-float LIS2DH12::GetAccelerationY()
+StructDataRaw LIS2DH12::GetAccelerationY()
 {
-    return acceleration_mg[1];
+    return raw_acce_y;
 }
 
 
-float LIS2DH12::GetAccelerationZ()
+StructDataRaw LIS2DH12::GetAccelerationZ()
 {
-    return acceleration_mg[2];
+    return raw_acce_z;
 }
 
 
