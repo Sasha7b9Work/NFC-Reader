@@ -51,4 +51,7 @@ void HAL_PINS::Init()
     is2.Pull = GPIO_PULLDOWN;
 
     HAL_GPIO_Init(GPIOD, &is2);     // IRQ_SNS INT1 от акселерометра
+    uint data = GPIOD->ODR;
+    _CLEAR_BIT(data, 0);
+    GPIOD->ODR = data;              // Записываем ноль в ODR0
 }
