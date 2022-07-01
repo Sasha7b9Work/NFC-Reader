@@ -1,7 +1,6 @@
 // (c) Aleksandr Shevchenko e-mail : Sasha7b9@tut.by
 #include "Device.h"
-#include "Hardware/Timer.h"
-
+#include "Hardware/Power.h"
 
 int main(void)
 {
@@ -9,13 +8,8 @@ int main(void)
 
     while (true)
     {
-        static TimeMeterMS meter;
+        Power::EnterSleepMode();
 
-        if (meter.ElapsedTime() >= 60)
-        {
-            meter.Reset();
-
-            Device::Update();
-        }
+        Device::Update();
     }
 }

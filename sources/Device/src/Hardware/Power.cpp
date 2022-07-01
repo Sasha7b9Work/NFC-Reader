@@ -20,6 +20,8 @@ namespace Power
     };
 
     void *handleTIM3 = &handle;
+
+    static int number = 0;
 }
 
 
@@ -49,4 +51,12 @@ void Power::LeaveSleepMode()
     HAL_TIM_Base_Stop_IT(&handle);
 
     HAL_TIM_Base_DeInit(&handle);
+
+    number++;
+}
+
+
+int Power::GetNumber()
+{
+    return number;
 }

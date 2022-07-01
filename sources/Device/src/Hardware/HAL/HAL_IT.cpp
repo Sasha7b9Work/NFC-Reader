@@ -1,6 +1,7 @@
 // 2022/6/10 9:08:02 (c) Aleksandr Shevchenko e-mail : Sasha7b9@tut.by
 #include "defines.h"
 #include "Hardware/HAL/HAL.h"
+#include "Hardware/Power.h"
 #include <stm32f1xx_hal.h>
 
 
@@ -73,6 +74,21 @@ void SysTick_Handler(void)
 void USART2_IRQHandler(void)
 {
     HAL_UART_IRQHandler((UART_HandleTypeDef *)HAL_USART2::handle);
+}
+
+
+void TIM3_IRQHandler(void)
+{
+    TIM_HandleTypeDef *handle = (TIM_HandleTypeDef *)Power::handleTIM3;
+
+    if (__HAL_TIM_GET_FLAG(handle, TIM_FLAG_UPDATE) == SET &&
+        __HAL_TIM_GET_ITSTATUS(handle, TIM_IT_UPDATE))
+    {
+        Power::LeaveSleepMode();
+
+        __HAL_TIM_CLEAR_FLAG(handle, TIM_FLAG_UPDATE);
+        __HAL_TIM_CLEAR_IT(handle, TIM_IT_UPDATE);
+    }
 }
 
 #ifdef __cplusplus

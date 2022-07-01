@@ -59,8 +59,6 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define IRQ_SNS_Pin GPIO_PIN_0
-#define IRQ_SNS_GPIO_Port GPIOD
 #define VIN_Pin GPIO_PIN_0
 #define VIN_GPIO_Port GPIOA
 #define TXD2_Pin GPIO_PIN_2

@@ -9,4 +9,6 @@ namespace Power
     void LeaveSleepMode();
 
     extern void *handleTIM3;       // TIM_HandleTypeDef
+
+    int GetNumber();
 }
