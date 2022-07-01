@@ -463,6 +463,11 @@
               <FileType>1</FileType>
               <FilePath>..\common\STM32Cube_F1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_adc_ex.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f1xx_hal_pwr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\common\STM32Cube_F1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_pwr.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -512,6 +517,16 @@
               <FileName>Beeper.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\src\Hardware\Beeper.h</FilePath>
+            </File>
+            <File>
+              <FileName>Power.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\Hardware\Power.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Power.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\Hardware\Power.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -1124,6 +1139,11 @@
               <FileType>1</FileType>
               <FilePath>..\common\STM32Cube_F1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_adc_ex.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f1xx_hal_pwr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\common\STM32Cube_F1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_pwr.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1173,6 +1193,16 @@
               <FileName>Beeper.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\src\Hardware\Beeper.h</FilePath>
+            </File>
+            <File>
+              <FileName>Power.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\Hardware\Power.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Power.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\Hardware\Power.h</FilePath>
             </File>
           </Files>
         </Group>
