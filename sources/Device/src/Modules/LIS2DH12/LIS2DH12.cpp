@@ -84,17 +84,14 @@ void LIS2DH12::Update()
 {
     if (HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_0) == GPIO_PIN_SET)           // ZYXDA
     {
-        if (Read(LIS2DH12_STATUS_REG) & (1 << 3))
-        {
-            raw_acce_x.lo = Read(LIS2DH12_OUT_X_L);
-            raw_acce_x.hi = Read(LIS2DH12_OUT_X_H);
+        raw_acce_x.lo = Read(LIS2DH12_OUT_X_L);
+        raw_acce_x.hi = Read(LIS2DH12_OUT_X_H);
 
-            raw_acce_y.lo = Read(LIS2DH12_OUT_Y_L);
-            raw_acce_y.hi = Read(LIS2DH12_OUT_Y_H);
+        raw_acce_y.lo = Read(LIS2DH12_OUT_Y_L);
+        raw_acce_y.hi = Read(LIS2DH12_OUT_Y_H);
 
-            raw_acce_z.lo = Read(LIS2DH12_OUT_Z_L);
-            raw_acce_z.hi = Read(LIS2DH12_OUT_Z_H);
-        }
+        raw_acce_z.lo = Read(LIS2DH12_OUT_Z_L);
+        raw_acce_z.hi = Read(LIS2DH12_OUT_Z_H);
     }
 
     if (Read(LIS2DH12_STATUS_REG_AUX) & (1 << 2))       // TDA
