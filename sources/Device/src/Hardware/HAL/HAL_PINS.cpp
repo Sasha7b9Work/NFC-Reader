@@ -54,4 +54,6 @@ void HAL_PINS::Init()
     uint data = GPIOD->ODR;
     _CLEAR_BIT(data, 0);
     GPIOD->ODR = data;              // Записываем ноль в ODR0
+
+    __HAL_AFIO_REMAP_PD01_ENABLE();
 }
