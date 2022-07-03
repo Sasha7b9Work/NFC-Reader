@@ -127,6 +127,12 @@ void HAL_SPI::Init()
 }
 
 
+void HAL_SPI::DeInit()
+{
+
+}
+
+
 void HAL_SPI::Write(const void *buffer, int size)
 {
     CS::Low();
