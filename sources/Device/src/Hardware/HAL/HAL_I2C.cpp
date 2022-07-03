@@ -40,6 +40,12 @@ void HAL_I2C1::Init(void)
 }
 
 
+void HAL_I2C1::DeInit()
+{
+    __HAL_RCC_I2C1_CLK_DISABLE();
+}
+
+
 int8 HAL_I2C1::Read(uint8 dev_id, uint8 reg_addr, uint8* reg_data, uint16 len)
 {
     while (HAL_I2C_GetState(&hi2c1) != HAL_I2C_STATE_READY)

@@ -2,6 +2,16 @@
 #pragma once
 
 
+struct DeviceSPI
+{
+    enum E
+    {
+        Memory,         // Работа с флеш-памятью
+        Reader          // Работа с карт-ридером
+    };
+};
+
+
 namespace HAL
 {
     void Init();
@@ -36,6 +46,8 @@ namespace HAL_I2C1
 {
     void Init();
 
+    void DeInit();
+
     int8 Read(uint8 dev_id, uint8 reg_addr, uint8 *reg_data, uint16 len);
     int8 Read16(uint8 dev_id, uint8 *data);
 
@@ -69,7 +81,7 @@ extern "C" {
     void SysTick_Handler(void);
     void USART2_IRQHandler(void);
     void TIM3_IRQHandler(void);
-
+        
 #ifdef __cplusplus
 }
 #endif

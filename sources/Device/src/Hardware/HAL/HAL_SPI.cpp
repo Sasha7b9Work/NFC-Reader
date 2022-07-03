@@ -100,6 +100,8 @@ void HAL_SPI::Init()
         return;
     }
 
+    HAL_I2C1::DeInit();
+
     initialized = true;
 
     GPIO_InitTypeDef is =
