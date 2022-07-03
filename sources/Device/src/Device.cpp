@@ -7,6 +7,7 @@
 #include "Modules/W25Q80DV/W25Q80DV.h"
 #include "Modules/WS2812B/WS2812B.h"
 #include "Modules/LIS2DH12/LIS2DH12.h"
+#include "Modules/CLRC66303HN/CLRC66303HN.h"
 #include <stm32f1xx_hal.h>
 #include <cstdlib>
 #include <cstring>
@@ -36,18 +37,20 @@ void Device::Init()
     WS2812B::Init();
 
     LIS2DH12::Init();
+
+    CLRC66303HN::Init();
 }
 
 
 void Device::Update()
 {
-//    W25Q80DV::ReadID();         // Флеш-память
-
     HAL_ADC::Update();
 
     WS2812B::Update();          // Индикаторы
 
     LIS2DH12::Update();         // Акселерометр
+
+    CLRC66303HN::Update();      // Обнаружение карты
 
     if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_11) == GPIO_PIN_RESET)
     {

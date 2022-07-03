@@ -1,6 +1,8 @@
 // (c) Aleksandr Shevchenko e-mail : Sasha7b9@tut.by
+#include "defines.h"
 #include "Device.h"
 #include "Hardware/Power.h"
+#include "Hardware/Beeper.h"
 #include <stm32f1xx_hal.h>
 
 
@@ -12,7 +14,10 @@ int main(void)
 
     while (true)
     {
-        Power::EnterSleepMode();
+        if (!Beeper::Running())
+        {
+            Power::EnterSleepMode();
+        }
 
         Device::Update();
     }

@@ -44,9 +44,9 @@ void Power::EnterSleepMode()
 
     HAL_PWR_DisableSleepOnExit();
 
-    HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI);
+    HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI);   // Здесь процессор останавливается
 
-    HAL_ResumeTick();
+    HAL_ResumeTick();                                                   // А здесь возобнавляет работу после любого прерывания
 }
 
 

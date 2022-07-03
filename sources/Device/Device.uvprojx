@@ -601,6 +601,21 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>Modules/CLRC66303HN</GroupName>
+          <Files>
+            <File>
+              <FileName>CLRC66303HN.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\Modules\CLRC66303HN\CLRC66303HN.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>CLRC66303HN.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\Modules\CLRC66303HN\CLRC66303HN.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>Modules/LIS2DH12</GroupName>
           <Files>
             <File>
@@ -1273,6 +1288,21 @@
               <FileName>HAL_PINS.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\src\Hardware\HAL\HAL_PINS.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Modules/CLRC66303HN</GroupName>
+          <Files>
+            <File>
+              <FileName>CLRC66303HN.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\Modules\CLRC66303HN\CLRC66303HN.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>CLRC66303HN.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\Modules\CLRC66303HN\CLRC66303HN.h</FilePath>
             </File>
           </Files>
         </Group>

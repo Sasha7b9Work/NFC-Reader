@@ -10,4 +10,7 @@ namespace Beeper
     void Start(int frequency);
 
     void Stop();
+
+    // Возвращает true, если звук идёт
+    bool Running();
 }

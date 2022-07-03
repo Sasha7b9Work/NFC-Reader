@@ -106,3 +106,9 @@ void Beeper::Stop()
 
     running = false;
 }
+
+
+bool Beeper::Running()
+{
+    return running;
+}
