@@ -4,11 +4,11 @@
 
 namespace Power
 {
+    void Init();
+
     void EnterSleepMode();
 
-    void LeaveSleepMode();
-
-    extern void *handleTIM3;       // TIM_HandleTypeDef
-
     int GetNumber();
+
+    extern void *handleTIM3;   // TIM_HandleTypeDef
 }

@@ -25,7 +25,7 @@ namespace Power
 }
 
 
-void Power::EnterSleepMode()
+void Power::Init()
 {
     __HAL_RCC_TIM3_CLK_ENABLE();
 
@@ -35,28 +35,28 @@ void Power::EnterSleepMode()
     HAL_TIM_Base_Init(&handle);
 
     HAL_TIM_Base_Start_IT(&handle);
+}
 
+
+void Power::EnterSleepMode()
+{
     HAL_SuspendTick();
 
     HAL_PWR_DisableSleepOnExit();
 
     HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI);
-}
 
-
-void Power::LeaveSleepMode()
-{
     HAL_ResumeTick();
-
-    HAL_TIM_Base_Stop_IT(&handle);
-
-    HAL_TIM_Base_DeInit(&handle);
-
-    number++;
 }
 
 
 int Power::GetNumber()
 {
     return number;
+}
+
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *)
+{
+    Power::number++;
 }

@@ -79,16 +79,7 @@ void USART2_IRQHandler(void)
 
 void TIM3_IRQHandler(void)
 {
-    TIM_HandleTypeDef *handle = (TIM_HandleTypeDef *)Power::handleTIM3;
-
-    if (__HAL_TIM_GET_FLAG(handle, TIM_FLAG_UPDATE) == SET &&
-        __HAL_TIM_GET_ITSTATUS(handle, TIM_IT_UPDATE))
-    {
-        Power::LeaveSleepMode();
-
-        __HAL_TIM_CLEAR_FLAG(handle, TIM_FLAG_UPDATE);
-        __HAL_TIM_CLEAR_IT(handle, TIM_IT_UPDATE);
-    }
+    HAL_TIM_IRQHandler((TIM_HandleTypeDef *)Power::handleTIM3);
 }
 
 #ifdef __cplusplus
