@@ -66,7 +66,6 @@ void HAL_SPI::Init()
 
     GPIO_InitTypeDef is =
     {
-        GPIO_PIN_4 |    // MISO
         GPIO_PIN_5 |    // MOSI
         GPIO_PIN_3,     // SCK
         GPIO_MODE_AF_PP,
@@ -75,7 +74,13 @@ void HAL_SPI::Init()
     };
 
     HAL_GPIO_Init(GPIOB, &is);
-    
+
+    is.Pin = GPIO_PIN_4;        // MISO
+    is.Mode = GPIO_MODE_INPUT;
+    is.Pull = GPIO_NOPULL;
+
+    HAL_GPIO_Init(GPIOB, &is);
+
     __HAL_AFIO_REMAP_SPI1_ENABLE();
 
     handle.Instance = SPI1;
