@@ -2,12 +2,13 @@
 #pragma once
 
 
-struct DeviceSPI
+struct DirectionSPI
 {
     enum E
     {
         Memory,         // Работа с флеш-памятью
-        Reader          // Работа с карт-ридером
+        Reader,         // Работа с карт-ридером
+        Count
     };
 };
 
@@ -33,10 +34,10 @@ namespace HAL_SPI
 {
     void DeInit();
 
-    void Write(uint8);
-    void Write(const void *buffer, int size);
-    void Read(const void *buffer, int size);
-    void WriteRead(const void *out, void *in, int size);
+    void Write(DirectionSPI::E, uint8);
+    void Write(DirectionSPI::E, const void *buffer, int size);
+    void Read(DirectionSPI::E, const void *buffer, int size);
+    void WriteRead(DirectionSPI::E, const void *out, void *in, int size);
 }
 
 

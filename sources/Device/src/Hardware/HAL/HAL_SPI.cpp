@@ -15,23 +15,26 @@ namespace HAL_SPI
     namespace CS
     {
         static GPIO_TypeDef *PORT_CS = GPIOA;
-        static const uint16 PIN_CS = GPIO_PIN_12;
+        static const uint16 PIN_CS_MEMORY = GPIO_PIN_12;
+        static const uint16 PIN_CS_READER = GPIO_PIN_15;
 
-        void Hi()
+        static const uint16 pins[DirectionSPI::Count] = { PIN_CS_MEMORY, PIN_CS_READER };
+
+        void Hi(DirectionSPI::E dir)
         {
-            HAL_GPIO_WritePin(PORT_CS, PIN_CS, GPIO_PIN_SET);
+            HAL_GPIO_WritePin(PORT_CS, pins[dir], GPIO_PIN_SET);
         }
 
-        void Low()
+        void Low(DirectionSPI::E dir)
         {
-            HAL_GPIO_WritePin(PORT_CS, PIN_CS, GPIO_PIN_RESET);
+            HAL_GPIO_WritePin(PORT_CS, pins[dir], GPIO_PIN_RESET);
         }
 
         void Init()
         {
             GPIO_InitTypeDef is =
             {
-                PIN_CS,
+                PIN_CS_MEMORY | PIN_CS_READER,
                 GPIO_MODE_OUTPUT_PP,
                 GPIO_PULLUP,
                 GPIO_SPEED_HIGH
@@ -39,7 +42,8 @@ namespace HAL_SPI
 
             HAL_GPIO_Init(PORT_CS, &is);
 
-            Hi();
+            Hi(DirectionSPI::Memory);
+            Hi(DirectionSPI::Reader);
         }
     }
 }
@@ -81,7 +85,7 @@ void HAL_SPI::Init()
     handle.Init.CLKPolarity = SPI_POLARITY_HIGH;
     handle.Init.CLKPhase = SPI_PHASE_1EDGE;
     handle.Init.NSS = SPI_NSS_SOFT;
-    handle.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_128;
+    handle.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_64;
     handle.Init.FirstBit = SPI_FIRSTBIT_MSB;
     handle.Init.TIMode = SPI_TIMODE_DISABLE;
     handle.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -103,49 +107,49 @@ void HAL_SPI::DeInit()
 }
 
 
-void HAL_SPI::Write(const void *buffer, int size)
+void HAL_SPI::Write(DirectionSPI::E dir, const void *buffer, int size)
 {
     Init();
 
-    CS::Low();
+    CS::Low(dir);
 
     HAL_SPI_Transmit(&handle, (uint8 *)buffer, (uint16)size, 100);
 
-    CS::Hi();
+    CS::Hi(dir);
 }
 
 
-void HAL_SPI::Write(uint8 byte)
+void HAL_SPI::Write(DirectionSPI::E dir, uint8 byte)
 {
     Init();
 
-    CS::Low();
+    CS::Low(dir);
 
     HAL_SPI_Transmit(&handle, &byte, 1, 100);
 
-    CS::Hi();
+    CS::Hi(dir);
 }
 
 
-void HAL_SPI::Read(const void *buffer, int size)
+void HAL_SPI::Read(DirectionSPI::E dir, const void *buffer, int size)
 {
     Init();
 
-    CS::Low();
+    CS::Low(dir);
 
     HAL_SPI_Receive(&handle, (uint8 *)buffer, (uint16)size, 100);
 
-    CS::Hi();
+    CS::Hi(dir);
 }
 
 
-void HAL_SPI::WriteRead(const void *out, void *in, int size)
+void HAL_SPI::WriteRead(DirectionSPI::E dir, const void *out, void *in, int size)
 {
     Init();
 
-    CS::Low();
+    CS::Low(dir);
 
     HAL_SPI_TransmitReceive(&handle, (uint8 *)out, (uint8 *)in, (uint16)size, 100);
 
-    CS::Hi();
+    CS::Hi(dir);
 }

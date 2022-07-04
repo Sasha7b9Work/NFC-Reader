@@ -35,15 +35,15 @@ void W25Q80DV::Write1024bytes(const uint8 *buffer, int size)
 {
     WaitRelease();
 
-    HAL_SPI::Write(WRITE_ENABLE);               // Write enable
+    HAL_SPI::Write(DirectionSPI::Memory, WRITE_ENABLE);               // Write enable
 
     Write32bit(SECTOR_ERASE, 0x000000);         // Sector erase
 
-    HAL_SPI::Write(WRITE_DISABLE);              // Write disable
+    HAL_SPI::Write(DirectionSPI::Memory, WRITE_DISABLE);              // Write disable
 
     WaitRelease();
 
-    HAL_SPI::Write(WRITE_ENABLE);               // Write enable
+    HAL_SPI::Write(DirectionSPI::Memory, WRITE_ENABLE);               // Write enable
 
     Buffer<uint8, 1024> data;
 
@@ -58,9 +58,9 @@ void W25Q80DV::Write1024bytes(const uint8 *buffer, int size)
     }
 
     //                                команда адрес
-    HAL_SPI::Write(data.Data(), size +   1   +  3);     // Page program
+    HAL_SPI::Write(DirectionSPI::Memory, data.Data(), size +   1   +  3);     // Page program
 
-    HAL_SPI::Write(WRITE_DISABLE);              // Write disable
+    HAL_SPI::Write(DirectionSPI::Memory, WRITE_DISABLE);              // Write disable
 }
 
 
@@ -77,7 +77,7 @@ void W25Q80DV::Read1024bytes(uint8 *buffer, int size)
 
     Buffer<uint8, 1024> in;
 
-    HAL_SPI::WriteRead(out.Data(), in.Data(), size + 1 + 3);
+    HAL_SPI::WriteRead(DirectionSPI::Memory, out.Data(), in.Data(), size + 1 + 3);
 
     for (int i = 0; i < size; i++)
     {
@@ -95,7 +95,7 @@ void W25Q80DV::Write32bit(uint8 command, uint bits24)
     data[2] = (uint8)(bits24 >> 8);
     data[3] = (uint8)(bits24);
 
-    HAL_SPI::Write(data, 4);
+    HAL_SPI::Write(DirectionSPI::Memory, data, 4);
 }
 
 
@@ -104,7 +104,7 @@ bool W25Q80DV::IsBusy()
     static const uint8 out[2] = { READ_STATUS_1, 0 };
     static uint8 in[2] = { 0, 0 };
 
-    HAL_SPI::WriteRead(out, in, 2);
+    HAL_SPI::WriteRead(DirectionSPI::Memory, out, in, 2);
 
     return (in[1] & 0x01);
 }
@@ -123,5 +123,5 @@ void W25Q80DV::ReadID()
     uint8 out[6] = { 0x90, 0, 0, 0, 0, 0 };
     uint8 in[6] = { 0, 0, 0, 0, 0, 0 };
 
-    HAL_SPI::WriteRead(out, in, 6);
+    HAL_SPI::WriteRead(DirectionSPI::Memory, out, in, 6);
 }
