@@ -6,11 +6,11 @@
 
 void CLRC66303HN::Init()
 {
-    HAL_SPI::Init();
+
 }
 
 
 void CLRC66303HN::Update()
 {
-    HAL_SPI::Init();
+
 }

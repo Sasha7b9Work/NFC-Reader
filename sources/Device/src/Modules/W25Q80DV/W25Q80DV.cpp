@@ -33,8 +33,6 @@ namespace W25Q80DV
 
 void W25Q80DV::Write1024bytes(const uint8 *buffer, int size)
 {
-    HAL_SPI::Init();
-
     WaitRelease();
 
     HAL_SPI::Write(WRITE_ENABLE);               // Write enable
@@ -68,8 +66,6 @@ void W25Q80DV::Write1024bytes(const uint8 *buffer, int size)
 
 void W25Q80DV::Read1024bytes(uint8 *buffer, int size)
 {
-    HAL_SPI::Init();
-
     WaitRelease();
 
     Buffer<uint8, 1024> out;

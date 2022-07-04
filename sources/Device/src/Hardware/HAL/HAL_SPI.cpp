@@ -1,4 +1,4 @@
-// 2022/6/15 17:05:03 (c) Aleksandr Shevchenko e-mail : Sasha7b9@tut.by
+// 2022/6/10 9:12:45 (c) Aleksandr Shevchenko e-mail : Sasha7b9@tut.by
 #include "defines.h"
 #include "Hardware/HAL/HAL.h"
 #include <stm32f1xx_hal.h>
@@ -8,9 +8,9 @@ namespace HAL_SPI
 {
     bool initialized = false;
 
-    void WriteByte(uint8);
+    static SPI_HandleTypeDef handle;
 
-    uint8 WriteReadByte(uint8);
+    static void Init();
 
     namespace CS
     {
@@ -42,54 +42,6 @@ namespace HAL_SPI
             Hi();
         }
     }
-
-    namespace CLK
-    {
-        void Hi()
-        {
-            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_SET);
-        }
-
-        void Low()
-        {
-            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_RESET);
-        }
-    }
-
-    struct MOSI
-    {
-        static void SetForHiBit(uint8 byte)
-        {
-            if (byte & 0x80)
-            {
-                Hi();
-            }
-            else
-            {
-                Low();
-            }
-        }
-
-    private:
-
-        static void Hi()
-        {
-            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_SET);
-        }
-
-        static void Low()
-        {
-            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_RESET);
-        }
-    };
-
-    namespace MISO
-    {
-        int State()
-        {
-            return HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4) == GPIO_PIN_SET ? 1 : 0;
-        }
-    }
 }
 
 
@@ -100,65 +52,64 @@ void HAL_SPI::Init()
         return;
     }
 
-//    HAL_I2C1::DeInit();
-
     initialized = true;
 
-    GPIO_InitTypeDef is =
-    {
-        GPIO_PIN_3 |    // SCK
-        GPIO_PIN_5,     // MOSI
-        GPIO_MODE_OUTPUT_PP,
-        GPIO_PULLUP,
-        GPIO_SPEED_HIGH
-    };
+    HAL_I2C1::DeInit();
 
-    HAL_GPIO_Init(GPIOB, &is);
-
-    is.Pin = GPIO_PIN_4;    // MISO
-    is.Mode = GPIO_MODE_INPUT;
-
-    HAL_GPIO_Init(GPIOB, &is);
+    __HAL_RCC_SPI1_CLK_ENABLE();
 
     CS::Init();
 
-    MOSI::SetForHiBit(0xff);
-    CLK::Hi();
+    GPIO_InitTypeDef is =
+    {
+        GPIO_PIN_4 |    // MISO
+        GPIO_PIN_5 |    // MOSI
+        GPIO_PIN_3,     // SCK
+        GPIO_MODE_AF_PP,
+        GPIO_PULLUP,
+        GPIO_SPEED_FREQ_HIGH
+    };
+
+    HAL_GPIO_Init(GPIOB, &is);
+    
+    __HAL_AFIO_REMAP_SPI1_ENABLE();
+
+    handle.Instance = SPI1;
+    handle.Init.Mode = SPI_MODE_MASTER;
+    handle.Init.Direction = SPI_DIRECTION_2LINES;
+    handle.Init.DataSize = SPI_DATASIZE_8BIT;
+    handle.Init.CLKPolarity = SPI_POLARITY_HIGH;
+    handle.Init.CLKPhase = SPI_PHASE_1EDGE;
+    handle.Init.NSS = SPI_NSS_SOFT;
+    handle.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_128;
+    handle.Init.FirstBit = SPI_FIRSTBIT_MSB;
+    handle.Init.TIMode = SPI_TIMODE_DISABLE;
+    handle.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+    handle.Init.CRCPolynomial = 10;
+
+    HAL_SPI_Init(&handle);
 }
 
 
 void HAL_SPI::DeInit()
 {
+    initialized = false;
 
+    HAL_SPI_DeInit(&handle);
+
+    __HAL_AFIO_REMAP_SPI1_DISABLE();
+
+    __HAL_RCC_SPI1_CLK_DISABLE();
 }
 
 
 void HAL_SPI::Write(const void *buffer, int size)
 {
+    Init();
+
     CS::Low();
 
-    uint8 *bytes = (uint8 *)buffer;
-
-    for (int i = 0; i < size; i++)
-    {
-        WriteByte(*bytes++);
-    }
-
-    CS::Hi();
-}
-
-
-void HAL_SPI::WriteRead(const void *out, void *in, int size)
-{
-    CS::Low();
-
-    uint8 *write = (uint8 *)out;
-    uint8 *read = (uint8 *)in;
-
-    for (int i = 0; i < size; i++)
-    {
-        *read++ = WriteReadByte(*write++);
-    }
+    HAL_SPI_Transmit(&handle, (uint8 *)buffer, (uint16)size, 100);
 
     CS::Hi();
 }
@@ -166,48 +117,35 @@ void HAL_SPI::WriteRead(const void *out, void *in, int size)
 
 void HAL_SPI::Write(uint8 byte)
 {
-    Write((const void *)&byte, 1);
+    Init();
+
+    CS::Low();
+
+    HAL_SPI_Transmit(&handle, &byte, 1, 100);
+
+    CS::Hi();
 }
 
 
-void HAL_SPI::WriteByte(uint8 byte)
+void HAL_SPI::Read(const void *buffer, int size)
 {
-    for (int i = 0; i < 8; i++)
-    {
-        CLK::Low();
+    Init();
 
-        MOSI::SetForHiBit(byte);
+    CS::Low();
 
-        CLK::Hi();
+    HAL_SPI_Receive(&handle, (uint8 *)buffer, (uint16)size, 100);
 
-        MOSI::SetForHiBit(byte);
-
-        byte <<= 1;
-    }
+    CS::Hi();
 }
 
 
-uint8 HAL_SPI::WriteReadByte(uint8 byte)
+void HAL_SPI::WriteRead(const void *out, void *in, int size)
 {
-    uint8 result = 0;
+    Init();
 
-    for (int i = 0; i < 8; i++)
-    {
-        CLK::Low();
+    CS::Low();
 
-        MOSI::SetForHiBit(byte);
+    HAL_SPI_TransmitReceive(&handle, (uint8 *)out, (uint8 *)in, (uint16)size, 100);
 
-        byte <<= 1;
-
-        CLK::Hi();
-
-        result <<= 1;
-
-        if (MISO::State())
-        {
-            result |= 0x01;
-        }
-    }
-
-    return result;
+    CS::Hi();
 }

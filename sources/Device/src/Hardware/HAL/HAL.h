@@ -31,8 +31,6 @@ namespace HAL_ADC
 
 namespace HAL_SPI
 {
-    void Init();
-
     void DeInit();
 
     void Write(uint8);
@@ -44,8 +42,6 @@ namespace HAL_SPI
 
 namespace HAL_I2C1
 {
-    void Init();
-
     void DeInit();
 
     int8 Read(uint8 dev_id, uint8 reg_addr, uint8 *reg_data, uint16 len);

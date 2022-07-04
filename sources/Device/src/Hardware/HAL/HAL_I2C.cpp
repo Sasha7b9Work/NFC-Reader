@@ -4,17 +4,29 @@
 #include <stm32f1xx_hal.h>
 
 
-static I2C_HandleTypeDef hi2c1;
-
-
 namespace HAL_I2C1
 {
+    static I2C_HandleTypeDef hi2c1;
+
     void *handle = &hi2c1;
+
+    static bool initialized = false;
+
+    void Init();
 }
 
 
 void HAL_I2C1::Init(void)
 {
+    if (initialized)
+    {
+        return;
+    }
+
+    HAL_SPI::DeInit();
+
+    initialized = true;
+
     GPIO_InitTypeDef GPIO_InitStruct;
 
     GPIO_InitStruct.Pin = GPIO_PIN_6 | GPIO_PIN_7;
@@ -42,12 +54,16 @@ void HAL_I2C1::Init(void)
 
 void HAL_I2C1::DeInit()
 {
-//    __HAL_RCC_I2C1_CLK_DISABLE();
+    HAL_I2C_DeInit(&hi2c1);
+
+    __HAL_RCC_I2C1_CLK_DISABLE();
 }
 
 
 int8 HAL_I2C1::Read(uint8 dev_id, uint8 reg_addr, uint8* reg_data, uint16 len)
 {
+    Init();
+
     while (HAL_I2C_GetState(&hi2c1) != HAL_I2C_STATE_READY)
     {
     }
@@ -70,6 +86,8 @@ int8 HAL_I2C1::Read(uint8 dev_id, uint8 reg_addr, uint8* reg_data, uint16 len)
 
 int8 HAL_I2C1::Read16(uint8 dev_id, uint8* data)
 {
+    Init();
+
     while (HAL_I2C_GetState(&hi2c1) != HAL_I2C_STATE_READY)
     {
     }
@@ -86,6 +104,8 @@ int8 HAL_I2C1::Read16(uint8 dev_id, uint8* data)
 
 int8 HAL_I2C1::Write(uint8 dev_id, uint8 reg_addr, const uint8 *reg_data, uint16 len)
 {
+    Init();
+
     while (HAL_I2C_GetState(&hi2c1) != HAL_I2C_STATE_READY)
     {
 
@@ -109,6 +129,8 @@ int8 HAL_I2C1::Write(uint8 dev_id, uint8 reg_addr, const uint8 *reg_data, uint16
 
 int8 HAL_I2C1::Write8(uint8 dev_id, uint8 data)
 {
+    Init();
+
     while (HAL_I2C_GetState(&hi2c1) != HAL_I2C_STATE_READY)
     {
     }
