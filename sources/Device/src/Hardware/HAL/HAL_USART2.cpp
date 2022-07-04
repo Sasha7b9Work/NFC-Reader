@@ -123,7 +123,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *)
 
                 HAL_USART2::Transmit(message);
 
-                pointer = 0;
+                pointer = 0; 
             }
         }
         else
