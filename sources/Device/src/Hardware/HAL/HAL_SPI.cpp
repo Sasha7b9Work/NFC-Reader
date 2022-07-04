@@ -102,6 +102,11 @@ void HAL_SPI::Init()
 
 void HAL_SPI::DeInit()
 {
+    if (!initialized)
+    {
+        return;
+    }
+
     initialized = false;
 
     HAL_SPI_DeInit(&handle);

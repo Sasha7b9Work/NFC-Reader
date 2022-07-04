@@ -54,6 +54,13 @@ void HAL_I2C1::Init(void)
 
 void HAL_I2C1::DeInit()
 {
+    if (!initialized)
+    {
+        return;
+    }
+
+    initialized = false;
+
     HAL_I2C_DeInit(&hi2c1);
 
     __HAL_RCC_I2C1_CLK_DISABLE();
