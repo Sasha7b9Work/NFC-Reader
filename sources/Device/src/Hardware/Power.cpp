@@ -29,7 +29,7 @@ void Power::Init()
 {
     __HAL_RCC_TIM3_CLK_ENABLE();
 
-    HAL_NVIC_SetPriority(TIM3_IRQn, 0, 0);
+    HAL_NVIC_SetPriority(TIM3_IRQn, 0, 1);
     HAL_NVIC_EnableIRQ(TIM3_IRQn);
 
     HAL_TIM_Base_Init(&handle);

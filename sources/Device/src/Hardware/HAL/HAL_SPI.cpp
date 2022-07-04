@@ -100,7 +100,7 @@ void HAL_SPI::Init()
         return;
     }
 
-    HAL_I2C1::DeInit();
+//    HAL_I2C1::DeInit();
 
     initialized = true;
 

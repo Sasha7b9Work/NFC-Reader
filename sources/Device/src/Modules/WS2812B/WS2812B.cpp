@@ -7,6 +7,20 @@
 
 namespace WS2812B
 {
+    struct Color
+    {
+        enum E
+        {
+            None,
+            RED,
+            GREEN,
+            BLUE,
+            BLACK
+        };
+    };
+
+    static Color::E color = Color::None;
+
     uint dT0H = 18;     // В тактах
     uint dT0L = 47;     // В тактах
     uint dT1H = 47;     // В тактах
@@ -83,24 +97,52 @@ void WS2812B::Update()
 
 void WS2812B::FireRED()
 {
+    if (color == Color::RED)
+    {
+        return;
+    }
+
+    color = Color::RED;
+
     Fire(127, 0, 0);
 }
 
 
 void WS2812B::FireGREEN()
 {
+    if (color == Color::GREEN)
+    {
+        return;
+    }
+
+    color = Color::GREEN;
+
     Fire(0, 127, 0);
 }
 
 
 void WS2812B::FireBLUE()
 {
+    if (color == Color::BLUE)
+    {
+        return;
+    }
+
+    color = Color::BLUE;
+
     Fire(0, 0, 127);
 }
 
 
 void WS2812B::FireBLACK()
 {
+    if (color == Color::BLACK)
+    {
+        return;
+    }
+
+    color = Color::BLACK;
+
     Fire(0, 0, 0);
 }
 
@@ -123,11 +165,11 @@ void WS2812B::Fire(uint8 red, uint8 green, uint8 blue)
 
     for (int indicator = 0; indicator < 4; indicator++)
     {
-        uint color = (value << 8);
+        uint col = (value << 8);
 
         for (int i = 0; i < 24; i++)
         {
-            if (color & 0x80000000)     // единица
+            if (col & 0x80000000)     // единица
             {
                 ADD_AND_WRITE(dT1H);
                 ADD_AND_WRITE(dT1L);
@@ -138,7 +180,7 @@ void WS2812B::Fire(uint8 red, uint8 green, uint8 blue)
                 ADD_AND_WRITE(dT0L);
             }
 
-            color <<= 1;
+            col <<= 1;
         }
     }
 
