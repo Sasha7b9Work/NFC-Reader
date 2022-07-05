@@ -4,7 +4,8 @@ project (Sample)
 
 message("------------------------------------------------------------------------ ${PROJECT_NAME}")
 
-include_directories(.)
+include_directories(.
+                    Empty)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -MP -Wall")
 
@@ -30,18 +31,18 @@ add_compile_options(/wd26812)   # The enum type %type% is unscoped. Prefer 'enum
 file(GLOB SRC                *.h *.cpp)
 file(GLOB CLRC663            CLRC663/*.*)
 file(GLOB CR95LF             CR95LF/*.*)
-file(GLOB DRV_SPI            Drv/Spi/*.*)
-file(GLOB HARDWARE           Hardware/*.*)
-file(GLOB SCMRTOS_COMMON     scmRTOS/Common/*.*)
-file(GLOB MAIN               Main/*.*)
+file(GLOB DRV_SPI            Empty/Drv/Spi/*.*)
+file(GLOB HARDWARE           Empty/Hardware/*.*)
+file(GLOB SCMRTOS_COMMON     Empty/scmRTOS/Common/*.*)
+file(GLOB MAIN               Empty/Main/*.*)
 
-source_group(src             FILES ${SRC})
-source_group(CLRC663         FILES ${CLRC663})
-source_group(CR95LF          FILES ${CR95LF})
-source_group(Drv/Spi         FILES ${DRV_SPI})
-source_group(Hardware        FILES ${HARDWARE})
-source_group(scmRTOS/Common  FILES ${SCMRTOS_COMMON})
-source_group(Main            FILES ${MAIN})
+source_group(src                   FILES ${SRC})
+source_group(CLRC663               FILES ${CLRC663})
+source_group(CR95LF                FILES ${CR95LF})
+source_group(Empty/Drv/Spi         FILES ${DRV_SPI})
+source_group(Empty/Hardware        FILES ${HARDWARE})
+source_group(Empty/scmRTOS/Common  FILES ${SCMRTOS_COMMON})
+source_group(Empty/Main            FILES ${MAIN})
 
 
 add_library(${PROJECT_NAME}
