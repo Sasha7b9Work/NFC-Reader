@@ -1,10 +1,14 @@
 
-#include "LPC13xx.h"
-#include "hrd_Globals.h"
+#include "Hardware/LPC13xx.h"
+#include "Hardware/hrd_Globals.h"
 #include "hrd_SPI.h"
-#include "../scmRTOS/Common/scmRTOS.h"
+#include "scmRTOS/Common/scmRTOS.h"
 
 spi_type spiBus;
+
+#ifndef __irq
+#define __irq
+#endif
 
 extern "C"
 __irq void SSP_IRQHandler( void )

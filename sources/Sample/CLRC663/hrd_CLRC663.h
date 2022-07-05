@@ -3,14 +3,14 @@
 
 #include <stdint.h>
 
-#include "../hrd_Globals.h"
+#include "Hardware/hrd_Globals.h"
 
-#include "../scmRTOS/Common/scmRTOS.h"
+#include "scmRTOS/Common/scmRTOS.h"
 
-#include "../Drv/Spi/SpiAbstractBus.h"
+#include "Drv/Spi/SpiAbstractBus.h"
 #include "hrd_CLRC663_Registers.h"
 
-#include "../CardAnalogInterface.h"
+#include "Hardware/CardAnalogInterface.h"
 //#include "hrd_CLRC663_SPI.h"
 
 extern "C" void PIOINT2_IRQHandler(void );
