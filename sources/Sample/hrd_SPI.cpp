@@ -11,9 +11,9 @@ spi_type spiBus;
 #endif
 
 extern "C"
-__irq void SSP_IRQHandler( void )
+__irq void SSP_IRQHandler(void)
 {
- spiBus.IRQHandler(LPC_SSP0);
+    spiBus.IRQHandler(LPC_SSP0);
 }
 
 /////////////////////////////////////////////////////////
@@ -30,9 +30,9 @@ __irq void SSP_IRQHandler( void )
  *
  * \return 1 в случае успеха, иначе 0
  */
-template<uint32_t s>int SPI_Bus<s>::swap( uint16_t size, const uint8_t *tx, uint8_t *rx )
+template<uint32_t s>int SPI_Bus<s>::swap(uint16_t size, const uint8_t *tx, uint8_t *rx)
 {
- return TSpiLpcBus::swapBytes( (LPC_SSP_TypeDef*)s,size,tx,rx);
+    return TSpiLpcBus::swapBytes((LPC_SSP_TypeDef *)s, size, tx, rx);
 }
 
 

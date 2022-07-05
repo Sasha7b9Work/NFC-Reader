@@ -14,5 +14,6 @@ struct LPC_SSP_TypeDef
 
 class TSpiLpcBus
 {
+public:
     int swapBytes(LPC_SSP_TypeDef *, uint16_t, const uint8_t *, uint8_t *);
 };
