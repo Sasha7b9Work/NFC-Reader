@@ -8,13 +8,12 @@ namespace OS
 {
     void sleep(int);
 
-    enum scmRTOS_ISRW_TYPE
+    struct scmRTOS_ISRW_TYPE
     {
-        _1
     };
 
-    enum TEventFlag
+    struct TEventFlag
     {
-        _2
+        static void signal();
     };
 }
