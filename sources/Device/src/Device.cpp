@@ -14,9 +14,6 @@
 #include <cstdio>
 
 
-static bool TestFlashMemory();
-
-
 void Device::Init()
 {
     HAL::Init();
@@ -25,7 +22,7 @@ void Device::Init()
 
     Timer::Delay(500);
 
-    if (TestFlashMemory())
+    if (W25Q80DV::Test())
     {
         Beeper::Beep(2000, 500);
     }
@@ -62,17 +59,4 @@ void Device::Update()
     {
         Beeper::Stop();
     }
-}
-
-
-static bool TestFlashMemory()
-{
-    uint8 out[256] = { 0x55 };
-    uint8 in[256] = { 0x00 };
-
-    W25Q80DV::Write1024bytes(out, 1);
-
-    W25Q80DV::Read1024bytes(in, 1);
-
-    return (std::memcmp(out, in, 1) == 0);
 }

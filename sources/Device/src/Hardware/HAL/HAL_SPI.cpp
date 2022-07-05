@@ -77,7 +77,6 @@ void HAL_SPI::Init()
 
     is.Pin = GPIO_PIN_4;        // MISO
     is.Mode = GPIO_MODE_INPUT;
-    is.Pull = GPIO_NOPULL;
 
     HAL_GPIO_Init(GPIOB, &is);
 

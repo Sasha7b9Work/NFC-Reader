@@ -125,3 +125,16 @@ void W25Q80DV::ReadID()
 
     HAL_SPI::WriteRead(DirectionSPI::Memory, out, in, 6);
 }
+
+
+bool W25Q80DV::Test()
+{
+    uint8 out[256] = { 0x55 };
+    uint8 in[256] = { 0x00 };
+
+    Write1024bytes(out, 1);
+
+    Read1024bytes(in, 1);
+
+    return (std::memcmp(out, in, 1) == 0);
+}

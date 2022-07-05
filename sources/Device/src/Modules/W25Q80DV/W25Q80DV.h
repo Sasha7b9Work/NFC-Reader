@@ -11,4 +11,6 @@ namespace W25Q80DV
     void Read1024bytes(uint8 *buffer, int size);
 
     void ReadID();
+
+    bool Test();
 }
