@@ -41,8 +41,6 @@ void Device::Init()
 
 void Device::Update()
 {
-    W25Q80DV::ReadID();
-
     HAL_ADC::Update();
 
     WS2812B::Update();          // Индикаторы
