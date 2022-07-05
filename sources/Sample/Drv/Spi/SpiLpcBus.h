@@ -15,23 +15,32 @@ struct LPC_SSP_TypeDef
 class TSpiLpcBus
 {
 public:
-    int swapBytes(LPC_SSP_TypeDef *, uint16_t, const uint8_t *, uint8_t *);
+    int swapBytes(LPC_SSP_TypeDef *, unsigned short, const unsigned char *, unsigned char *);
 };
 
 
 struct _LPC_GPIO2
 {
-    uint32_t MIS;
-    uint32_t IC;
-    uint32_t DIR;
+    unsigned int MIS;
+    unsigned int IC;
+    unsigned int DIR;
+    unsigned int IS;
+    unsigned int IBE;
+    unsigned int IEV;
+    unsigned int IE;
+    unsigned int DATA;
 };
 
 
 struct _LPC_IOCON
 {
-    uint32_t PIO3_1;
+    unsigned int PIO0_1;
+    unsigned int PIO3_1;
+    unsigned int PIO2_2;
+    unsigned int PIO0_2;
 };
 
 
 extern _LPC_GPIO2 *LPC_GPIO2;
+extern _LPC_GPIO2 *LPC_GPIO0;
 extern _LPC_IOCON *LPC_IOCON;

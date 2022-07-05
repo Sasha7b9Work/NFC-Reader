@@ -383,7 +383,7 @@ void TClrc663::init()
     LPC_GPIO2->IEV &= ~(1UL << 10); // по спаду
     LPC_GPIO2->IE |= (1UL << 10);    // разрешение прерывания с ноги 
 
-    NVIC_EnableIRQ(EINT2_IRQn);    // разрешение прерываний с порта
+//    NVIC_EnableIRQ(EINT2_IRQn);    // разрешение прерываний с порта
 }
 
 void TClrc663::resetCrypto()
@@ -417,12 +417,12 @@ void TClrc663::flushFIFO()
 
 void TClrc663::writeFIFO(const uint8_t *tx, int bytenum)
 {
-    this->writeBytes(HW_RC663_REG_FIFODATA, bytenum, tx);
+    this->writeBytes(HW_RC663_REG_FIFODATA, (uint8_t)bytenum, tx);
 }
 
 int TClrc663::readFIFO(uint8_t *rx, int bytenum)
 {
-    return readFifo(HW_RC663_REG_FIFODATA, bytenum, rx);
+    return readFifo(HW_RC663_REG_FIFODATA, (uint8_t)bytenum, rx);
 }
 
 void TClrc663::fieldOff()

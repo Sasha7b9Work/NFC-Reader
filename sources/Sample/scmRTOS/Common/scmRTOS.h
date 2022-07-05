@@ -15,5 +15,6 @@ namespace OS
     struct TEventFlag
     {
         static void signal();
+        bool wait(int);
     };
 }
