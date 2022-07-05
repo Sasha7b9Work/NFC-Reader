@@ -19,17 +19,23 @@ add_compile_options(/wd5220)    # a non-static data member with a volatile quali
 add_compile_options(/wd26812)   # The enum type %type% is unscoped. Prefer 'enum class' over 'enum' (Enum.3)
 
 
-file(GLOB SRC           *.h *.cpp)
-file(GLOB CLRC663       CLRC663/*.*)
-file(GLOB CR95LF        CR95LF/*.*)
+file(GLOB SRC                *.h *.cpp)
+file(GLOB CLRC663            CLRC663/*.*)
+file(GLOB CR95LF             CR95LF/*.*)
+file(GLOB HARDWARE           Hardware/*.*)
+file(GLOB SCMRTOS_COMMON     scmRTOS/Common/*.*)
 
-source_group(src        FILES ${SRC})
-source_group(CLRC663    FILES ${CLRC663})
-source_group(CR95LF     FILES ${CR95LF})
+source_group(src             FILES ${SRC})
+source_group(CLRC663         FILES ${CLRC663})
+source_group(CR95LF          FILES ${CR95LF})
+source_group(Hardware        FILES ${HARDWARE})
+source_group(scmRTOS/Common  FILES ${SCMRTOS_COMMON})
 
 
 add_library(${PROJECT_NAME}
             ${SRC}
             ${CLRC663}
             ${CR95LF}
+            ${HARDWARE}
+            ${SCMRTOS_COMMON}
             )

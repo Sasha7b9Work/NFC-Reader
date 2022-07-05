@@ -4,7 +4,7 @@
 #include "CardUid.h"
 
 //#include "../Hardware/CLRC663/hrd_CLRC663.h"
-#include "../Hardware/CardAnalogInterface.h"
+#include "Hardware/CardAnalogInterface.h"
 
 #define Type_NO                    0
 
