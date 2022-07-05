@@ -3,6 +3,7 @@
 #include "Device.h"
 #include "Hardware/Power.h"
 #include "Hardware/Beeper.h"
+#include "Hardware/Timer.h"
 
 
 int main(void)
@@ -13,10 +14,7 @@ int main(void)
 
     while (true)
     {
-        if (!Beeper::Running())
-        {
-            Power::EnterSleepMode();
-        }
+        Power::EnterSleepMode();
 
         Device::Update();
     }
