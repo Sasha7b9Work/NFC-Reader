@@ -13,4 +13,7 @@ namespace W25Q80DV
     void ReadID();
 
     bool Test();
+
+    // ¬озвращает значение, считанное во врем€ теста
+    uint8 TestValue();
 }

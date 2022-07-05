@@ -28,6 +28,8 @@ namespace W25Q80DV
     bool IsBusy();
 
     void WaitRelease();
+
+    uint8 test_value = 0;
 }
 
 
@@ -136,5 +138,13 @@ bool W25Q80DV::Test()
 
     Read1024bytes(in, 1);
 
+    test_value = in[0];
+
     return (std::memcmp(out, in, 1) == 0);
+}
+
+
+uint8 W25Q80DV::TestValue()
+{
+    return test_value;
 }
