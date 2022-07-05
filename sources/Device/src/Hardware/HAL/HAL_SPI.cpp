@@ -87,7 +87,7 @@ void HAL_SPI::Init()
     handle.Init.Direction = SPI_DIRECTION_2LINES;
     handle.Init.DataSize = SPI_DATASIZE_8BIT;
     handle.Init.CLKPolarity = SPI_POLARITY_HIGH;
-    handle.Init.CLKPhase = SPI_PHASE_1EDGE;
+    handle.Init.CLKPhase = SPI_PHASE_2EDGE;
     handle.Init.NSS = SPI_NSS_SOFT;
     handle.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_64;
     handle.Init.FirstBit = SPI_FIRSTBIT_MSB;
