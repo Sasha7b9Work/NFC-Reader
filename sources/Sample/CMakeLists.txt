@@ -17,6 +17,7 @@ add_compile_options(/wd4244)
 add_compile_options(/wd4365)
 add_compile_options(/wd4456)
 add_compile_options(/wd4458)
+add_compile_options(/wd4505)
 add_compile_options(/wd4514)    # 'function' : unreferenced inline function has been removed
 add_compile_options(/wd4623)    # default constructor was implicitly defined as deleted
 add_compile_options(/wd4626)    # assignment operator was implicitly defined as deleted

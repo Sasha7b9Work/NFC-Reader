@@ -38,6 +38,8 @@ namespace CLRC66303HN
     }
 
     bool DetectCard();
+
+    static void LoadAntennaConfiguration106();
 }
 
 
@@ -46,6 +48,8 @@ void CLRC66303HN::Init()
     Power::Init();
 
     Power::On();
+
+    LoadAntennaConfiguration106();
 }
 
 
@@ -116,4 +120,31 @@ bool CLRC66303HN::DetectCard()
     HAL_USART2::Transmit("fifo: %02Xh %02Xh", fifo_data[0], fifo_data[1]);
 
     return (value_irq0 != reg_irq0.Read());
+}
+
+
+static void CLRC66303HN::LoadAntennaConfiguration106()
+{
+    /* address              value
+         28   DrvMode         8E
+         29   TxAmp           12
+         2A   DrvCon          39
+         2B   Txl             0A
+         2C   TXCrcPreset     18
+         2D   RXCrcPreset     18
+         2E   TxDataNum       0F
+         2F   TxModWidth      21
+         30   TxSym10BurstLen 00
+         31   TxWaitCtrl      C0
+         32   TxWaitLo        12
+         33   TxFrameCon      CF
+         34   RxSofD          00
+         35   RxCtrl          04
+         36   RxWait          90
+         37   RxThreshold     5C
+         38   Rcv             12
+         39   RxAna           0A
+    */
+
+    Register::RegisterCLRC663(0x28).Write(0x8E);
 }
