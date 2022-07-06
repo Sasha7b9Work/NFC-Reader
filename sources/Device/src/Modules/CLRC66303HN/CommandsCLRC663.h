@@ -6,12 +6,25 @@ namespace Command
 {
     struct CommandCLRC663
     {
+        CommandCLRC663(uint8 _command) : command(_command) { }
+
         void Run();
+
+        uint8 command;
     };
+
 
     struct Idle : public CommandCLRC663
     {
+        Idle() : CommandCLRC663(0x00) { }
+    };
 
+
+    struct LoadProtocol : public CommandCLRC663
+    {
+        LoadProtocol() : CommandCLRC663(0x0D) { }
+
+        void Run(uint8 protocol_rx, uint8 protocol_tx);
     };
 }
 

@@ -13,3 +13,9 @@ void Register::FIFOData::Write(uint8 data0, uint8 data1)
 {
 
 }
+
+
+void Register::DrvMode::Write(bool Tx2Inv, bool Tx1Inv, bool TxEn, uint8 TxClkMode)
+{
+
+}

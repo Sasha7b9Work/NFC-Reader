@@ -58,8 +58,8 @@ bool CLRC66303HN::DetectCard()
     1:  writeRegister(0x00, 0x00);          command idle
     2:  writeRegister(0x02, 0xB0);          FIFOControl
     3:  writeRegister(0x05, 0x00, 0x00);    FIFOData
-    4:  writeRegister(0x00, 0x0D);
-    5:  writeRegister(0x02, 0xB0);
+    4:  writeRegister(0x00, 0x0D);          command LoadProtocol
+    5:  writeRegister(0x02, 0xB0);          FIFOControl
     6:  writeRegister(0x28, 0x8E);
     7:  writeRegister(0x06, 0x7F);
     8:  writeRegister(0x2C, 0x18);
@@ -80,9 +80,17 @@ bool CLRC66303HN::DetectCard()
 
     Register::FIFOControl().Write(Register::FIFOControl::Size::_256, true, 0);
 
-    // 3
+    // 3, 4
 
-    Register::FIFOData().Write(0x00, 0x00);
+    Command::LoadProtocol().Run(0x00, 0x00);
+
+    // 5
+
+    Register::FIFOControl().Write(Register::FIFOControl::Size::_256, true, 0);
+
+    // 6
+
+    Register::DrvMode().Write(true, false, false, 0x00);
 
     return false;
 }

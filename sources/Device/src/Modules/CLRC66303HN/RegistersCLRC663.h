@@ -6,8 +6,8 @@ namespace Register
 {
     struct RegisterCLRC663
     {
-
- 
+        RegisterCLRC663(uint8 _address) : address(_address) { }
+        uint8 address;
     };
 
 
@@ -23,6 +23,8 @@ namespace Register
             };
         };
 
+        FIFOControl() : RegisterCLRC663(0x02) { }
+
         // clear - очистить буфер
         // waterLevelExtBit - 0 или 1 для 512-байтного FIFO
         void Write(Size::E, bool clear, int waterLevelExtBit);
@@ -31,7 +33,17 @@ namespace Register
 
     struct FIFOData : public RegisterCLRC663
     {
+        FIFOData() : RegisterCLRC663(0x05) { }
+
         void Write(uint8 data0, uint8 data1);
+    };
+
+
+    struct DrvMode : public RegisterCLRC663
+    {
+        DrvMode() : RegisterCLRC663(0x28) { }
+
+        void Write(bool Tx2Inv, bool Tx1Inv, bool TxEn, uint8 TxClkMode);
     };
 }
 
