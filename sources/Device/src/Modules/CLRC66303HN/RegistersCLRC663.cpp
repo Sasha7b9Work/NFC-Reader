@@ -12,6 +12,14 @@ void Register::RegisterCLRC663::Write()
 }
 
 
+void Register::RegisterCLRC663::Write(uint8 _data)
+{
+    data = _data;
+
+    Write();
+}
+
+
 uint8 Register::RegisterCLRC663::Read()
 {
     uint8 out[2] = { (uint8)((address << 1) | 1), 0 };

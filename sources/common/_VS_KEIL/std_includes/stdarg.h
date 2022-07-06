@@ -1,8 +1,12 @@
 #pragma once
 
+struct va_list
+{
+    char *a;
+};
 
-//#define va_list char *
-typedef char * va_list;
-#define va_start(x, y) x = (char *)y;
-int vsprintf(void *, const void *, void *);
-#define va_end(x)
+#define va_start(x, y) x.a = (char *)y; //-V1059
+
+int vsprintf(char *__restrict, const char *__restrict, struct va_list);
+
+void va_end(va_list);
