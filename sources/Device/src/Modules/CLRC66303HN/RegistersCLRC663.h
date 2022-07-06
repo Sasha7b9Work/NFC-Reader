@@ -8,6 +8,7 @@ namespace Register
     {
         RegisterCLRC663(uint8 _address, int _data = 0) : address(_address), data(_data) { }
         void Write();
+        uint8 Read();
         uint8 address;
         int data;
     };
@@ -37,13 +38,24 @@ namespace Register
     {
         FIFOData() : RegisterCLRC663(0x05) { }
 
+        void Write(uint8 data);
+
         void Write(uint8 data0, uint8 data1);
     };
 
 
     struct IRQ0 : public RegisterCLRC663
     {
-        IRQ0(int data) : RegisterCLRC663(0x06, data) { }
+        static const int Set = (1 << 7);
+        static const int HiAlertIRQ = (1 << 6);
+        static const int LoAlertIRQ = (1 << 5);
+        static const int IdleIRQ = (1 << 4);
+        static const int TxIRQ = (1 << 3);
+        static const int RxIRQ = (1 << 2);
+        static const int ErrIRQ = (1 << 1);
+        static const int RxSOFIRQ = (1 << 0);
+
+        IRQ0(int data = 0) : RegisterCLRC663(0x06, data) { }
     };
 
 

@@ -13,6 +13,14 @@ void Command::CommandCLRC663::Run()
 }
 
 
+void Command::Transceive::Run(uint8 data)
+{
+    Register::FIFOData().Write(data);
+
+    CommandCLRC663::Run();
+}
+
+
 void Command::LoadProtocol::Run(uint8 protocol_rx, uint8 protocol_tx)
 {
     Register::FIFOData().Write(protocol_rx, protocol_tx);

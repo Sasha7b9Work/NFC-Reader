@@ -20,6 +20,14 @@ namespace Command
     };
 
 
+    struct Transceive : public CommandCLRC663
+    {
+        Transceive() : CommandCLRC663(0x07) { }
+
+        void Run(uint8 data);
+    };
+
+
     struct LoadProtocol : public CommandCLRC663
     {
         LoadProtocol() : CommandCLRC663(0x0D) { }
