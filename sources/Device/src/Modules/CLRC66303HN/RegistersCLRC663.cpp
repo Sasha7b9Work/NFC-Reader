@@ -30,7 +30,7 @@ uint8 Register::RegisterCLRC663::Read()
 
     data = in[1];
 
-    return data;
+    return (uint8)data;
 }
 
 
@@ -52,18 +52,12 @@ void Register::FIFOData::Write(uint8 /*data0*/, uint8 /*data1*/)
 }
 
 
-void Register::FIFOData::Read2Bytes(uint8 data[2])
+void Register::FIFOData::Read2Bytes(uint8 _data[2])
 {
     uint8 out[3] = { (uint8)address, 0x05, 0x00 };
     uint8 in[3];
 
     HAL_SPI::WriteRead(DirectionSPI::Reader, out, in, 3);
 
-    std::memcpy(data, &in[1], 2);
-}
-
-
-void Register::DrvMode::Write(bool /*Tx2Inv*/, bool /*Tx1Inv*/, bool /*TxEn*/, uint8 /*TxClkMode*/)
-{
-
+    std::memcpy(_data, &in[1], 2);
 }

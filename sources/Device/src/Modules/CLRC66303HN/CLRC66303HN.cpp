@@ -91,15 +91,7 @@ bool CLRC66303HN::DetectCard()
 
     Register::FIFOControl().Write(Register::FIFOControl::Size::_256, true, 0);      // 5
 
-    Register::DrvMode().Write(true, false, true, 0x06);                             // 6
-
     reg_irq0.Write(0x7F);                                                           // 7
-
-    Register::TxCrcPreset(0x18).Write();                                            // 8
-
-    Register::RxCrcCon(0x18).Write();                                               // 9
-
-    Register::TxDataNum(0x0F).Write();                                              // 10
 
     uint8 value_irq0 = reg_irq0.Read();
 
@@ -125,26 +117,22 @@ bool CLRC66303HN::DetectCard()
 
 static void CLRC66303HN::LoadAntennaConfiguration106()
 {
-    /* address              value
-         28   DrvMode         8E
-         29   TxAmp           12
-         2A   DrvCon          39
-         2B   Txl             0A
-         2C   TXCrcPreset     18
-         2D   RXCrcPreset     18
-         2E   TxDataNum       0F
-         2F   TxModWidth      21
-         30   TxSym10BurstLen 00
-         31   TxWaitCtrl      C0
-         32   TxWaitLo        12
-         33   TxFrameCon      CF
-         34   RxSofD          00
-         35   RxCtrl          04
-         36   RxWait          90
-         37   RxThreshold     5C
-         38   Rcv             12
-         39   RxAna           0A
-    */
-
-    Register::RegisterCLRC663(0x28).Write(0x8E);
+    Register::RegisterCLRC663(0x28).Write(0x8E);    // DrvMode
+    Register::RegisterCLRC663(0x29).Write(0x12);    // TxAmp
+    Register::RegisterCLRC663(0x2A).Write(0x39);    // DrvCon
+    Register::RegisterCLRC663(0x2B).Write(0x0A);    // Txl
+    Register::RegisterCLRC663(0x2C).Write(0x18);    // TXCrcPreset
+    Register::RegisterCLRC663(0x2D).Write(0x18);    // TXCrcPreset
+    Register::RegisterCLRC663(0x2E).Write(0x0F);    // TxDataNum
+    Register::RegisterCLRC663(0x2F).Write(0x21);    // TxModWidth
+    Register::RegisterCLRC663(0x30).Write(0x00);    // TxSym10BurstLen
+    Register::RegisterCLRC663(0x31).Write(0xC0);    // TxWaitCtrl
+    Register::RegisterCLRC663(0x32).Write(0x12);    // TxWaitLo
+    Register::RegisterCLRC663(0x33).Write(0xCF);    // TxFrameCon
+    Register::RegisterCLRC663(0x34).Write(0x00);    // RsSofD
+    Register::RegisterCLRC663(0x35).Write(0x04);    // RxCtrl
+    Register::RegisterCLRC663(0x36).Write(0x90);    // RxWait
+    Register::RegisterCLRC663(0x37).Write(0x5C);    // RxThreshold
+    Register::RegisterCLRC663(0x38).Write(0x12);    // Rcv
+    Register::RegisterCLRC663(0x39).Write(0x0A);    // RxAna
 }

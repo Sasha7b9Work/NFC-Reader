@@ -60,31 +60,5 @@ namespace Register
 
         IRQ0(int data = 0) : RegisterCLRC663(0x06, data) { }
     };
-
-
-    struct DrvMode : public RegisterCLRC663
-    {
-        DrvMode() : RegisterCLRC663(0x28) { }
-
-        void Write(bool Tx2Inv, bool Tx1Inv, bool TxEn, uint8 TxClkMode);
-    };
-
-
-    struct TxCrcPreset : public RegisterCLRC663
-    {
-        TxCrcPreset(int data) : RegisterCLRC663(0x2C, data) { }
-    };
-
-
-    struct RxCrcCon : public RegisterCLRC663
-    {
-        RxCrcCon(int data) : RegisterCLRC663(0x2D, data) { }
-    };
-
-
-    struct TxDataNum : public RegisterCLRC663
-    {
-        TxDataNum(int data) : RegisterCLRC663(0x2E, data) { }
-    };
 }
 
