@@ -6,8 +6,10 @@ namespace Register
 {
     struct RegisterCLRC663
     {
-        RegisterCLRC663(uint8 _address) : address(_address) { }
+        RegisterCLRC663(uint8 _address, int _data = 0) : address(_address), data(_data) { }
+        void Write();
         uint8 address;
+        int data;
     };
 
 
@@ -39,11 +41,23 @@ namespace Register
     };
 
 
+    struct IRQ0 : public RegisterCLRC663
+    {
+        IRQ0(int data) : RegisterCLRC663(0x06, data) { }
+    };
+
+
     struct DrvMode : public RegisterCLRC663
     {
         DrvMode() : RegisterCLRC663(0x28) { }
 
         void Write(bool Tx2Inv, bool Tx1Inv, bool TxEn, uint8 TxClkMode);
+    };
+
+
+    struct TxCrcPreset : public RegisterCLRC663
+    {
+        TxCrcPreset(int data) : RegisterCLRC663(0x2C, data) { }
     };
 }
 
