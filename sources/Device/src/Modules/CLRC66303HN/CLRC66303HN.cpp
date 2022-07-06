@@ -34,8 +34,6 @@ namespace CLRC66303HN
             };
 
             HAL_GPIO_Init(GPIOA, &is);
-
-            Off();
         }
     }
 
@@ -46,26 +44,20 @@ namespace CLRC66303HN
 void CLRC66303HN::Init()
 {
     Power::Init();
+
+    Power::On();
 }
 
 
 void CLRC66303HN::Update()
 {
-    Power::On();
 
-    if (DetectCard())
-    {
-        HAL_USART2::TransmitRAW("Card detected");
-    }
-
-    Power::Off();
 }
 
 
 bool CLRC66303HN::DetectCard()
 {
     /*
-    * 
             AN12657.pdf
 
     1:  writeRegister(0x00, 0x00);          command idle
