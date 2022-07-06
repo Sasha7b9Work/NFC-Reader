@@ -8,6 +8,7 @@ namespace Register
     {
         RegisterCLRC663(uint8 _address, int _data = 0) : address(_address), data(_data) { }
         void Write();
+        void Write(uint8 data);
         uint8 Read();
         uint8 address;
         int data;

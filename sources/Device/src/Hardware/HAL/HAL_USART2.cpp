@@ -8,6 +8,7 @@
 #include <cstring>
 #include <cctype>
 #include <cstdio>
+#include <cstdarg>
 
 
     // PA2     ------> USART2_TX
@@ -83,13 +84,25 @@ void HAL_USART2::Init()
 }
 
 
-void HAL_USART2::Transmit(char *message)
+void HAL_USART2::TransmitRAW(char *message)
 {
     Mode::Transmit();
 
     HAL_UART_Transmit(&handleUART, (uint8 *)message, (uint16)std::strlen(message), 1000);
 
     Mode::Receive();
+}
+
+
+void HAL_USART2::Transmit(char *format, ...)
+{
+    char message[128];
+    std::va_list args;
+    va_start(args, format);
+    vsprintf(message, format, args);
+    va_end(args);
+
+    TransmitRAW(message);
 }
 
 
@@ -123,7 +136,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *)
                     LIS2DH12::GetAccelerationZ().ToAccelearation(),
                     LIS2DH12::GetRawTemperature().ToTemperatrue());
 
-                HAL_USART2::Transmit(message);
+                HAL_USART2::TransmitRAW(message);
 
                 pointer = 0;
             }

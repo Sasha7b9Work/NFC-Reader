@@ -3,7 +3,9 @@
 #include "Modules/CLRC66303HN/CLRC66303HN.h"
 #include "Modules/CLRC66303HN/CommandsCLRC663.h"
 #include "Modules/CLRC66303HN/RegistersCLRC663.h"
+#include "Hardware/Timer.h"
 #include "Hardware/HAL/HAL.h"
+#include <cstdio>
 
 
 namespace CLRC66303HN
@@ -22,7 +24,7 @@ void CLRC66303HN::Update()
 {
     if (DetectCard())
     {
-        HAL_USART2::Transmit("Card detected");
+        HAL_USART2::TransmitRAW("Card detected");
     }
 }
 
@@ -50,53 +52,37 @@ bool CLRC66303HN::DetectCard()
 
     */
 
-    // 1
+    Register::IRQ0 reg_irq0;
 
-    Command::Idle().Run();
+    Command::Idle().Run();                                                          // 1
 
-    // 2
+    Register::FIFOControl().Write(Register::FIFOControl::Size::_256, true, 0);      // 2
 
-    Register::FIFOControl().Write(Register::FIFOControl::Size::_256, true, 0);
+    Command::LoadProtocol().Run(0x00, 0x00);                                        // 3, 4
 
-    // 3, 4
+    Register::FIFOControl().Write(Register::FIFOControl::Size::_256, true, 0);      // 5
 
-    Command::LoadProtocol().Run(0x00, 0x00);
+    Register::DrvMode().Write(true, false, true, 0x06);                             // 6
 
-    // 5
+    reg_irq0.Write(0x7F);                                                           // 7
 
-    Register::FIFOControl().Write(Register::FIFOControl::Size::_256, true, 0);
+    Register::TxCrcPreset(0x18).Write();                                            // 8
 
-    // 6
+    Register::RxCrcCon(0x18).Write();                                               // 9
 
-    Register::DrvMode().Write(true, false, true, 0x06);
+    Register::TxDataNum(0x0F).Write();                                              // 10
 
-    // 7
+    uint8 value_irq0 = reg_irq0.Read();
 
-    Register::IRQ0(0x7F).Write();
+    Command::Transceive().Run(0x26);                                                // 11, 12
 
-    // 8
+    TimeMeterMS meter;
 
-    Register::TxCrcPreset(0x18).Write();
-
-    // 9
-
-    Register::RxCrcCon(0x18).Write();
-
-    // 10
-
-    Register::TxDataNum(0x0F).Write();
-
-    uint8 irq1 = Register::IRQ0().Read();
-
-    // 11, 12
-
-    Command::Transceive().Run(0x26);
-
-    // 13
-
-    while (Register::IRQ0().Read() == irq1)
+    while (Register::IRQ0().Read() == value_irq0 && meter.ElapsedTime() < 6)        // 13
     {
     }
+
+    HAL_USART2::Transmit("irq1 : before:%X, after:%X", value_irq0, Register::IRQ0().Read());
 
     return false;
 }
