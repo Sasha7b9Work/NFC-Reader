@@ -42,6 +42,8 @@ namespace Register
         void Write(uint8 data);
 
         void Write(uint8 data0, uint8 data1);
+
+        void Read2Bytes(uint8 data[2]);
     };
 
 

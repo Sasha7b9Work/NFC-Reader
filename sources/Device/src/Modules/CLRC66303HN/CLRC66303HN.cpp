@@ -5,27 +5,60 @@
 #include "Modules/CLRC66303HN/RegistersCLRC663.h"
 #include "Hardware/Timer.h"
 #include "Hardware/HAL/HAL.h"
+#include <stm32f1xx_hal.h>
 #include <cstdio>
 
 
 namespace CLRC66303HN
 {
+    namespace Power
+    {
+        void Off()
+        {
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_SET);
+        }
+
+        void On()
+        {
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET);
+        }
+
+        void Init()
+        {
+            GPIO_InitTypeDef is =
+            {
+                GPIO_PIN_6,                     // ENN
+                GPIO_MODE_OUTPUT_PP,
+                GPIO_PULLUP,
+                GPIO_SPEED_HIGH
+            };
+
+            HAL_GPIO_Init(GPIOA, &is);
+
+            Off();
+        }
+    }
+
     bool DetectCard();
 }
 
 
 void CLRC66303HN::Init()
 {
-
+    Power::Init();
 }
 
 
 void CLRC66303HN::Update()
 {
+    Power::On();
+
     if (DetectCard())
     {
         HAL_USART2::TransmitRAW("Card detected");
     }
+
+    Power::Off();
 }
 
 
@@ -47,8 +80,8 @@ bool CLRC66303HN::DetectCard()
     10: writeRegister(0x2E, 0x0F);          TxDataNum
     11: writeRegister(0x05, 0x26);          FIFOData
     12: writeRegister(0x00, 0x07);          Transceive
-    13: waitForCardResponse();
-    14: readRegister(0x05, 0x05, 0x00);
+    13: waitForCardResponse();              IRQ0
+    14: readRegister(0x05, 0x05, 0x00);     FIFOData
 
     */
 
@@ -74,15 +107,21 @@ bool CLRC66303HN::DetectCard()
 
     uint8 value_irq0 = reg_irq0.Read();
 
-    Command::Transceive().Run(0x26);                                                // 11, 12
+    Command::Transceive().Run(0x26);    // REQA                                     // 11, 12
 
     TimeMeterMS meter;
 
-    while (Register::IRQ0().Read() == value_irq0 && meter.ElapsedTime() < 6)        // 13
+    while ((reg_irq0.Read() == value_irq0) && meter.ElapsedTime() < 6)              // 13
     {
     }
 
-    HAL_USART2::Transmit("irq1 : before:%X, after:%X", value_irq0, Register::IRQ0().Read());
+    HAL_USART2::Transmit("irq1: before:%02Xh, after:%02Xh", value_irq0, reg_irq0.Read());
 
-    return false;
+    uint8 fifo_data[2] = { 0 , 0 };
+
+    Register::FIFOData().Read2Bytes(fifo_data);                                     // 14
+
+    HAL_USART2::Transmit("fifo: %02Xh %02Xh", fifo_data[0], fifo_data[1]);
+
+    return (value_irq0 != reg_irq0.Read());
 }

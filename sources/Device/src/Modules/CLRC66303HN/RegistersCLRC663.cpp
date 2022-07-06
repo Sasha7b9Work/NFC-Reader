@@ -2,6 +2,7 @@
 #include "defines.h"
 #include "Modules/CLRC66303HN/RegistersCLRC663.h"
 #include "Hardware/HAL/HAL.h"
+#include <cstring>
 
 
 void Register::RegisterCLRC663::Write()
@@ -27,7 +28,9 @@ uint8 Register::RegisterCLRC663::Read()
 
     HAL_SPI::WriteRead(DirectionSPI::Reader, out, in, 2);
 
-    return in[1];
+    data = in[1];
+
+    return data;
 }
 
 
@@ -46,6 +49,17 @@ void Register::FIFOData::Write(uint8 /*data*/)
 void Register::FIFOData::Write(uint8 /*data0*/, uint8 /*data1*/)
 {
 
+}
+
+
+void Register::FIFOData::Read2Bytes(uint8 data[2])
+{
+    uint8 out[3] = { (uint8)address, 0x05, 0x00 };
+    uint8 in[3];
+
+    HAL_SPI::WriteRead(DirectionSPI::Reader, out, in, 3);
+
+    std::memcpy(data, &in[1], 2);
 }
 
 
