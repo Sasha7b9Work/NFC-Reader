@@ -613,6 +613,26 @@
               <FileType>5</FileType>
               <FilePath>.\src\Modules\CLRC66303HN\CLRC66303HN.h</FilePath>
             </File>
+            <File>
+              <FileName>CommandsCLRC663.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\Modules\CLRC66303HN\CommandsCLRC663.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>CommandsCLRC663.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\Modules\CLRC66303HN\CommandsCLRC663.h</FilePath>
+            </File>
+            <File>
+              <FileName>RegistersCLRC663.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\Modules\CLRC66303HN\RegistersCLRC663.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>RegistersCLRC663.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\Modules\CLRC66303HN\RegistersCLRC663.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1303,6 +1323,26 @@
               <FileName>CLRC66303HN.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\src\Modules\CLRC66303HN\CLRC66303HN.h</FilePath>
+            </File>
+            <File>
+              <FileName>CommandsCLRC663.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\Modules\CLRC66303HN\CommandsCLRC663.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>CommandsCLRC663.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\Modules\CLRC66303HN\CommandsCLRC663.h</FilePath>
+            </File>
+            <File>
+              <FileName>RegistersCLRC663.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\Modules\CLRC66303HN\RegistersCLRC663.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>RegistersCLRC663.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\Modules\CLRC66303HN\RegistersCLRC663.h</FilePath>
             </File>
           </Files>
         </Group>

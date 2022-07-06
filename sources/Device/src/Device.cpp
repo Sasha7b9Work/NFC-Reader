@@ -35,7 +35,7 @@ void Device::Init()
 
     LIS2DH12::Init();
 
-//    CLRC66303HN::Init();
+    CLRC66303HN::Init();
 }
 
 
@@ -47,7 +47,7 @@ void Device::Update()
 
     LIS2DH12::Update();         // Акселерометр
 
-//    CLRC66303HN::Update();      // Обнаружение карты
+    CLRC66303HN::Update();      // Обнаружение карты
 
     if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_11) == GPIO_PIN_RESET)
     {
