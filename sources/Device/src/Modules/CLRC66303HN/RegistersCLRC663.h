@@ -59,5 +59,17 @@ namespace Register
     {
         TxCrcPreset(int data) : RegisterCLRC663(0x2C, data) { }
     };
+
+
+    struct RxCrcCon : public RegisterCLRC663
+    {
+        RxCrcCon(int data) : RegisterCLRC663(0x2D, data) { }
+    };
+
+
+    struct TxDataNum : public RegisterCLRC663
+    {
+        TxDataNum(int data) : RegisterCLRC663(0x2E, data) { }
+    };
 }
 

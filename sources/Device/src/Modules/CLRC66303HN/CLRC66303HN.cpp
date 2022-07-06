@@ -63,8 +63,8 @@ bool CLRC66303HN::DetectCard()
     6:  writeRegister(0x28, 0x8E);          DrvMode
     7:  writeRegister(0x06, 0x7F);          IRQ0
     8:  writeRegister(0x2C, 0x18);          TxCrcPreset
-    9:  writeRegister(0x2D, 0x18);
-    10: writeRegister(0x2E, 0x0F);
+    9:  writeRegister(0x2D, 0x18);          RxCrcCon
+    10: writeRegister(0x2E, 0x0F);          TxDataNum
     11: writeRegister(0x05, 0x26);
     12: writeRegister(0x00, 0x07);
     13: waitForCardResponse();
@@ -99,6 +99,14 @@ bool CLRC66303HN::DetectCard()
     // 8
 
     Register::TxCrcPreset(0x18).Write();
+
+    // 9
+
+    Register::RxCrcCon(0x18).Write();
+
+    // 10
+
+    Register::TxDataNum(0x0F).Write();
 
     return false;
 }
