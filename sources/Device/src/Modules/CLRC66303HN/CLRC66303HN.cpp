@@ -2,6 +2,7 @@
 #include "defines.h"
 #include "Modules/CLRC66303HN/CLRC66303HN.h"
 #include "Modules/CLRC66303HN/CommandsCLRC663.h"
+#include "Modules/CLRC66303HN/RegistersCLRC663.h"
 #include "Hardware/HAL/HAL.h"
 
 
@@ -54,9 +55,9 @@ bool CLRC66303HN::DetectCard()
     * 
             AN12657.pdf
 
-    1:  writeRegister(0x00, 0x00);
-    2:  writeRegister(0x02, 0xB0);
-    3:  writeRegister(0x05, 0x00, 0x00);
+    1:  writeRegister(0x00, 0x00);          command idle
+    2:  writeRegister(0x02, 0xB0);          FIFOControl
+    3:  writeRegister(0x05, 0x00, 0x00);    FIFOData
     4:  writeRegister(0x00, 0x0D);
     5:  writeRegister(0x02, 0xB0);
     6:  writeRegister(0x28, 0x8E);
@@ -74,6 +75,14 @@ bool CLRC66303HN::DetectCard()
     // 1
 
     Command::Idle().Run();
+
+    // 2
+
+    Register::FIFOControl().Write(Register::FIFOControl::Size::_256, true, 0);
+
+    // 3
+
+    Register::FIFOData().Write(0x00, 0x00);
 
     return false;
 }
