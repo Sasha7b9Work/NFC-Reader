@@ -3,6 +3,7 @@
 #include "Hardware/HAL/HAL.h"
 #include "Modules/LIS2DH12/LIS2DH12.h"
 #include "Modules/W25Q80DV/W25Q80DV.h"
+#include "Modules/CLRC66303HN/CLRC66303HN.h"
 #include "Hardware/Power.h"
 #include <stm32f1xx_hal.h>
 #include <cstring>
@@ -128,13 +129,14 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *)
             {
                 char message[100];
 
-                std::sprintf(message, "OK;%02Xh;%3.1fV;%3.2fg;%3.2fg;%3.2fg;%3.1fC\x0D\x0A",
+                std::sprintf(message, "OK;%02Xh;%3.1fV;%3.2fg;%3.2fg;%3.2fg;%3.1fC;reg_0x28:%02Xh\x0D\x0A",
                     W25Q80DV::TestValue(),
                     HAL_ADC::GetValue(),
                     LIS2DH12::GetAccelerationX().ToAccelearation(),
                     LIS2DH12::GetAccelerationY().ToAccelearation(),
                     LIS2DH12::GetAccelerationZ().ToAccelearation(),
-                    LIS2DH12::GetRawTemperature().ToTemperatrue());
+                    LIS2DH12::GetRawTemperature().ToTemperatrue(),
+                    CLRC66303HN::GetRegister28());
 
                 HAL_USART2::TransmitRAW(message);
 

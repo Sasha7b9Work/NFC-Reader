@@ -55,6 +55,8 @@ namespace CLRC66303HN
     static void LoadAntennaConfiguration106();
 
     static void LoadProtocol();
+
+    static uint8 reg_0x28 = 0;
 }
 
 
@@ -85,12 +87,14 @@ void CLRC66303HN::Update()
     }
 
     RF::Off();
+
+    reg_0x28 = Register::RegisterCLRC663(0x28).Read();
 }
 
 
 uint8 CLRC66303HN::GetRegister28()
 {
-    return Register::RegisterCLRC663(0x28).Read();
+    return reg_0x28;
 }
 
 
@@ -116,33 +120,26 @@ bool CLRC66303HN::DetectCard()
 
     */
 
-    Register::IRQ0 reg_irq0;
-
     Command::Idle().Run();                                                          // 1
 
     Register::FIFOControl().Write(Register::FIFOControl::Size::_256, true, 0);      // 5
 
-    reg_irq0.Write(0x7F);                                                           // 7
+    Register::IRQ0 reg_irq0;                                                        // 7 Очистка битов irq0
+    reg_irq0.Write(0x7F);
 
-    uint8 value_irq0 = reg_irq0.Read();
+    Command::Transceive().Run(0x26);    // REQA                                     // 11, 12  Запрос на карту
 
-    Command::Transceive().Run(0x26);    // REQA                                     // 11, 12
+    TimeMeterUS meter;
 
-    TimeMeterMS meter;
-
-    while ((reg_irq0.Read() == value_irq0) && meter.ElapsedTime() < 6)              // 13
+    while (meter.ElapsedUS() < 5100)
     {
+        if (reg_irq0.Read() & Register::IRQ0::RxSOFIRQ)                             // Обнаружена SOF или поднесушая
+        {
+            return true;
+        }
     }
 
-    HAL_USART2::Transmit("irq1: before:%02Xh, after:%02Xh", value_irq0, reg_irq0.Read());
-
-    uint8 fifo_data[2] = { 0 , 0 };
-
-    Register::FIFOData().Read2Bytes(fifo_data);                                     // 14
-
-    HAL_USART2::Transmit("fifo: %02Xh %02Xh", fifo_data[0], fifo_data[1]);
-
-    return (value_irq0 != reg_irq0.Read());
+    return false;
 }
 
 
