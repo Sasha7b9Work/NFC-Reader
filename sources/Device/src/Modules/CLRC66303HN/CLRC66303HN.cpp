@@ -56,7 +56,11 @@ namespace CLRC66303HN
 
     static void LoadProtocol();
 
+    void Update1();
+
     static uint8 reg_0x28 = 0;
+
+    static bool detected = false;       // true, если карта детектирована
 }
 
 
@@ -89,6 +93,33 @@ void CLRC66303HN::Update()
     RF::Off();
 
     reg_0x28 = Register::RegisterCLRC663(0x28).Read();
+}
+
+
+void CLRC66303HN::Update1()
+{
+    RF::On();
+
+    if (DetectCard())
+    {
+        if (!detected)
+        {
+            HAL_USART2::TransmitRAW("Card detected.");
+        }
+
+        detected = true;
+    }
+    else
+    {
+        if (detected)
+        {
+            HAL_USART2::TransmitRAW("Card lost.");
+        }
+
+        detected = false;
+    }
+
+    RF::Off();
 }
 
 
