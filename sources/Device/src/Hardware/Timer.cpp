@@ -6,7 +6,8 @@
 
 namespace Timer
 {
-    static TIM_HandleTypeDef handle;
+    static TIM_HandleTypeDef handleTIM2;
+    static TIM_HandleTypeDef handleTIM4;
 }
 
 
@@ -14,15 +15,27 @@ void Timer::Init()
 {
     __HAL_RCC_TIM2_CLK_ENABLE();
 
-    handle.Instance = TIM2;
-    handle.Init.Prescaler = 0;
-    handle.Init.CounterMode = TIM_COUNTERMODE_UP;
-    handle.Init.Period = 65535;
-    handle.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+    handleTIM2.Instance = TIM2;                             // Для отсчёта тиков
+    handleTIM2.Init.Prescaler = 0;
+    handleTIM2.Init.CounterMode = TIM_COUNTERMODE_UP;
+    handleTIM2.Init.Period = 65535;
+    handleTIM2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
 
-    HAL_TIM_Base_Init(&handle);
+    HAL_TIM_Base_Init(&handleTIM2);
 
-    HAL_TIM_Base_Start(&handle);
+    HAL_TIM_Base_Start(&handleTIM2);
+
+    __HAL_RCC_TIM4_CLK_ENABLE();
+
+    handleTIM4.Instance = TIM4;                             // Для отсчёта микросекунд
+    handleTIM4.Init.Prescaler = 60;                         // Тепрье
+    handleTIM4.Init.CounterMode = TIM_COUNTERMODE_UP;
+    handleTIM4.Init.Period = 65535;
+    handleTIM4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+
+    HAL_TIM_Base_Init(&handleTIM4);
+
+    HAL_TIM_Base_Start(&handleTIM4);
 }
 
 
@@ -66,6 +79,20 @@ void TimeMeterMS::Continue()
 uint TimeMeterMS::ElapsedTime()
 {
     return TIME_MS - time_reset;
+}
+
+
+void TimeMeterUS::Reset()
+{
+    TIM4->CR1 &= ~TIM_CR1_CEN;
+    TIM4->CNT = 0;
+    TIM4->CR1 |= TIM_CR1_CEN;
+}
+
+
+uint TimeMeterUS::ElapsedUS()
+{
+    return TIM4->CNT;
 }
 
 

@@ -39,6 +39,19 @@ private:
 };
 
 
+struct TimeMeterUS
+{
+    TimeMeterUS()
+    {
+        Reset();
+    }
+
+    void Reset();
+
+    uint ElapsedUS();
+};
+
+
 struct TimeMeterTics
 {
     TimeMeterTics()

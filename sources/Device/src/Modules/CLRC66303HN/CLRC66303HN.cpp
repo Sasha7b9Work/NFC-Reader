@@ -37,9 +37,24 @@ namespace CLRC66303HN
         }
     }
 
+    namespace RF
+    {
+        void On()
+        {
+            Register::RegisterCLRC663(0x28).Write(0x8F);
+        }
+
+        void Off()
+        {
+            Register::RegisterCLRC663(0x28).Write(0x87);
+        }
+    }
+
     bool DetectCard();
 
     static void LoadAntennaConfiguration106();
+
+    static void LoadProtocol();
 }
 
 
@@ -49,13 +64,33 @@ void CLRC66303HN::Init()
 
     Power::On();
 
+    Timer::Delay(100);
+
+    RF::Off();
+
     LoadAntennaConfiguration106();
+
+    LoadProtocol();
 }
 
 
 void CLRC66303HN::Update()
 {
+    RF::On();
 
+    TimeMeterUS meter;
+
+    while (meter.ElapsedUS() < 5100)
+    {
+    }
+
+    RF::Off();
+}
+
+
+uint8 CLRC66303HN::GetRegister28()
+{
+    return Register::RegisterCLRC663(0x28).Read();
 }
 
 
@@ -85,10 +120,6 @@ bool CLRC66303HN::DetectCard()
 
     Command::Idle().Run();                                                          // 1
 
-    Register::FIFOControl().Write(Register::FIFOControl::Size::_256, true, 0);      // 2
-
-    Command::LoadProtocol().Run(0x00, 0x00);                                        // 3, 4
-
     Register::FIFOControl().Write(Register::FIFOControl::Size::_256, true, 0);      // 5
 
     reg_irq0.Write(0x7F);                                                           // 7
@@ -117,7 +148,7 @@ bool CLRC66303HN::DetectCard()
 
 static void CLRC66303HN::LoadAntennaConfiguration106()
 {
-    Register::RegisterCLRC663(0x28).Write(0x8E);    // DrvMode
+    Register::RegisterCLRC663(0x28).Write(0x87);    // DrvMode
     Register::RegisterCLRC663(0x29).Write(0x12);    // TxAmp
     Register::RegisterCLRC663(0x2A).Write(0x39);    // DrvCon
     Register::RegisterCLRC663(0x2B).Write(0x0A);    // Txl
@@ -135,4 +166,12 @@ static void CLRC66303HN::LoadAntennaConfiguration106()
     Register::RegisterCLRC663(0x37).Write(0x5C);    // RxThreshold
     Register::RegisterCLRC663(0x38).Write(0x12);    // Rcv
     Register::RegisterCLRC663(0x39).Write(0x0A);    // RxAna
+}
+
+
+static void CLRC66303HN::LoadProtocol()
+{
+    Register::FIFOControl().Write(Register::FIFOControl::Size::_256, true, 0);
+
+    Command::LoadProtocol().Run(0x00, 0x00);
 }
