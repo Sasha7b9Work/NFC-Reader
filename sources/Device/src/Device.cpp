@@ -41,13 +41,13 @@ void Device::Init()
 
 void Device::Update()
 {
-    HAL_ADC::Update();
+    HAL_ADC::Update();          // Замеряем напряжение
 
     WS2812B::Update();          // Индикаторы
 
     LIS2DH12::Update();         // Акселерометр
 
-    CLRC66303HN::Update();      // Обнаружение карты
+    CLRC66303HN::Update();      // Карт-ридер
 
     if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_11) == GPIO_PIN_RESET)
     {

@@ -34,21 +34,44 @@ uint8 Register::RegisterCLRC663::Read()
 }
 
 
-void Register::FIFOControl::Write(Size::E /*size*/, bool /*clear*/, int /*waterLevelExtBit*/)
+void Register::FIFOControl::Write(Size::E size, bool clear, int waterLevelExtBit)
 {
+    data = 0;
 
+    if (size == Size::_255)
+    {
+        _SET_BIT(data, 7);
+    }
+
+    if (clear)
+    {
+        _SET_BIT(data, 4);
+    }
+
+    if (waterLevelExtBit)
+    {
+        _SET_BIT(data, 2);
+    }
+
+    RegisterCLRC663::Write();
 }
 
 
-void Register::FIFOData::Write(uint8 /*data*/)
+void Register::FIFOData::Write(uint8 _data)
 {
+    data = _data;
 
+    RegisterCLRC663::Write();
 }
 
 
-void Register::FIFOData::Write(uint8 /*data0*/, uint8 /*data1*/)
+void Register::FIFOData::Write(uint8 data0, uint8 data1)
 {
+    uint8 buffer[3] = { (uint8)(address << 1), data0, data1 };
 
+    HAL_SPI::Write(DirectionSPI::Reader, buffer, 3);
+
+    data = data1;
 }
 
 

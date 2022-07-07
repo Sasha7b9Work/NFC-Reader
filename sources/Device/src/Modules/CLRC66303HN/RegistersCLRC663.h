@@ -23,7 +23,7 @@ namespace Register
             enum E
             {
                 _512,
-                _256
+                _255
             };
         };
 

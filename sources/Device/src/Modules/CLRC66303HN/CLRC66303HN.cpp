@@ -11,6 +11,7 @@
 
 namespace CLRC66303HN
 {
+    // Подача питания на чип
     namespace Power
     {
         void Off()
@@ -37,6 +38,7 @@ namespace CLRC66303HN
         }
     }
 
+    // Включение электромагнитного поля
     namespace RF
     {
         void On()
@@ -153,7 +155,7 @@ bool CLRC66303HN::DetectCard()
 
     Command::Idle().Run();                                                          // 1
 
-    Register::FIFOControl().Write(Register::FIFOControl::Size::_256, true, 0);      // 5
+    Register::FIFOControl().Write(Register::FIFOControl::Size::_255, true, 0);      // 5
 
     Register::IRQ0 reg_irq0;                                                        // 7 Очистка битов irq0
     reg_irq0.Write(0x7F);
@@ -199,7 +201,7 @@ static void CLRC66303HN::LoadAntennaConfiguration106()
 
 static void CLRC66303HN::LoadProtocol()
 {
-    Register::FIFOControl().Write(Register::FIFOControl::Size::_256, true, 0);
+    Register::FIFOControl().Write(Register::FIFOControl::Size::_255, true, 0);
 
     Command::LoadProtocol().Run(0x00, 0x00);
 }
