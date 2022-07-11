@@ -13,6 +13,14 @@ void Register::RegisterCLRC663::Write()
 }
 
 
+void Register::RegisterCLRC663::Write(uint8 data1, uint8 data2)
+{
+    uint8 buffer[3] = { (uint8)(address << 1), data1, data2 };
+
+    HAL_SPI::Write(DirectionSPI::Reader, buffer, 3);
+}
+
+
 void Register::RegisterCLRC663::Write(uint8 _data)
 {
     data = _data;

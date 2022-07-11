@@ -52,6 +52,8 @@ namespace CLRC66303HN
         }
     }
 
+    bool DetectCard1();
+
     bool DetectCard();
 
     static void LoadAntennaConfiguration106();
@@ -84,7 +86,7 @@ void CLRC66303HN::Init()
 
 void CLRC66303HN::Update1()
 {
-    RF::On();
+//    RF::On();
 
     TimeMeterUS meter;
 
@@ -92,7 +94,7 @@ void CLRC66303HN::Update1()
     {
     }
 
-    RF::Off();
+//    RF::Off();
 
     reg_0x28 = Register::RegisterCLRC663(0x28).Read();
 }
@@ -134,6 +136,44 @@ uint8 CLRC66303HN::GetRegister28()
 
 
 bool CLRC66303HN::DetectCard()
+{
+    TimeMeterUS meter;
+
+    Register::RegisterCLRC663(0x00).Write(0x00);
+    Register::RegisterCLRC663(0x02).Write(0xB0);
+    Register::RegisterCLRC663(0x05).Write(0x00, 0x00);
+    Register::RegisterCLRC663(0x00).Write(0x0D);
+    Register::RegisterCLRC663(0x02).Write(0xB0);
+    RF::On();
+
+    while (meter.ElapsedUS() < 1000)
+    {
+    }
+
+    Register::RegisterCLRC663(0x06).Write(0x7F);
+    Register::RegisterCLRC663(0x2C).Write(0x18);
+    Register::RegisterCLRC663(0x2D).Write(0x18);
+    Register::RegisterCLRC663(0x2E).Write(0x0F);
+    Register::RegisterCLRC663(0x05).Write(0x26);
+    Register::RegisterCLRC663(0x00).Write(0x07);
+
+    while (meter.ElapsedUS() < 6000)
+    {
+        if (Register::RegisterCLRC663(0x06).Read() & Register::IRQ0::RxSOFIRQ)
+        {
+            RF::Off();
+
+            return true;
+        }
+    }
+
+    RF::Off();
+
+    return false;
+}
+
+
+bool CLRC66303HN::DetectCard1()
 {
     /*
             AN12657.pdf
