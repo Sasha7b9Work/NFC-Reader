@@ -228,7 +228,7 @@ bool CLRC66303HN::DetectCard1()
 static void CLRC66303HN::LoadAntennaConfiguration106()
 {
     Register::RegisterCLRC663(0x28).Write(0x8F);    // DrvMode
-    Register::RegisterCLRC663(0x29).Write(0x00);    // TxAmp
+    Register::RegisterCLRC663(0x29).Write(0x1F);    // TxAmp
     Register::RegisterCLRC663(0x2A).Write(0x39);    // DrvCon
     Register::RegisterCLRC663(0x2B).Write(0x0A);    // Txl
     Register::RegisterCLRC663(0x2C).Write(0x18);    // TXCrcPreset
