@@ -139,26 +139,26 @@ bool CLRC66303HN::DetectCard()
 {
     TimeMeterUS meter;
 
-    Register::RegisterCLRC663(0x00).Write(0x00);
-    Register::RegisterCLRC663(0x02).Write(0xB0);
+    Register::RegisterCLRC663(0x00).Write(0x00);        // Cancels previous executions and the state machine returns into IDLE mode
+    Register::RegisterCLRC663(0x02).Write(0xB0);        // Flushes the FIFO and defines FIFO characteristics
 //    Register::RegisterCLRC663(0x05).Write(0x00, 0x00);
 //    Register::RegisterCLRC663(0x00).Write(0x0D);
 
     LoadProtocol();
 
-    Register::RegisterCLRC663(0x02).Write(0xB0);
-    RF::On();
+    Register::RegisterCLRC663(0x02).Write(0xB0);        // Flushes the FIFO and defines FIFO characteristics
+    RF::On();                                           // Switches the RF filed ON.
 
     while (meter.ElapsedUS() < 1000)
     {
     }
 
-    Register::RegisterCLRC663(0x06).Write(0x7F);
-    Register::RegisterCLRC663(0x2C).Write(0x18);
-    Register::RegisterCLRC663(0x2D).Write(0x18);
-    Register::RegisterCLRC663(0x2E).Write(0x0F);
-    Register::RegisterCLRC663(0x05).Write(0x26);
-    Register::RegisterCLRC663(0x00).Write(0x07);
+    Register::RegisterCLRC663(0x06).Write(0x7F);        // Clears all bits in IRQ0
+    Register::RegisterCLRC663(0x2C).Write(0x18);        // Switches the CRC extention OFF in tx direction
+    Register::RegisterCLRC663(0x2D).Write(0x18);        // Switches the CRC extention OFF in rx direction
+    Register::RegisterCLRC663(0x2E).Write(0x0F);        // Only the 7 last bits will be sent via NFC
+    Register::RegisterCLRC663(0x05).Write(0x26);        // Fills the FIFO with 0x26 (REQA)
+    Register::RegisterCLRC663(0x00).Write(0x07);        // Executes Transceive routine
 
     while (meter.ElapsedUS() < 6000)
     {
@@ -227,8 +227,8 @@ bool CLRC66303HN::DetectCard1()
 
 static void CLRC66303HN::LoadAntennaConfiguration106()
 {
-    Register::RegisterCLRC663(0x28).Write(0x8E);    // DrvMode
-    Register::RegisterCLRC663(0x29).Write(0x12);    // TxAmp
+    Register::RegisterCLRC663(0x28).Write(0x8F);    // DrvMode
+    Register::RegisterCLRC663(0x29).Write(0x00);    // TxAmp
     Register::RegisterCLRC663(0x2A).Write(0x39);    // DrvCon
     Register::RegisterCLRC663(0x2B).Write(0x0A);    // Txl
     Register::RegisterCLRC663(0x2C).Write(0x18);    // TXCrcPreset
@@ -269,7 +269,7 @@ static void CLRC66303HN::LoadProtocol()
     Register::RegisterCLRC663(0x54).Write(0x00);    // TxSym32Len   00
     Register::RegisterCLRC663(0x55).Write(0x00);    // TxSym10BurstCtrl 00
     Register::RegisterCLRC663(0x56).Write(0x00);    // TxSym10Mod   00
-    Register::RegisterCLRC663(0x57).Write(0x52);    // TxSym32Mod   50
+    Register::RegisterCLRC663(0x57).Write(0x50);    // TxSym32Mod   50
     Register::RegisterCLRC663(0x58).Write(0x02);    // RxBitMod     02
     Register::RegisterCLRC663(0x59).Write(0x00);    // RxEofSym     00
     Register::RegisterCLRC663(0x5A).Write(0x00);    // RxSyncValH   00
