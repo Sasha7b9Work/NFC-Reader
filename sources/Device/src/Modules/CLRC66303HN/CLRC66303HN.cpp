@@ -122,6 +122,8 @@ void CLRC66303HN::Update()
     }
 
     RF::Off();
+
+    reg_0x28 = Register::RegisterCLRC663(0x28).Read();
 }
 
 
@@ -159,16 +161,16 @@ bool CLRC66303HN::DetectCard()
 
     Register::FIFOControl().Write(Register::FIFOControl::Size::_255, true, 0);      // 5
 
-    Register::IRQ0 reg_irq0;                                                        // 7 Очистка битов irq0
-    reg_irq0.Write(0x7F);
-
-    while (meter.ElapsedUS() < 5100)
+    while (meter.ElapsedUS() < 1000)
     {
     }
 
+    Register::IRQ0 reg_irq0;                                                        // 7 Очистка битов irq0
+    reg_irq0.Write(0x7F);
+
     Command::Transceive().Run(0x26);    // REQA                                     // 11, 12  Запрос на карту
 
-    while (meter.ElapsedUS() < 6100)
+    while (meter.ElapsedUS() < 6000)
     {
         if (reg_irq0.Read() & Register::IRQ0::RxSOFIRQ)                             // Обнаружена SOF или поднесушая
         {
