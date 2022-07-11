@@ -149,7 +149,7 @@ bool CLRC66303HN::DetectCard()
     Register::RegisterCLRC663(0x02).Write(0xB0);        // Flushes the FIFO and defines FIFO characteristics
     RF::On();                                           // Switches the RF filed ON.
 
-    while (meter.ElapsedUS() < 1000)
+    while (meter.ElapsedUS() < 5100)
     {
     }
 
@@ -160,7 +160,7 @@ bool CLRC66303HN::DetectCard()
     Register::RegisterCLRC663(0x05).Write(0x26);        // Fills the FIFO with 0x26 (REQA)
     Register::RegisterCLRC663(0x00).Write(0x07);        // Executes Transceive routine
 
-    while (meter.ElapsedUS() < 6000)
+    while (meter.ElapsedUS() < 7000)
     {
         if (Register::RegisterCLRC663(0x06).Read() & Register::IRQ0::RxSOFIRQ)
         {
