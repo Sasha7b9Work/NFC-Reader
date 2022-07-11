@@ -102,7 +102,7 @@ void CLRC66303HN::Update1()
 
 void CLRC66303HN::Update()
 {
-    RF::On();
+//    RF::On();
 
     if (DetectCard())
     {
@@ -123,7 +123,7 @@ void CLRC66303HN::Update()
         detected = false;
     }
 
-    RF::Off();
+//    RF::Off();
 
     reg_0x28 = Register::RegisterCLRC663(0x28).Read();
 }
