@@ -82,7 +82,7 @@ void CLRC66303HN::Init()
 }
 
 
-void CLRC66303HN::Update()
+void CLRC66303HN::Update1()
 {
     RF::On();
 
@@ -98,7 +98,7 @@ void CLRC66303HN::Update()
 }
 
 
-void CLRC66303HN::Update1()
+void CLRC66303HN::Update()
 {
     RF::On();
 
@@ -153,6 +153,8 @@ bool CLRC66303HN::DetectCard()
 
     */
 
+    TimeMeterUS meter;
+
     Command::Idle().Run();                                                          // 1
 
     Register::FIFOControl().Write(Register::FIFOControl::Size::_255, true, 0);      // 5
@@ -160,11 +162,13 @@ bool CLRC66303HN::DetectCard()
     Register::IRQ0 reg_irq0;                                                        // 7 Очистка битов irq0
     reg_irq0.Write(0x7F);
 
+    while (meter.ElapsedUS() < 5100)
+    {
+    }
+
     Command::Transceive().Run(0x26);    // REQA                                     // 11, 12  Запрос на карту
 
-    TimeMeterUS meter;
-
-    while (meter.ElapsedUS() < 5100)
+    while (meter.ElapsedUS() < 6100)
     {
         if (reg_irq0.Read() & Register::IRQ0::RxSOFIRQ)                             // Обнаружена SOF или поднесушая
         {
