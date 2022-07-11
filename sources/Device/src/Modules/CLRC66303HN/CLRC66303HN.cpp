@@ -80,7 +80,7 @@ void CLRC66303HN::Init()
 
     LoadAntennaConfiguration106();
 
-    LoadProtocol();
+//    LoadProtocol();
 }
 
 
@@ -141,8 +141,11 @@ bool CLRC66303HN::DetectCard()
 
     Register::RegisterCLRC663(0x00).Write(0x00);
     Register::RegisterCLRC663(0x02).Write(0xB0);
-    Register::RegisterCLRC663(0x05).Write(0x00, 0x00);
-    Register::RegisterCLRC663(0x00).Write(0x0D);
+//    Register::RegisterCLRC663(0x05).Write(0x00, 0x00);
+//    Register::RegisterCLRC663(0x00).Write(0x0D);
+
+    LoadProtocol();
+
     Register::RegisterCLRC663(0x02).Write(0xB0);
     RF::On();
 
@@ -224,7 +227,7 @@ bool CLRC66303HN::DetectCard1()
 
 static void CLRC66303HN::LoadAntennaConfiguration106()
 {
-    Register::RegisterCLRC663(0x28).Write(0x87);    // DrvMode
+    Register::RegisterCLRC663(0x28).Write(0x8E);    // DrvMode
     Register::RegisterCLRC663(0x29).Write(0x12);    // TxAmp
     Register::RegisterCLRC663(0x2A).Write(0x39);    // DrvCon
     Register::RegisterCLRC663(0x2B).Write(0x0A);    // Txl
@@ -247,7 +250,32 @@ static void CLRC66303HN::LoadAntennaConfiguration106()
 
 static void CLRC66303HN::LoadProtocol()
 {
-    Register::FIFOControl().Write(Register::FIFOControl::Size::_255, true, 0);
+//    Register::FIFOControl().Write(Register::FIFOControl::Size::_255, true, 0);
+//
+//    Command::LoadProtocol().Run(0x00, 0x00);
 
-    Command::LoadProtocol().Run(0x00, 0x00);
+    Register::RegisterCLRC663(0x48).Write(0x20);    // TxBitMod     20
+    Register::RegisterCLRC663(0x49).Write(0x00);    // RFU          00
+    Register::RegisterCLRC663(0x4A).Write(0x04);    // TxDataCon    04
+    Register::RegisterCLRC663(0x4B).Write(0x50);    // TxDataMod    50
+    Register::RegisterCLRC663(0x4C).Write(0x40);    // TxSymFreq    40
+    Register::RegisterCLRC663(0x4D).Write(0x00);    // TxSym0H      00
+    Register::RegisterCLRC663(0x4E).Write(0x00);    // TxSym0L      00
+    Register::RegisterCLRC663(0x4F).Write(0x00);    // TxSym1H      00
+    Register::RegisterCLRC663(0x50).Write(0x00);    // TxSym1L      00
+    Register::RegisterCLRC663(0x51).Write(0x00);    // TxSym2       00
+    Register::RegisterCLRC663(0x52).Write(0x00);    // TxSym3       00
+    Register::RegisterCLRC663(0x53).Write(0x00);    // TxSym10Len   00
+    Register::RegisterCLRC663(0x54).Write(0x00);    // TxSym32Len   00
+    Register::RegisterCLRC663(0x55).Write(0x00);    // TxSym10BurstCtrl 00
+    Register::RegisterCLRC663(0x56).Write(0x00);    // TxSym10Mod   00
+    Register::RegisterCLRC663(0x57).Write(0x52);    // TxSym32Mod   50
+    Register::RegisterCLRC663(0x58).Write(0x02);    // RxBitMod     02
+    Register::RegisterCLRC663(0x59).Write(0x00);    // RxEofSym     00
+    Register::RegisterCLRC663(0x5A).Write(0x00);    // RxSyncValH   00
+    Register::RegisterCLRC663(0x5B).Write(0x01);    // RxSyncVaIL   01
+    Register::RegisterCLRC663(0x5C).Write(0x00);    // RxSyncMod    00
+    Register::RegisterCLRC663(0x5D).Write(0x08);    // RxMod        08
+    Register::RegisterCLRC663(0x5E).Write(0x80);    // RxCorr       80
+    Register::RegisterCLRC663(0x5F).Write(0xB2);    // FabCal       B2
 }
