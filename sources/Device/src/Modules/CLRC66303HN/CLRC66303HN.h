@@ -9,4 +9,6 @@ namespace CLRC66303HN
     void Update();
 
     uint8 GetRegister06();
+
+    BitSet16 GetData();
 }

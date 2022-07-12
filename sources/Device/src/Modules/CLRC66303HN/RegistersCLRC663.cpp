@@ -42,6 +42,18 @@ uint8 Register::RegisterCLRC663::Read()
 }
 
 
+void Register::RegisterCLRC663::Read(uint8 _out[2], uint8 _in[2])
+{
+    uint8 out[3] = { (uint8)((address << 1) | 1), _out[0], _out[1] };
+    uint8 in[3];
+
+    HAL_SPI::WriteRead(DirectionSPI::Reader, out, in, 3);
+
+    _in[0] = in[1];
+    _in[1] = in[2];
+}
+
+
 void Register::FIFOControl::Write(Size::E size, bool clear, int waterLevelExtBit)
 {
     data = 0;

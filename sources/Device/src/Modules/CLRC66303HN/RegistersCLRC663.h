@@ -11,6 +11,7 @@ namespace Register
         void Write(uint8 data);
         void Write(uint8 data1, uint8 data2);
         uint8 Read();
+        void Read(uint8 out[2], uint8 in[2]);
         uint8 address;
         int data;
     };
