@@ -4,7 +4,7 @@
 
 struct UID
 {
-    UID() : byte0(0), byte1(0), byte2(0), byte3(0), byte4(0) {}
+    UID() : byte0(0), byte1(1), byte2(2), byte3(3), byte4(4) {}
 
     uint8 byte0;
     uint8 byte1;
@@ -25,4 +25,6 @@ namespace CLRC66303HN
     BitSet16 GetData();
 
     UID GetUID();
+
+    char *Readed();
 }

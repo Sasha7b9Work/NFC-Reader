@@ -69,6 +69,8 @@ namespace CLRC66303HN
     static bool detected = false;       // true, если карта детектирована
 
     static UID uid;
+
+    static char *readed = "no";
 }
 
 
@@ -133,6 +135,12 @@ UID CLRC66303HN::GetUID()
 }
 
 
+char *CLRC66303HN::Readed()
+{
+    return readed;
+}
+
+
 bool CLRC66303HN::DetectCard()
 {
     bool result = false;
@@ -141,8 +149,6 @@ bool CLRC66303HN::DetectCard()
 
     Register::RegisterCLRC663(0x00).Write(0x00);        // Cancels previous executions and the state machine returns into IDLE mode
     Register::RegisterCLRC663(0x02).Write(0xB0);        // Flushes the FIFO and defines FIFO characteristics
-//    Register::RegisterCLRC663(0x05).Write(0x00, 0x00);
-//    Register::RegisterCLRC663(0x00).Write(0x0D);
 
     LoadProtocol();
 
@@ -190,8 +196,13 @@ bool CLRC66303HN::DetectCard()
 
     if (result)
     {
+        Register::RegisterCLRC663(0x00).Write(0x00);        // Cancels previous executions and the state machine returns into IDLE mode
+        Register::RegisterCLRC663(0x02).Write(0xB0);        // Flushes the FIFO and defines FIFO characteristics
+
         Register::RegisterCLRC663(0x06).Write(0x7F);        // Clears all bits in IRQ0
-        Register::RegisterCLRC663(0x05).Write(0x93);        // CL1
+
+        Register::RegisterCLRC663(0x05).Write(0x93);        // CL1  \ Anticollision 
+        Register::RegisterCLRC663(0x05).Write(0x20);        //      / CL1
         Register::RegisterCLRC663(0x00).Write(0x07);        // Transceive routine
 
         while (meter.ElapsedUS() < 7000)
@@ -211,6 +222,8 @@ bool CLRC66303HN::DetectCard()
                     uid.byte2 = Register::RegisterCLRC663(0x05).Read();
                     uid.byte3 = Register::RegisterCLRC663(0x05).Read();
                     uid.byte4 = Register::RegisterCLRC663(0x05).Read();
+
+                    readed = "yes";
 
                     break;
                 }
