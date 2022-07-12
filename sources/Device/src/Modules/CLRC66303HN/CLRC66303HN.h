@@ -8,5 +8,5 @@ namespace CLRC66303HN
 
     void Update();
 
-    uint8 GetRegister28();
+    uint8 GetRegister06();
 }

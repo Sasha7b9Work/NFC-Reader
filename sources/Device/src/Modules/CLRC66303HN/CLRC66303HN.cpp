@@ -62,7 +62,7 @@ namespace CLRC66303HN
 
     void Update1();
 
-    static uint8 reg_0x28 = 0;
+    static uint8 reg_0x06 = 0;
 
     static bool detected = false;       // true, если карта детектирована
 }
@@ -95,8 +95,6 @@ void CLRC66303HN::Update1()
     }
 
 //    RF::Off();
-
-    reg_0x28 = Register::RegisterCLRC663(0x28).Read();
 }
 
 
@@ -124,14 +122,12 @@ void CLRC66303HN::Update()
     }
 
 //    RF::Off();
-
-    reg_0x28 = Register::RegisterCLRC663(0x28).Read();
 }
 
 
-uint8 CLRC66303HN::GetRegister28()
+uint8 CLRC66303HN::GetRegister06()
 {
-    return reg_0x28;
+    return reg_0x06;
 }
 
 
@@ -162,7 +158,9 @@ bool CLRC66303HN::DetectCard()
 
     while (meter.ElapsedUS() < 7000)
     {
-        if (Register::RegisterCLRC663(0x06).Read() & Register::IRQ0::RxSOFIRQ)
+        reg_0x06 = Register::RegisterCLRC663(0x06).Read();
+
+        if (reg_0x06 & Register::IRQ0::RxSOFIRQ)
         {
             RF::Off();
 
@@ -257,9 +255,7 @@ static void CLRC66303HN::LoadProtocol()
     Register::RegisterCLRC663(0x48).Write(0x20);    // TxBitMod     20
     Register::RegisterCLRC663(0x49).Write(0x00);    // RFU          00
     Register::RegisterCLRC663(0x4A).Write(0x04);    // TxDataCon    04
-    
     Register::RegisterCLRC663(0x4B).Write(0x50);    // TxDataMod    50
-
     Register::RegisterCLRC663(0x4C).Write(0x40);    // TxSymFreq    40
     Register::RegisterCLRC663(0x4D).Write(0x00);    // TxSym0H      00
     Register::RegisterCLRC663(0x4E).Write(0x00);    // TxSym0L      00
