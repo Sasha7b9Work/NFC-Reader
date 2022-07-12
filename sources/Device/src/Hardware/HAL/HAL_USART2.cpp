@@ -129,15 +129,16 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *)
             {
                 char message[100];
 
-                std::sprintf(message, "OK;%02Xh;%3.1fV;%3.2fg;%3.2fg;%3.2fg;%3.1fC;reg_0x06:%02Xh;data:%04Xh\x0D\x0A",
+                UID uid = CLRC66303HN::GetUID();
+
+                std::sprintf(message, "OK;%02Xh;%3.1fV;%3.2fg;%3.2fg;%3.2fg;%3.1fC;uid:%02X:%02X:%02X:%02X:%02X\x0D\x0A",
                     W25Q80DV::TestValue(),
                     HAL_ADC::GetValue(),
                     LIS2DH12::GetAccelerationX().ToAccelearation(),
                     LIS2DH12::GetAccelerationY().ToAccelearation(),
                     LIS2DH12::GetAccelerationZ().ToAccelearation(),
                     LIS2DH12::GetRawTemperature().ToTemperatrue(),
-                    CLRC66303HN::GetRegister06(),
-                    CLRC66303HN::GetData().half_word);
+                    uid.byte0, uid.byte1, uid.byte2, uid.byte3, uid.byte4);
 
                 HAL_USART2::TransmitRAW(message);
 

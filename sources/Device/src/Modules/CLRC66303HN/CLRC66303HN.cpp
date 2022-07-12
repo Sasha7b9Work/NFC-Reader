@@ -67,6 +67,8 @@ namespace CLRC66303HN
     static BitSet16 data;
 
     static bool detected = false;       // true, если карта детектирована
+
+    static UID uid;
 }
 
 
@@ -125,6 +127,12 @@ BitSet16 CLRC66303HN::GetData()
 }
 
 
+UID CLRC66303HN::GetUID()
+{
+    return uid;
+}
+
+
 bool CLRC66303HN::DetectCard()
 {
     bool result = false;
@@ -163,6 +171,8 @@ bool CLRC66303HN::DetectCard()
                 data.byte[0] = Register::RegisterCLRC663(0x05).Read();
                 data.byte[1] = Register::RegisterCLRC663(0x05).Read();
 
+                data.half_word = (uint16)(-1);
+
                 Register::RegisterCLRC663(0x05).Write(0x26);        // Fills the FIFO with 0x26 (REQA)
                 Register::RegisterCLRC663(0x00).Write(0x07);        // Executes Transceive routine
             }
@@ -178,12 +188,37 @@ bool CLRC66303HN::DetectCard()
         }
     }
 
-    RF::Off();
-
-    if (!result)
+    if (result)
     {
-        data.half_word = (uint16)(-1);
+        Register::RegisterCLRC663(0x06).Write(0x7F);        // Clears all bits in IRQ0
+        Register::RegisterCLRC663(0x05).Write(0x93);        // CL1
+        Register::RegisterCLRC663(0x00).Write(0x07);        // Transceive routine
+
+        while (meter.ElapsedUS() < 7000)
+        {
+            reg_0x06 = Register::RegisterCLRC663(0x06).Read();
+
+            if (reg_0x06 & Register::IRQ0::RxIRQ)
+            {
+                if (reg_0x06 & Register::IRQ0::ErrIRQ)
+                {
+                    result = false;
+                }
+                else
+                {
+                    uid.byte0 = Register::RegisterCLRC663(0x05).Read();         // „итаем первый уровень UID
+                    uid.byte1 = Register::RegisterCLRC663(0x05).Read();
+                    uid.byte2 = Register::RegisterCLRC663(0x05).Read();
+                    uid.byte3 = Register::RegisterCLRC663(0x05).Read();
+                    uid.byte4 = Register::RegisterCLRC663(0x05).Read();
+
+                    break;
+                }
+            }
+        }
     }
+
+    RF::Off();
 
     return result;
 }
