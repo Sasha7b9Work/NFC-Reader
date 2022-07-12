@@ -43,12 +43,12 @@ namespace CLRC66303HN
     {
         void On()
         {
-            Register::RegisterCLRC663(0x28).Write(0x8F);
+            Register::RegisterCLRC663(0x28).Write(0x8E);
         }
 
         void Off()
         {
-            Register::RegisterCLRC663(0x28).Write(0x87);
+            Register::RegisterCLRC663(0x28).Write(0x86);
         }
     }
 
@@ -227,12 +227,12 @@ bool CLRC66303HN::DetectCard1()
 
 static void CLRC66303HN::LoadAntennaConfiguration106()
 {
-    Register::RegisterCLRC663(0x28).Write(0x8F);    // DrvMode
+    RF::Off();                                      // DrvMode
     Register::RegisterCLRC663(0x29).Write(0x1F);    // TxAmp
     Register::RegisterCLRC663(0x2A).Write(0x39);    // DrvCon
     Register::RegisterCLRC663(0x2B).Write(0x0A);    // Txl
     Register::RegisterCLRC663(0x2C).Write(0x18);    // TXCrcPreset
-    Register::RegisterCLRC663(0x2D).Write(0x18);    // TXCrcPreset
+    Register::RegisterCLRC663(0x2D).Write(0x18);    // RxCrcCon
     Register::RegisterCLRC663(0x2E).Write(0x0F);    // TxDataNum
     Register::RegisterCLRC663(0x2F).Write(0x21);    // TxModWidth
     Register::RegisterCLRC663(0x30).Write(0x00);    // TxSym10BurstLen
@@ -257,7 +257,9 @@ static void CLRC66303HN::LoadProtocol()
     Register::RegisterCLRC663(0x48).Write(0x20);    // TxBitMod     20
     Register::RegisterCLRC663(0x49).Write(0x00);    // RFU          00
     Register::RegisterCLRC663(0x4A).Write(0x04);    // TxDataCon    04
+    
     Register::RegisterCLRC663(0x4B).Write(0x50);    // TxDataMod    50
+
     Register::RegisterCLRC663(0x4C).Write(0x40);    // TxSymFreq    40
     Register::RegisterCLRC663(0x4D).Write(0x00);    // TxSym0H      00
     Register::RegisterCLRC663(0x4E).Write(0x00);    // TxSym0L      00
