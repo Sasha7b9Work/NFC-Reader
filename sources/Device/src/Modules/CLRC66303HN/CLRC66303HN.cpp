@@ -202,6 +202,7 @@ bool CLRC66303HN::DetectCard()
         Register::RegisterCLRC663(0x02).Write(0xB0);        // Flushes the FIFO and defines FIFO characteristics
 
         Register::RegisterCLRC663(0x06).Write(0x7F);        // Clears all bits in IRQ0
+        Register::RegisterCLRC663(0x2E).Write(0x08);        // All bits will be sent via NFC
 
         Register::RegisterCLRC663(0x05).Write(0x93);        // CL1  \ Anticollision 
         Register::RegisterCLRC663(0x05).Write(0x20);        //      / CL1
@@ -215,7 +216,11 @@ bool CLRC66303HN::DetectCard()
             {
                 if (reg_0x06 & Register::IRQ0::ErrIRQ)
                 {
+                    readed = "error";
+
                     result = false;
+
+                    break;
                 }
                 else
                 {
