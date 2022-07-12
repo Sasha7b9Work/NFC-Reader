@@ -196,6 +196,8 @@ bool CLRC66303HN::DetectCard()
 
     if (result)
     {
+        meter.Reset();
+
         Register::RegisterCLRC663(0x00).Write(0x00);        // Cancels previous executions and the state machine returns into IDLE mode
         Register::RegisterCLRC663(0x02).Write(0xB0);        // Flushes the FIFO and defines FIFO characteristics
 
@@ -205,7 +207,7 @@ bool CLRC66303HN::DetectCard()
         Register::RegisterCLRC663(0x05).Write(0x20);        //      / CL1
         Register::RegisterCLRC663(0x00).Write(0x07);        // Transceive routine
 
-        while (meter.ElapsedUS() < 7000)
+        while (meter.ElapsedUS() < 10000)
         {
             reg_0x06 = Register::RegisterCLRC663(0x06).Read();
 
