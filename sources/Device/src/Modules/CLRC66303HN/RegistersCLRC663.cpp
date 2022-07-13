@@ -5,102 +5,107 @@
 #include <cstring>
 
 
-void Register::RegisterCLRC663::Write()
+namespace CLRC66303HN
 {
-    uint8 buffer[2] = { (uint8)(address << 1), (uint8)data };
 
-    HAL_SPI::Write(DirectionSPI::Reader, buffer, 2);
-}
-
-
-void Register::RegisterCLRC663::Write(uint8 data1, uint8 data2)
-{
-    uint8 buffer[3] = { (uint8)(address << 1), data1, data2 };
-
-    HAL_SPI::Write(DirectionSPI::Reader, buffer, 3);
-}
-
-
-void Register::RegisterCLRC663::Write(uint8 _data)
-{
-    data = _data;
-
-    Write();
-}
-
-
-uint8 Register::RegisterCLRC663::Read()
-{
-    uint8 out[2] = { (uint8)((address << 1) | 1), 0 };
-    uint8 in[2];
-
-    HAL_SPI::WriteRead(DirectionSPI::Reader, out, in, 2);
-
-    data = in[1];
-
-    return (uint8)data;
-}
-
-
-void Register::RegisterCLRC663::Read(uint8 _out[2], uint8 _in[2])
-{
-    uint8 out[3] = { (uint8)((address << 1) | 1), _out[0], _out[1] };
-    uint8 in[3];
-
-    HAL_SPI::WriteRead(DirectionSPI::Reader, out, in, 3);
-
-    _in[0] = in[1];
-    _in[1] = in[2];
-}
-
-
-void Register::FIFOControl::Write(Size::E size, bool clear, int waterLevelExtBit)
-{
-    data = 0;
-
-    if (size == Size::_255)
+    void Register::RegisterCLRC663::Write()
     {
-        _SET_BIT(data, 7);
+        uint8 buffer[2] = { (uint8)(address << 1), (uint8)data };
+
+        HAL_SPI::Write(DirectionSPI::Reader, buffer, 2);
     }
 
-    if (clear)
+
+    void Register::RegisterCLRC663::Write(uint8 data1, uint8 data2)
     {
-        _SET_BIT(data, 4);
+        uint8 buffer[3] = { (uint8)(address << 1), data1, data2 };
+
+        HAL_SPI::Write(DirectionSPI::Reader, buffer, 3);
     }
 
-    if (waterLevelExtBit)
+
+    void Register::RegisterCLRC663::Write(uint8 _data)
     {
-        _SET_BIT(data, 2);
+        data = _data;
+
+        Write();
     }
 
-    RegisterCLRC663::Write();
-}
+
+    uint8 Register::RegisterCLRC663::Read()
+    {
+        uint8 out[2] = { (uint8)((address << 1) | 1), 0 };
+        uint8 in[2];
+
+        HAL_SPI::WriteRead(DirectionSPI::Reader, out, in, 2);
+
+        data = in[1];
+
+        return (uint8)data;
+    }
 
 
-void Register::FIFOData::Write(uint8 _data)
-{
-    data = _data;
+    void Register::RegisterCLRC663::Read(uint8 _out[2], uint8 _in[2])
+    {
+        uint8 out[3] = { (uint8)((address << 1) | 1), _out[0], _out[1] };
+        uint8 in[3];
 
-    RegisterCLRC663::Write();
-}
+        HAL_SPI::WriteRead(DirectionSPI::Reader, out, in, 3);
 
-
-void Register::FIFOData::Write(uint8 data0, uint8 data1)
-{
-    uint8 buffer[3] = { (uint8)(address << 1), data0, data1 };
-
-    HAL_SPI::Write(DirectionSPI::Reader, buffer, 3);
-
-    data = data1;
-}
+        _in[0] = in[1];
+        _in[1] = in[2];
+    }
 
 
-void Register::FIFOData::Read2Bytes(uint8 _data[2])
-{
-    uint8 out[3] = { (uint8)address, 0x05, 0x00 };
-    uint8 in[3];
+    void Register::FIFOControl::Write(Size::E size, bool clear, int waterLevelExtBit)
+    {
+        data = 0;
 
-    HAL_SPI::WriteRead(DirectionSPI::Reader, out, in, 3);
+        if (size == Size::_255)
+        {
+            _SET_BIT(data, 7);
+        }
 
-    std::memcpy(_data, &in[1], 2);
+        if (clear)
+        {
+            _SET_BIT(data, 4);
+        }
+
+        if (waterLevelExtBit)
+        {
+            _SET_BIT(data, 2);
+        }
+
+        RegisterCLRC663::Write();
+    }
+
+
+    void Register::FIFOData::Write(uint8 _data)
+    {
+        data = _data;
+
+        RegisterCLRC663::Write();
+    }
+
+
+    void Register::FIFOData::Write(uint8 data0, uint8 data1)
+    {
+        uint8 buffer[3] = { (uint8)(address << 1), data0, data1 };
+
+        HAL_SPI::Write(DirectionSPI::Reader, buffer, 3);
+
+        data = data1;
+    }
+
+
+    void Register::FIFOData::Read2Bytes(uint8 _data[2])
+    {
+        uint8 out[3] = { (uint8)address, 0x05, 0x00 };
+        uint8 in[3];
+
+        HAL_SPI::WriteRead(DirectionSPI::Reader, out, in, 3);
+
+        std::memcpy(_data, &in[1], 2);
+    }
+
 }
