@@ -166,7 +166,7 @@ bool CLRC66303HN::DetectCard()
     Register::RegisterCLRC663(0x05).Write(0x26);        // Fills the FIFO with 0x26 (REQA)
     Register::RegisterCLRC663(0x00).Write(0x07);        // Executes Transceive routine
 
-    while (meter.ElapsedUS() < 7000)
+    while (meter.ElapsedUS() < 7000)                                                        // Запрос REQA
     {
         reg_0x06 = Register::RegisterCLRC663(0x06).Read();
 
@@ -194,7 +194,7 @@ bool CLRC66303HN::DetectCard()
         }
     }
 
-    if (result)
+    if (result)                                                                         // Anticollision CL1
     {
         meter.Reset();
 
