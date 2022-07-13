@@ -2,37 +2,39 @@
 #pragma once
 
 
-namespace Command
+namespace CLRC66303HN
 {
-    struct CommandCLRC663
+    namespace Command
     {
-        CommandCLRC663(uint8 _command) : command(_command) { }
+        struct CommandCLRC663
+        {
+            CommandCLRC663(uint8 _command) : command(_command) { }
 
-        void Run();
+            void Run();
 
-        uint8 command;
-    };
-
-
-    struct Idle : public CommandCLRC663
-    {
-        Idle() : CommandCLRC663(0x00) { }
-    };
+            uint8 command;
+        };
 
 
-    struct Transceive : public CommandCLRC663
-    {
-        Transceive() : CommandCLRC663(0x07) { }
-
-        void Run(uint8 data);
-    };
+        struct Idle : public CommandCLRC663
+        {
+            Idle() : CommandCLRC663(0x00) { }
+        };
 
 
-    struct LoadProtocol : public CommandCLRC663
-    {
-        LoadProtocol() : CommandCLRC663(0x0D) { }
+        struct Transceive : public CommandCLRC663
+        {
+            Transceive() : CommandCLRC663(0x07) { }
 
-        void Run(uint8 protocol_rx, uint8 protocol_tx);
-    };
+            void Run(uint8 data);
+        };
+
+
+        struct LoadProtocol : public CommandCLRC663
+        {
+            LoadProtocol() : CommandCLRC663(0x0D) { }
+
+            void Run(uint8 protocol_rx, uint8 protocol_tx);
+        };
+    }
 }
-

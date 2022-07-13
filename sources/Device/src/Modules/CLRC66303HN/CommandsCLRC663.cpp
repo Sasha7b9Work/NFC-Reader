@@ -5,25 +5,30 @@
 #include "Hardware/HAL/HAL.h"
 
 
-void Command::CommandCLRC663::Run()
+namespace CLRC66303HN
 {
-    uint8 buffer[2] = { 0x00, command };
 
-    HAL_SPI::Write(DirectionSPI::Reader, buffer, 2);
-}
+    void Command::CommandCLRC663::Run()
+    {
+        uint8 buffer[2] = { 0x00, command };
 
-
-void Command::Transceive::Run(uint8 data)
-{
-    Register::FIFOData().Write(data);
-
-    CommandCLRC663::Run();
-}
+        HAL_SPI::Write(DirectionSPI::Reader, buffer, 2);
+    }
 
 
-void Command::LoadProtocol::Run(uint8 protocol_rx, uint8 protocol_tx)
-{
-    Register::FIFOData().Write(protocol_rx, protocol_tx);
+    void Command::Transceive::Run(uint8 data)
+    {
+        Register::FIFOData().Write(data);
 
-    CommandCLRC663::Run();
+        CommandCLRC663::Run();
+    }
+
+
+    void Command::LoadProtocol::Run(uint8 protocol_rx, uint8 protocol_tx)
+    {
+        Register::FIFOData().Write(protocol_rx, protocol_tx);
+
+        CommandCLRC663::Run();
+    }
+
 }
