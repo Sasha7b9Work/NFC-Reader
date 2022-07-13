@@ -7,7 +7,6 @@
 
 namespace CLRC66303HN
 {
-
     void Command::CommandCLRC663::Run()
     {
         uint8 buffer[2] = { 0x00, command };
@@ -31,4 +30,27 @@ namespace CLRC66303HN
         CommandCLRC663::Run();
     }
 
+
+    bool Request::AnticollisionCL1::Transceive(UID *uid)
+    {
+        return false;
+    }
+
+
+    bool Request::SelectCL1::Transceive(UID *uid)
+    {
+        return false;
+    }
+
+
+    bool Request::AnticollisionCL2::Transceive(UID *uid)
+    {
+        return false;
+    }
+
+
+    bool Request::SelectCL2::Transceive(UID *uid)
+    {
+        return false;
+    }
 }

@@ -85,15 +85,11 @@ void CLRC66303HN::Init()
     RF::Off();
 
     LoadAntennaConfiguration106();
-
-//    LoadProtocol();
 }
 
 
 void CLRC66303HN::Update()
 {
-//    RF::On();
-
     if (DetectCard())
     {
         if (!detected)
@@ -112,8 +108,6 @@ void CLRC66303HN::Update()
 
         detected = false;
     }
-
-//    RF::Off();
 }
 
 
@@ -129,7 +123,7 @@ BitSet16 CLRC66303HN::GetData()
 }
 
 
-UID CLRC66303HN::GetUID()
+CLRC66303HN::UID CLRC66303HN::GetUID()
 {
     return uid;
 }
@@ -192,6 +186,26 @@ bool CLRC66303HN::DetectCard()
                 break;
             }
         }
+    }
+
+    if (result)
+    {
+        result = Request::AnticollisionCL1().Transceive(&uid);
+    }
+
+    if (result)
+    {
+        result = Request::SelectCL1().Transceive(&uid);
+    }
+
+    if (result)
+    {
+        result = Request::AnticollisionCL2().Transceive(&uid);
+    }
+
+    if (result)
+    {
+        result = Request::SelectCL2().Transceive(&uid);
     }
 
     if (result)                                                                         // Anticollision CL1
