@@ -3,6 +3,7 @@
 #include "Modules/CLRC66303HN/CommandsCLRC663.h"
 #include "Modules/CLRC66303HN/RegistersCLRC663.h"
 #include "Hardware/HAL/HAL.h"
+#include "Hardware/Timer.h"
 
 
 namespace CLRC66303HN
@@ -23,6 +24,12 @@ namespace CLRC66303HN
     }
 
 
+    void Command::Transceive::Run()
+    {
+        CommandCLRC663::Run();
+    }
+
+
     void Command::LoadProtocol::Run(uint8 protocol_rx, uint8 protocol_tx)
     {
         Register::FIFOData().Write(protocol_rx, protocol_tx);
@@ -33,6 +40,50 @@ namespace CLRC66303HN
 
     bool Request::AnticollisionCL1::Transceive(UID *uid)
     {
+        Register::IRQ0 irq0;
+        Register::FIFOData fifo;
+
+        Command::Idle().Run();
+        Register::FIFOControl().Clear256();
+        irq0.Clear();
+
+        Register::RegisterCLRC663(0x2E).Write(0x08);        // All bits will be sent via NFC
+
+        fifo.Write(0x93);
+        fifo.Write(0x20);
+
+        irq0.Clear();
+
+        Command::Transceive().Run();
+
+        TimeMeterMS meter;
+
+        while (meter.ElapsedTime() < 10)
+        {
+            if (irq0.Read() & Register::IRQ0::RxIRQ)
+            {
+                if (Register::Error().Read() & Register::Error::CollDet)
+                {
+                    return false;
+                }
+
+                if (irq0.Read() & Register::IRQ0::ErrIRQ)
+                {
+                    return false;
+                }
+                else
+                {
+                    uid->byte0 = fifo.Read();
+                    uid->byte1 = fifo.Read();
+                    uid->byte2 = fifo.Read();
+                    uid->byte3 = fifo.Read();
+                    uid->byte4 = fifo.Read();
+
+                    return true;
+                }
+            }
+        }
+
         return false;
     }
 

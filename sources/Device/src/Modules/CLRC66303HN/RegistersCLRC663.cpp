@@ -80,6 +80,12 @@ namespace CLRC66303HN
     }
 
 
+    void Register::FIFOControl::Clear256()
+    {
+        Register::RegisterCLRC663(0x02).Write(0xB0);
+    }
+
+
     void Register::FIFOData::Write(uint8 _data)
     {
         data = _data;
@@ -100,7 +106,7 @@ namespace CLRC66303HN
 
     void Register::FIFOData::Read2Bytes(uint8 _data[2])
     {
-        uint8 out[3] = { (uint8)address, 0x05, 0x00 };
+        uint8 out[3] = { (uint8)((address << 1) | 1), 0x05, 0x00 };
         uint8 in[3];
 
         HAL_SPI::WriteRead(DirectionSPI::Reader, out, in, 3);
@@ -108,4 +114,9 @@ namespace CLRC66303HN
         std::memcpy(_data, &in[1], 2);
     }
 
+
+    void Register::IRQ0::Clear()
+    {
+        Register::RegisterCLRC663(0x06).Write(0x7F);
+    }
 }

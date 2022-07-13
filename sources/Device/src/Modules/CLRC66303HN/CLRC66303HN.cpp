@@ -212,15 +212,15 @@ bool CLRC66303HN::DetectCard()
     {
         meter.Reset();
 
-        Register::RegisterCLRC663(0x00).Write(0x00);        // Cancels previous executions and the state machine returns into IDLE mode
-        Register::RegisterCLRC663(0x02).Write(0xB0);        // Flushes the FIFO and defines FIFO characteristics
+//        Register::RegisterCLRC663(0x00).Write(0x00);        // Cancels previous executions and the state machine returns into IDLE mode
+//        Register::RegisterCLRC663(0x02).Write(0xB0);        // Flushes the FIFO and defines FIFO characteristics
 
-        Register::RegisterCLRC663(0x06).Write(0x7F);        // Clears all bits in IRQ0
-        Register::RegisterCLRC663(0x2E).Write(0x08);        // All bits will be sent via NFC
+//        Register::RegisterCLRC663(0x06).Write(0x7F);        // Clears all bits in IRQ0
+//        Register::RegisterCLRC663(0x2E).Write(0x08);        // All bits will be sent via NFC
 
-        Register::RegisterCLRC663(0x05).Write(0x93);        // CL1  \ Anticollision 
-        Register::RegisterCLRC663(0x05).Write(0x20);        //      / CL1
-        Register::RegisterCLRC663(0x00).Write(0x07);        // Transceive routine
+//        Register::RegisterCLRC663(0x05).Write(0x93);        // CL1  \ Anticollision 
+//        Register::RegisterCLRC663(0x05).Write(0x20);        //      / CL1
+//        Register::RegisterCLRC663(0x00).Write(0x07);        // Transceive routine
 
         while (meter.ElapsedUS() < 10000)
         {

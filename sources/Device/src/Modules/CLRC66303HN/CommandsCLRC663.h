@@ -38,6 +38,7 @@ namespace CLRC66303HN
         {
             Transceive() : CommandCLRC663(0x07) { }
 
+            void Run();
             void Run(uint8 data);
         };
 

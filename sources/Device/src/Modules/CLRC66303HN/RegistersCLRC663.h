@@ -37,6 +37,8 @@ namespace CLRC66303HN
             // clear - очистить буфер
             // waterLevelExtBit - 0 или 1 для 512-байтного FIFO
             void Write(Size::E, bool clear, int waterLevelExtBit);
+
+            void Clear256();
         };
 
 
@@ -64,6 +66,15 @@ namespace CLRC66303HN
             static const int RxSOFIRQ = (1 << 0);
 
             IRQ0(int data = 0) : RegisterCLRC663(0x06, data) { }
+
+            void Clear();
+        };
+
+        struct Error : public RegisterCLRC663
+        {
+            static const int CollDet = (1 << 2);
+
+            Error() : RegisterCLRC663(0x0A) { }
         };
     }
 
