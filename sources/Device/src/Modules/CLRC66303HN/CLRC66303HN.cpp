@@ -62,15 +62,11 @@ namespace CLRC66303HN
 
     void Update1();
 
-    static uint8 reg_0x06 = 0;
-
-    static BitSet16 data;
-
     static bool detected = false;       // true, если карта детектирована
 
     static UID uid;
 
-    static char *readed = "no";
+    static BitSet16 data;
 }
 
 
@@ -111,27 +107,9 @@ void CLRC66303HN::Update()
 }
 
 
-uint8 CLRC66303HN::GetRegister06()
-{
-    return reg_0x06;
-}
-
-
-BitSet16 CLRC66303HN::GetData()
-{
-    return data;
-}
-
-
-CLRC66303HN::UID CLRC66303HN::GetUID()
+CLRC66303HN::UID &CLRC66303HN::GetUID()
 {
     return uid;
-}
-
-
-char *CLRC66303HN::Readed()
-{
-    return readed;
 }
 
 
@@ -154,15 +132,17 @@ bool CLRC66303HN::DetectCard()
     }
 
     Register::RegisterCLRC663(0x06).Write(0x7F);        // Clears all bits in IRQ0
+
     Register::RegisterCLRC663(0x2C).Write(0x18);        // Switches the CRC extention OFF in tx direction
     Register::RegisterCLRC663(0x2D).Write(0x18);        // Switches the CRC extention OFF in rx direction
+
     Register::RegisterCLRC663(0x2E).Write(0x0F);        // Only the 7 last bits will be sent via NFC
     Register::RegisterCLRC663(0x05).Write(0x26);        // Fills the FIFO with 0x26 (REQA)
     Register::RegisterCLRC663(0x00).Write(0x07);        // Executes Transceive routine
 
     while (meter.ElapsedUS() < 7000)                                                        // «апрос REQA
     {
-        reg_0x06 = Register::RegisterCLRC663(0x06).Read();
+        uint8 reg_0x06 = Register::RegisterCLRC663(0x06).Read();
 
         if (reg_0x06 & Register::IRQ0::RxIRQ)                       // данные получены
         {
@@ -188,6 +168,8 @@ bool CLRC66303HN::DetectCard()
         }
     }
 
+    uid.Clear();
+
     if (result)
     {
         result = Request::AnticollisionCL1().Transceive(&uid);
@@ -198,29 +180,33 @@ bool CLRC66303HN::DetectCard()
         result = Request::SelectCL1().Transceive(&uid);
     }
 
-    if (result)
+    if (!uid.calculated)
     {
-        result = Request::AnticollisionCL2().Transceive(&uid);
+        if (result)
+        {
+            result = Request::AnticollisionCL2().Transceive(&uid);
+        }
+
+        if (result)
+        {
+            result = Request::SelectCL2().Transceive(&uid);
+        }
     }
 
-    if (result)
-    {
-        result = Request::SelectCL2().Transceive(&uid);
-    }
-
+    /*
     if (result)                                                                         // Anticollision CL1
     {
         meter.Reset();
 
-//        Register::RegisterCLRC663(0x00).Write(0x00);        // Cancels previous executions and the state machine returns into IDLE mode
-//        Register::RegisterCLRC663(0x02).Write(0xB0);        // Flushes the FIFO and defines FIFO characteristics
+        Register::RegisterCLRC663(0x00).Write(0x00);        // Cancels previous executions and the state machine returns into IDLE mode
+        Register::RegisterCLRC663(0x02).Write(0xB0);        // Flushes the FIFO and defines FIFO characteristics
 
-//        Register::RegisterCLRC663(0x06).Write(0x7F);        // Clears all bits in IRQ0
-//        Register::RegisterCLRC663(0x2E).Write(0x08);        // All bits will be sent via NFC
+        Register::RegisterCLRC663(0x06).Write(0x7F);        // Clears all bits in IRQ0
+        Register::RegisterCLRC663(0x2E).Write(0x08);        // All bits will be sent via NFC
 
-//        Register::RegisterCLRC663(0x05).Write(0x93);        // CL1  \ Anticollision 
-//        Register::RegisterCLRC663(0x05).Write(0x20);        //      / CL1
-//        Register::RegisterCLRC663(0x00).Write(0x07);        // Transceive routine
+        Register::RegisterCLRC663(0x05).Write(0x93);        // CL1  \ Anticollision 
+        Register::RegisterCLRC663(0x05).Write(0x20);        //      / CL1
+        Register::RegisterCLRC663(0x00).Write(0x07);        // Transceive routine
 
         while (meter.ElapsedUS() < 10000)
         {
@@ -251,6 +237,7 @@ bool CLRC66303HN::DetectCard()
             }
         }
     }
+    */
 
     RF::Off();
 

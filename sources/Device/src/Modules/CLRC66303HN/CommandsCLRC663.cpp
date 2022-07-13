@@ -90,17 +90,71 @@ namespace CLRC66303HN
 
     bool Request::SelectCL1::Transceive(UID *uid)
     {
+        Register::IRQ0 irq0;
+        Register::FIFOData fifo;
+
+        Command::Idle().Run();
+        Register::FIFOControl().Clear256();
+
+        Register::RegisterCLRC663(0x2C).Write(0x19);        // Switches the CRC extention ON in tx direction
+        Register::RegisterCLRC663(0x2D).Write(0x19);        // Switches the CRC extention OFF in rx direction
+
+        irq0.Clear();
+
+        Register::RegisterCLRC663(0x2E).Write(0x08);
+
+        fifo.Write(0x93);
+        fifo.Write(0x70);
+        fifo.Write(uid->byte0);
+        fifo.Write(uid->byte1);
+        fifo.Write(uid->byte2);
+        fifo.Write(uid->byte3);
+        fifo.Write(uid->byte4);
+
+        irq0.Clear();
+
+        Command::Transceive().Run();
+
+        TimeMeterMS meter;
+
+        while (meter.ElapsedTime() < 10)
+        {
+            if (irq0.Read() & Register::IRQ0::RxIRQ)
+            {
+                if (irq0.Read() & Register::IRQ0::ErrIRQ)
+                {
+                    return false;
+                }
+                else
+                {
+                    uint8 sak = fifo.Read();
+
+                    if (_GET_BIT(sak, 2) == 1)
+                    {
+                        uid->Clear();
+                        return true;
+                    }
+
+                    if (_GET_BIT(sak, 2) == 0)
+                    {
+                        uid->Calculate4Bytes();
+                        return true;
+                    }
+                }
+            }
+        }
+
         return false;
     }
 
 
-    bool Request::AnticollisionCL2::Transceive(UID *uid)
+    bool Request::AnticollisionCL2::Transceive(UID *)
     {
         return false;
     }
 
 
-    bool Request::SelectCL2::Transceive(UID *uid)
+    bool Request::SelectCL2::Transceive(UID *)
     {
         return false;
     }

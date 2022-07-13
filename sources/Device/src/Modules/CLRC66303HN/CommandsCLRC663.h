@@ -1,18 +1,48 @@
 // 2022/7/6 10:32:31 (c) Aleksandr Shevchenko e-mail : Sasha7b9@tut.by
 #pragma once
+#include <cstring>
+#include <cstdio>
 
 
 namespace CLRC66303HN
 {
     struct UID
     {
-        UID() : byte0(0), byte1(1), byte2(2), byte3(3), byte4(4) {}
+        UID()
+        {
+            Clear();
+        }
+
+        void Clear()
+        {
+            calculated = false;
+            std::strcat(buffer, "null");
+        }
+
+        // Рассчиатать uid из 4 байт
+        void Calculate4Bytes()
+        {
+            calculated = true;
+
+            std::sprintf(buffer, "%02X:%02X:02X:02X", byte1, byte2, byte3, byte4);
+        }
+
+        char *ToString()
+        {
+            return buffer;
+        }
 
         uint8 byte0;
         uint8 byte1;
         uint8 byte2;
         uint8 byte3;
         uint8 byte4;
+
+        bool calculated;
+
+    private:
+
+        char buffer[30];
     };
 
     // Команды работы с CLRC663
