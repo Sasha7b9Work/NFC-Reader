@@ -123,7 +123,7 @@ void CLRC66303HN::DetectCard()
 
     Register::RegisterCLRC663(0x2E).Write(0x0F);        // Only the 7 last bits will be sent via NFC
 
-    Command::SendToCard(0x26);                          // REQA
+    Command::Card::Send(0x26);                          // REQA
 
     BitSet16 data;
 

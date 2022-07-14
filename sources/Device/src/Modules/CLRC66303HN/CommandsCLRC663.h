@@ -24,7 +24,7 @@ namespace CLRC66303HN
         {
             calculated = true;
 
-            std::sprintf(buffer, "%02X:%02X:%02X:%02X", byte1, byte2, byte3, byte4);
+            std::sprintf(buffer, "%02X:%02X:%02X:%02X", byte0, byte1, byte2, byte3);
         }
 
         char *ToString()
@@ -38,6 +38,11 @@ namespace CLRC66303HN
         uint8 byte3;
         uint8 byte4;
 
+        uint8 uid0;
+        uint8 uid1;
+        uint8 uid2;
+        uint8 uid3;
+
         bool calculated;
 
         char buffer[30];
@@ -47,11 +52,14 @@ namespace CLRC66303HN
     {
         void Idle();
 
-        void SendToCard(uint8);
+        namespace Card
+        {
+            void Send(uint8);
 
-        void SendToCard(uint8, uint8);
+            void Send(uint8, uint8);
 
-        void SendToCard(uint8, uint8, uint8, uint8, uint8, uint8, uint8);
+            void Send(uint8, uint8, uint8, uint8, uint8, uint8, uint8);
+        }
     }
 
     // Команды работы с картой

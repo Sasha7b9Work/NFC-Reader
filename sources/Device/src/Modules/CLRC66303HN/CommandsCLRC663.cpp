@@ -18,7 +18,7 @@ namespace CLRC66303HN
     }
 
 
-    void Command::SendToCard(uint8 command)
+    void Command::Card::Send(uint8 command)
     {
         fifo.Push(command);
 
@@ -26,7 +26,7 @@ namespace CLRC66303HN
     }
 
 
-    void Command::SendToCard(uint8 command, uint8 data)
+    void Command::Card::Send(uint8 command, uint8 data)
     {
         fifo.Push(command);
         fifo.Push(data);
@@ -35,7 +35,7 @@ namespace CLRC66303HN
     }
 
 
-    void Command::SendToCard(uint8 command, uint8 data0, uint8 data1, uint8 data2, uint8 data3, uint8 data4, uint8 data5)
+    void Command::Card::Send(uint8 command, uint8 data0, uint8 data1, uint8 data2, uint8 data3, uint8 data4, uint8 data5)
     {
         fifo.Push(command);
         fifo.Push(data0);
@@ -59,7 +59,7 @@ namespace CLRC66303HN
 
         irq0.Clear();
 
-        Command::SendToCard(0x93, 0x20);
+        Command::Card::Send(0x93, 0x20);
 
         TimeMeterMS meter;
 
@@ -105,7 +105,7 @@ namespace CLRC66303HN
 
         irq0.Clear();
 
-        Command::SendToCard(0x93, 0x70, uid->byte0, uid->byte1, uid->byte2, uid->byte3, uid->byte4);
+        Command::Card::Send(0x93, 0x70, uid->byte0, uid->byte1, uid->byte2, uid->byte3, uid->byte4);
 
         TimeMeterMS meter;
 
