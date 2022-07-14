@@ -131,7 +131,7 @@ namespace CLRC66303HN
 
                     if (_GET_BIT(sak, 2) == 1)
                     {
-                        uid->Clear();
+                        std::strcat(uid->buffer, "not complete");
                         return true;
                     }
 

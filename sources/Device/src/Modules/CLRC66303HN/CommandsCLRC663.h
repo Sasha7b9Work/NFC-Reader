@@ -24,7 +24,7 @@ namespace CLRC66303HN
         {
             calculated = true;
 
-            std::sprintf(buffer, "%02X:%02X:02X:02X", byte1, byte2, byte3, byte4);
+            std::sprintf(buffer, "%02X:%02X:%02X:%02X", byte1, byte2, byte3, byte4);
         }
 
         char *ToString()
@@ -39,8 +39,6 @@ namespace CLRC66303HN
         uint8 byte4;
 
         bool calculated;
-
-    private:
 
         char buffer[30];
     };

@@ -66,7 +66,7 @@ namespace CLRC66303HN
 
     static UID uid;
 
-    static BitSet16 data;
+    BitSet16 data;
 }
 
 
@@ -86,6 +86,8 @@ void CLRC66303HN::Init()
 
 void CLRC66303HN::Update()
 {
+    gf.Clear();
+
     if (DetectCard())
     {
         if (!detected)
@@ -159,6 +161,7 @@ bool CLRC66303HN::DetectCard()
             else                                                    // данные верны
             {
                 result = true;
+                gf.num_result++;
 
                 data.byte[0] = Register::RegisterCLRC663(0x05).Read();
                 data.byte[1] = Register::RegisterCLRC663(0x05).Read();
@@ -172,11 +175,13 @@ bool CLRC66303HN::DetectCard()
 
     if (result)
     {
+        gf.num_result++;
         result = Request::AnticollisionCL1().Transceive(&uid);
     }
 
     if (result)
     {
+        gf.num_result++;
         result = Request::SelectCL1().Transceive(&uid);
     }
 
@@ -184,11 +189,13 @@ bool CLRC66303HN::DetectCard()
     {
         if (result)
         {
+            gf.num_result++;
             result = Request::AnticollisionCL2().Transceive(&uid);
         }
 
         if (result)
         {
+            gf.num_result++;
             result = Request::SelectCL2().Transceive(&uid);
         }
     }
