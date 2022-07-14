@@ -61,8 +61,6 @@ namespace CLRC66303HN
     }
 
 
-    bool DetectCard1();
-
     bool DetectCard();
 
     static void LoadAntennaConfiguration106();
@@ -284,54 +282,6 @@ static void CLRC66303HN::LoadProtocol()
     Register::RegisterCLRC663(0x5D).Write(0x08);    // RxMod        08
     Register::RegisterCLRC663(0x5E).Write(0x80);    // RxCorr       80
     Register::RegisterCLRC663(0x5F).Write(0xB2);    // FabCal       B2
-}
-
-
-bool CLRC66303HN::DetectCard1()
-{
-    /*
-            AN12657.pdf
-
-    1:  writeRegister(0x00, 0x00);          command idle
-    2:  writeRegister(0x02, 0xB0);          FIFOControl
-    3:  writeRegister(0x05, 0x00, 0x00);    FIFOData
-    4:  writeRegister(0x00, 0x0D);          command LoadProtocol
-    5:  writeRegister(0x02, 0xB0);          FIFOControl
-    6:  writeRegister(0x28, 0x8E);          DrvMode
-    7:  writeRegister(0x06, 0x7F);          IRQ0
-    8:  writeRegister(0x2C, 0x18);          TxCrcPreset
-    9:  writeRegister(0x2D, 0x18);          RxCrcCon
-    10: writeRegister(0x2E, 0x0F);          TxDataNum
-    11: writeRegister(0x05, 0x26);          FIFOData
-    12: writeRegister(0x00, 0x07);          Transceive
-    13: waitForCardResponse();              IRQ0
-    14: readRegister(0x05, 0x05, 0x00);     FIFOData
-
-    */
-
-    TimeMeterUS meter;
-
-    Command::Idle();                                                          // 1
-
-    fifo.Clear();
-
-    while (meter.ElapsedUS() < 1000)
-    {
-    }
-
-    irq0.Clear();
-
-    Command_::Transceive().Run(0x26);    // REQA                                     // 11, 12  Запрос на карту
-
-    while (meter.ElapsedUS() < 6000)
-    {
-        if (irq0.GetValue() & IRQ0::RxSOFIRQ)                             // Обнаружена SOF или поднесушая
-        {
-            return true;
-        }
-    }
-
-    return false;
 }
 
 

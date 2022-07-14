@@ -21,29 +21,31 @@ namespace CLRC66303HN
     void Command::SendToCard(uint8 command)
     {
         fifo.Push(command);
+
         WriteRegister(0x00, 0x07);
     }
 
 
-    void Command_::CommandCLRC663::Run()
+    void Command::SendToCard(uint8 command, uint8 data)
     {
-        uint8 buffer[2] = { 0x00, command };
-
-        HAL_SPI::Write(DirectionSPI::Reader, buffer, 2);
-    }
-
-
-    void Command_::Transceive::Run(uint8 data)
-    {
+        fifo.Push(command);
         fifo.Push(data);
 
-        CommandCLRC663::Run();
+        WriteRegister(0x00, 0x07);
     }
 
 
-    void Command_::Transceive::Run()
+    void Command::SendToCard(uint8 command, uint8 data0, uint8 data1, uint8 data2, uint8 data3, uint8 data4, uint8 data5)
     {
-        CommandCLRC663::Run();
+        fifo.Push(command);
+        fifo.Push(data0);
+        fifo.Push(data1);
+        fifo.Push(data2);
+        fifo.Push(data3);
+        fifo.Push(data4);
+        fifo.Push(data5);
+
+        WriteRegister(0x00, 0x07);
     }
 
 
@@ -55,11 +57,9 @@ namespace CLRC66303HN
 
         Register::RegisterCLRC663(0x2E).Write(0x08);        // All bits will be sent via NFC
 
-        fifo.Push(0x93);
-        fifo.Push(0x20);
         irq0.Clear();
 
-        Command_::Transceive().Run();
+        Command::SendToCard(0x93, 0x20);
 
         TimeMeterMS meter;
 
@@ -101,21 +101,11 @@ namespace CLRC66303HN
         Register::RegisterCLRC663(0x2C).Write(0x19);        // Switches the CRC extention ON in tx direction
         Register::RegisterCLRC663(0x2D).Write(0x19);        // Switches the CRC extention OFF in rx direction
 
-        irq0.Clear();
-
         Register::RegisterCLRC663(0x2E).Write(0x08);
 
-        fifo.Push(0x93);
-        fifo.Push(0x70);
-        fifo.Push(uid->byte0);
-        fifo.Push(uid->byte1);
-        fifo.Push(uid->byte2);
-        fifo.Push(uid->byte3);
-        fifo.Push(uid->byte4);
-
         irq0.Clear();
 
-        Command_::Transceive().Run();
+        Command::SendToCard(0x93, 0x70, uid->byte0, uid->byte1, uid->byte2, uid->byte3, uid->byte4);
 
         TimeMeterMS meter;
 

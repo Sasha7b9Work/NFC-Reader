@@ -48,28 +48,10 @@ namespace CLRC66303HN
         void Idle();
 
         void SendToCard(uint8);
-    }
 
-    // Команды работы с CLRC663
-    namespace Command_
-    {
-        struct CommandCLRC663
-        {
-            CommandCLRC663(uint8 _command) : command(_command) { }
+        void SendToCard(uint8, uint8);
 
-            void Run();
-
-            uint8 command;
-        };
-
-
-        struct Transceive : public CommandCLRC663
-        {
-            Transceive() : CommandCLRC663(0x07) { }
-
-            void Run();
-            void Run(uint8 data);
-        };
+        void SendToCard(uint8, uint8, uint8, uint8, uint8, uint8, uint8);
     }
 
     // Команды работы с картой
