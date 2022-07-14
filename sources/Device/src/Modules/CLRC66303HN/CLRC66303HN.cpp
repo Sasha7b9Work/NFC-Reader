@@ -11,6 +11,10 @@
 
 namespace CLRC66303HN
 {
+    uint8 ReadRegister(uint8);
+
+    void WriteRegister(uint8 reg, uint8 value);
+
     // ѕодача питани€ на чип
     namespace Power
     {
@@ -43,12 +47,16 @@ namespace CLRC66303HN
     {
         void On()
         {
-            Register::RegisterCLRC663(0x28).Write(0x8E);
+            uint8 reg = ReadRegister(0x28);
+            _SET_BIT(reg, 3);
+            WriteRegister(0x28, reg);
         }
 
         void Off()
         {
-            Register::RegisterCLRC663(0x28).Write(0x86);
+            uint8 reg = ReadRegister(0x28);
+            _CLEAR_BIT(reg, 3);
+            WriteRegister(0x28, reg);
         }
     }
 
@@ -59,8 +67,6 @@ namespace CLRC66303HN
     static void LoadAntennaConfiguration106();
 
     static void LoadProtocol();
-
-    void Update1();
 
     static bool detected = false;       // true, если карта детектирована
 
@@ -277,10 +283,6 @@ static void CLRC66303HN::LoadAntennaConfiguration106()
 
 static void CLRC66303HN::LoadProtocol()
 {
-//    Register::FIFOControl().Write(Register::FIFOControl::Size::_255, true, 0);
-//
-//    Command::LoadProtocol().Run(0x00, 0x00);
-
     Register::RegisterCLRC663(0x48).Write(0x20);    // TxBitMod     20
     Register::RegisterCLRC663(0x49).Write(0x00);    // RFU          00
     Register::RegisterCLRC663(0x4A).Write(0x04);    // TxDataCon    04
@@ -357,15 +359,20 @@ bool CLRC66303HN::DetectCard1()
 }
 
 
-void CLRC66303HN::Update1()
+uint8 CLRC66303HN::ReadRegister(uint8 reg)
 {
-    //    RF::On();
+    uint8 out[2] = { (uint8)((reg << 1) | 1), 0 };
+    uint8 in[2];
 
-    TimeMeterUS meter;
+    HAL_SPI::WriteRead(DirectionSPI::Reader, out, in, 2);
 
-    while (meter.ElapsedUS() < 5100)
-    {
-    }
+    return in[1];
+}
 
-    //    RF::Off();
+
+void CLRC66303HN::WriteRegister(uint8 reg, uint8 value)
+{
+    uint8 out[2] = { (uint8)(reg << 1), value };
+
+    HAL_SPI::Write(DirectionSPI::Reader, out, 2);
 }

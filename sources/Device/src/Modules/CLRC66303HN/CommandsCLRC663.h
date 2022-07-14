@@ -69,14 +69,6 @@ namespace CLRC66303HN
             void Run();
             void Run(uint8 data);
         };
-
-
-        struct LoadProtocol : public CommandCLRC663
-        {
-            LoadProtocol() : CommandCLRC663(0x0D) { }
-
-            void Run(uint8 protocol_rx, uint8 protocol_tx);
-        };
     }
 
     // Команды работы с картой

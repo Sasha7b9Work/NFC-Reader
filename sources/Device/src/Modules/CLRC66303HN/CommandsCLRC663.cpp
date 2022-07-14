@@ -30,14 +30,6 @@ namespace CLRC66303HN
     }
 
 
-    void Command::LoadProtocol::Run(uint8 protocol_rx, uint8 protocol_tx)
-    {
-        Register::FIFOData().Write(protocol_rx, protocol_tx);
-
-        CommandCLRC663::Run();
-    }
-
-
     bool Request::AnticollisionCL1::Transceive(UID *uid)
     {
         Register::IRQ0 irq0;
