@@ -7,6 +7,15 @@
 
 namespace CLRC66303HN
 {
+    FIFO fifo;
+
+    IRQ0 irq0;
+
+    uint8 ReadRegister(uint8);
+
+    void WriteRegister(uint8 reg, uint8 value);
+
+
     void Register::RegisterCLRC663::Write()
     {
         uint8 buffer[2] = { (uint8)(address << 1), (uint8)data };
@@ -56,66 +65,38 @@ namespace CLRC66303HN
     }
 
 
-    void Register::FIFOControl::Write(Size::E size, bool clear, int waterLevelExtBit)
+    void FIFO::Init()
     {
-        data = 0;
-
-        if (size == Size::_255)
-        {
-            _SET_BIT(data, 7);
-        }
-
-        if (clear)
-        {
-            _SET_BIT(data, 4);
-        }
-
-        if (waterLevelExtBit)
-        {
-            _SET_BIT(data, 2);
-        }
-
-        RegisterCLRC663::Write();
+        WriteRegister(0x02, 0xB0);
     }
 
 
-    void Register::FIFOControl::Clear256()
+    void FIFO::Clear()
     {
-        Register::RegisterCLRC663(0x02).Write(0xB0);
+        WriteRegister(0x02, 0xB0);
     }
 
 
-    void Register::FIFOData::Write(uint8 _data)
+    void FIFO::Push(uint8 data)
     {
-        data = _data;
-
-        RegisterCLRC663::Write();
+        WriteRegister(0x05, data);
     }
 
 
-    void Register::FIFOData::Write(uint8 data0, uint8 data1)
+    uint8 FIFO::Pop()
     {
-        uint8 buffer[3] = { (uint8)(address << 1), data0, data1 };
-
-        HAL_SPI::Write(DirectionSPI::Reader, buffer, 3);
-
-        data = data1;
+        return ReadRegister(0x05);
     }
 
 
-    void Register::FIFOData::Read2Bytes(uint8 _data[2])
+    void IRQ0::Clear()
     {
-        uint8 out[3] = { (uint8)((address << 1) | 1), 0x05, 0x00 };
-        uint8 in[3];
-
-        HAL_SPI::WriteRead(DirectionSPI::Reader, out, in, 3);
-
-        std::memcpy(_data, &in[1], 2);
+        WriteRegister(0x06, 0x7F);      // Clears all bits in IRQ0
     }
 
 
-    void Register::IRQ0::Clear()
+    uint8 IRQ0::GetValue()
     {
-        Register::RegisterCLRC663(0x06).Write(0x7F);
+        return ReadRegister(0x06);
     }
 }

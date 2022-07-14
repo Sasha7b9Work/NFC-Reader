@@ -46,6 +46,8 @@ namespace CLRC66303HN
     namespace Command
     {
         void Idle();
+
+        void SendToCard(uint8);
     }
 
     // Команды работы с CLRC663

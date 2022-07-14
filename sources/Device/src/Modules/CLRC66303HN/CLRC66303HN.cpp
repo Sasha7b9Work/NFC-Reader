@@ -69,8 +69,6 @@ namespace CLRC66303HN
 
     static void LoadProtocol();
 
-    static bool detected = false;       // true, если карта детектирована
-
     static UID uid;
 
     BitSet16 data;
@@ -88,6 +86,8 @@ void CLRC66303HN::Init()
     RF::Off();
 
     LoadAntennaConfiguration106();
+
+    fifo.Init();
 }
 
 
@@ -95,24 +95,7 @@ void CLRC66303HN::Update()
 {
     gf.Clear();
 
-    if (DetectCard())
-    {
-        if (!detected)
-        {
-            HAL_USART2::TransmitRAW("Card detected.");
-        }
-
-        detected = true;
-    }
-    else
-    {
-        if (detected)
-        {
-            HAL_USART2::TransmitRAW("Card lost.");
-        }
-
-        detected = false;
-    }
+    DetectCard();
 }
 
 
@@ -128,13 +111,10 @@ bool CLRC66303HN::DetectCard()
 
     Command::Idle();
 
-    Register::RegisterCLRC663(0x00).Write(0x00);        // Cancels previous executions and the state machine returns into IDLE mode
-    Register::RegisterCLRC663(0x02).Write(0xB0);        // Flushes the FIFO and defines FIFO characteristics
-
     LoadProtocol();
 
-    Register::RegisterCLRC663(0x02).Write(0xB0);        // Flushes the FIFO and defines FIFO characteristics
-    RF::On();                                           // Switches the RF filed ON.
+    fifo.Clear();
+    RF::On();
 
     TimeMeterUS meter;
 
@@ -142,38 +122,32 @@ bool CLRC66303HN::DetectCard()
     {
     }
 
-    Register::RegisterCLRC663(0x06).Write(0x7F);        // Clears all bits in IRQ0
+    irq0.Clear();
 
     Register::RegisterCLRC663(0x2C).Write(0x18);        // Switches the CRC extention OFF in tx direction
     Register::RegisterCLRC663(0x2D).Write(0x18);        // Switches the CRC extention OFF in rx direction
 
     Register::RegisterCLRC663(0x2E).Write(0x0F);        // Only the 7 last bits will be sent via NFC
-    Register::RegisterCLRC663(0x05).Write(0x26);        // Fills the FIFO with 0x26 (REQA)
-    Register::RegisterCLRC663(0x00).Write(0x07);        // Executes Transceive routine
+
+    Command::SendToCard(0x26);                          // REQA
 
     while (meter.ElapsedUS() < 7000)                                                        // Запрос REQA
     {
-        uint8 reg_0x06 = Register::RegisterCLRC663(0x06).Read();
+        uint8 reg_0x06 = irq0.GetValue();
 
-        if (reg_0x06 & Register::IRQ0::RxIRQ)                       // данные получены
+        if (reg_0x06 & IRQ0::RxIRQ)                       // данные получены
         {
-            if (reg_0x06 & Register::IRQ0::ErrIRQ)                  // ошибка данных
+            if (reg_0x06 & IRQ0::ErrIRQ)                  // ошибка данных
             {
-                data.byte[0] = Register::RegisterCLRC663(0x05).Read();
-                data.byte[1] = Register::RegisterCLRC663(0x05).Read();
-
-                data.half_word = (uint16)(-1);
-
-                Register::RegisterCLRC663(0x05).Write(0x26);        // Fills the FIFO with 0x26 (REQA)
-                Register::RegisterCLRC663(0x00).Write(0x07);        // Executes Transceive routine
+                break;
             }
             else                                                    // данные верны
             {
                 result = true;
                 gf.num_result++;
 
-                data.byte[0] = Register::RegisterCLRC663(0x05).Read();
-                data.byte[1] = Register::RegisterCLRC663(0x05).Read();
+                data.byte[0] = fifo.Pop();
+                data.byte[1] = fifo.Pop();
 
                 break;
             }
@@ -339,20 +313,19 @@ bool CLRC66303HN::DetectCard1()
 
     Command::Idle();                                                          // 1
 
-    Register::FIFOControl().Write(Register::FIFOControl::Size::_255, true, 0);      // 5
+    fifo.Clear();
 
     while (meter.ElapsedUS() < 1000)
     {
     }
 
-    Register::IRQ0 reg_irq0;                                                        // 7 Очистка битов irq0
-    reg_irq0.Write(0x7F);
+    irq0.Clear();
 
     Command_::Transceive().Run(0x26);    // REQA                                     // 11, 12  Запрос на карту
 
     while (meter.ElapsedUS() < 6000)
     {
-        if (reg_irq0.Read() & Register::IRQ0::RxSOFIRQ)                             // Обнаружена SOF или поднесушая
+        if (irq0.GetValue() & IRQ0::RxSOFIRQ)                             // Обнаружена SOF или поднесушая
         {
             return true;
         }

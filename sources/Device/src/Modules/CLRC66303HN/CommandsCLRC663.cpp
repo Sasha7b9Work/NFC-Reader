@@ -18,6 +18,13 @@ namespace CLRC66303HN
     }
 
 
+    void Command::SendToCard(uint8 command)
+    {
+        fifo.Push(command);
+        WriteRegister(0x00, 0x07);
+    }
+
+
     void Command_::CommandCLRC663::Run()
     {
         uint8 buffer[2] = { 0x00, command };
@@ -28,7 +35,7 @@ namespace CLRC66303HN
 
     void Command_::Transceive::Run(uint8 data)
     {
-        Register::FIFOData().Write(data);
+        fifo.Push(data);
 
         CommandCLRC663::Run();
     }
@@ -42,18 +49,14 @@ namespace CLRC66303HN
 
     bool Request::AnticollisionCL1::Transceive(UID *uid)
     {
-        Register::IRQ0 irq0;
-        Register::FIFOData fifo;
-
         Command::Idle();
-        Register::FIFOControl().Clear256();
+        fifo.Clear();
         irq0.Clear();
 
         Register::RegisterCLRC663(0x2E).Write(0x08);        // All bits will be sent via NFC
 
-        fifo.Write(0x93);
-        fifo.Write(0x20);
-
+        fifo.Push(0x93);
+        fifo.Push(0x20);
         irq0.Clear();
 
         Command_::Transceive().Run();
@@ -62,24 +65,24 @@ namespace CLRC66303HN
 
         while (meter.ElapsedTime() < 10)
         {
-            if (irq0.Read() & Register::IRQ0::RxIRQ)
+            if (irq0.GetValue() & IRQ0::RxIRQ)
             {
                 if (Register::Error().Read() & Register::Error::CollDet)
                 {
                     return false;
                 }
 
-                if (irq0.Read() & Register::IRQ0::ErrIRQ)
+                if (irq0.GetValue() & IRQ0::ErrIRQ)
                 {
                     return false;
                 }
                 else
                 {
-                    uid->byte0 = fifo.Read();
-                    uid->byte1 = fifo.Read();
-                    uid->byte2 = fifo.Read();
-                    uid->byte3 = fifo.Read();
-                    uid->byte4 = fifo.Read();
+                    uid->byte0 = fifo.Pop();
+                    uid->byte1 = fifo.Pop();
+                    uid->byte2 = fifo.Pop();
+                    uid->byte3 = fifo.Pop();
+                    uid->byte4 = fifo.Pop();
 
                     return true;
                 }
@@ -92,11 +95,8 @@ namespace CLRC66303HN
 
     bool Request::SelectCL1::Transceive(UID *uid)
     {
-        Register::IRQ0 irq0;
-        Register::FIFOData fifo;
-
         Command::Idle();
-        Register::FIFOControl().Clear256();
+        fifo.Clear();
 
         Register::RegisterCLRC663(0x2C).Write(0x19);        // Switches the CRC extention ON in tx direction
         Register::RegisterCLRC663(0x2D).Write(0x19);        // Switches the CRC extention OFF in rx direction
@@ -105,13 +105,13 @@ namespace CLRC66303HN
 
         Register::RegisterCLRC663(0x2E).Write(0x08);
 
-        fifo.Write(0x93);
-        fifo.Write(0x70);
-        fifo.Write(uid->byte0);
-        fifo.Write(uid->byte1);
-        fifo.Write(uid->byte2);
-        fifo.Write(uid->byte3);
-        fifo.Write(uid->byte4);
+        fifo.Push(0x93);
+        fifo.Push(0x70);
+        fifo.Push(uid->byte0);
+        fifo.Push(uid->byte1);
+        fifo.Push(uid->byte2);
+        fifo.Push(uid->byte3);
+        fifo.Push(uid->byte4);
 
         irq0.Clear();
 
@@ -121,15 +121,15 @@ namespace CLRC66303HN
 
         while (meter.ElapsedTime() < 10)
         {
-            if (irq0.Read() & Register::IRQ0::RxIRQ)
+            if (irq0.GetValue() & IRQ0::RxIRQ)
             {
-                if (irq0.Read() & Register::IRQ0::ErrIRQ)
+                if (irq0.GetValue() & IRQ0::ErrIRQ)
                 {
                     return false;
                 }
                 else
                 {
-                    uint8 sak = fifo.Read();
+                    uint8 sak = fifo.Pop();
 
                     if (_GET_BIT(sak, 2) == 1)
                     {

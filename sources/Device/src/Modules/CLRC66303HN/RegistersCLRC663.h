@@ -4,6 +4,36 @@
 
 namespace CLRC66303HN
 {
+    struct FIFO
+    {
+        void Init();
+
+        void Clear();
+
+        void Push(uint8);
+
+        uint8 Pop();
+    };
+
+    struct IRQ0
+    {
+        static const int Set = (1 << 7);
+        static const int HiAlertIRQ = (1 << 6);
+        static const int LoAlertIRQ = (1 << 5);
+        static const int IdleIRQ = (1 << 4);
+        static const int TxIRQ = (1 << 3);
+        static const int RxIRQ = (1 << 2);
+        static const int ErrIRQ = (1 << 1);
+        static const int RxSOFIRQ = (1 << 0);
+
+        void Clear();
+
+        uint8 GetValue();
+    };
+
+    extern FIFO fifo;
+    extern IRQ0 irq0;
+
 
     namespace Register
     {
@@ -19,56 +49,6 @@ namespace CLRC66303HN
             int data;
         };
 
-
-        struct FIFOControl : public RegisterCLRC663
-        {
-            struct Size
-            {
-                // It is recommended to change the FIFO size only, when the FIFO content had been cleared.
-                enum E
-                {
-                    _512,
-                    _255
-                };
-            };
-
-            FIFOControl() : RegisterCLRC663(0x02) { }
-
-            // clear - очистить буфер
-            // waterLevelExtBit - 0 или 1 для 512-байтного FIFO
-            void Write(Size::E, bool clear, int waterLevelExtBit);
-
-            void Clear256();
-        };
-
-
-        struct FIFOData : public RegisterCLRC663
-        {
-            FIFOData() : RegisterCLRC663(0x05) { }
-
-            void Write(uint8 data);
-
-            void Write(uint8 data0, uint8 data1);
-
-            void Read2Bytes(uint8 data[2]);
-        };
-
-
-        struct IRQ0 : public RegisterCLRC663
-        {
-            static const int Set = (1 << 7);
-            static const int HiAlertIRQ = (1 << 6);
-            static const int LoAlertIRQ = (1 << 5);
-            static const int IdleIRQ = (1 << 4);
-            static const int TxIRQ = (1 << 3);
-            static const int RxIRQ = (1 << 2);
-            static const int ErrIRQ = (1 << 1);
-            static const int RxSOFIRQ = (1 << 0);
-
-            IRQ0(int data = 0) : RegisterCLRC663(0x06, data) { }
-
-            void Clear();
-        };
 
         struct Error : public RegisterCLRC663
         {
