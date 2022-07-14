@@ -65,15 +65,9 @@ namespace CLRC66303HN
 
             bool SelectCL1(UID *uid);
 
-            struct AnticollisionCL2
-            {
-                bool Transceive(UID *uid);
-            };
+            bool AnticollisionCL2(UID *uid);
 
-            struct SelectCL2
-            {
-                bool Transceive(UID *uid);
-            };
+            bool SelectCL2(UID *uid);
         }
     }
 }

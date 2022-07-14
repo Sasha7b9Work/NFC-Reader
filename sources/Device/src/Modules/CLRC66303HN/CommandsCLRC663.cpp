@@ -140,13 +140,13 @@ namespace CLRC66303HN
     }
 
 
-    bool Command::Card::AnticollisionCL2::Transceive(UID *)
+    bool Command::Card::AnticollisionCL2(UID *)
     {
         return false;
     }
 
 
-    bool Command::Card::SelectCL2::Transceive(UID *)
+    bool Command::Card::SelectCL2(UID *)
     {
         return false;
     }
