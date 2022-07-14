@@ -91,6 +91,8 @@ void CLRC66303HN::Update()
 {
     gf.Clear();
 
+    uid.Clear();
+
     DetectCard();
 }
 
@@ -151,8 +153,6 @@ void CLRC66303HN::DetectCard()
 
     if (data.half_word != 0)
     {
-        uid.Clear();
-
         gf.num_result++;
 
         if (Command::Card::AnticollisionCL(1, &uid))

@@ -57,6 +57,9 @@ namespace CLRC66303HN
         fifo.Clear();
         irq0.Clear();
 
+        Register::RegisterCLRC663(0x2C).Write(0x18);        // Switches the CRC extention ON in tx direction
+        Register::RegisterCLRC663(0x2D).Write(0x18);        // Switches the CRC extention OFF in rx direction
+
         Register::RegisterCLRC663(0x2E).Write(0x08);        // All bits will be sent via NFC
 
         irq0.Clear();
