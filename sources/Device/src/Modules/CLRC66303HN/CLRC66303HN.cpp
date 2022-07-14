@@ -164,7 +164,7 @@ void CLRC66303HN::DetectCard()
         {
             gf.num_result++;
 
-            if (Command::Card::SelectCL1().Transceive(&uid))
+            if (Command::Card::SelectCL1(&uid))
             {
                 gf.num_result++;
 

@@ -63,10 +63,7 @@ namespace CLRC66303HN
             // ѕосылают команду антиколлизии CL1 и ожидает ответ. ¬озвращает true в случае получени€ ответа
             bool AnticollisionCL1(UID *uid);
 
-            struct SelectCL1
-            {
-                bool Transceive(UID *uid);
-            };
+            bool SelectCL1(UID *uid);
 
             struct AnticollisionCL2
             {

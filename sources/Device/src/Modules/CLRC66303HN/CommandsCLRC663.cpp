@@ -93,7 +93,7 @@ namespace CLRC66303HN
     }
 
 
-    bool Command::Card::SelectCL1::Transceive(UID *uid)
+    bool Command::Card::SelectCL1(UID *uid)
     {
         Command::Idle();
         fifo.Clear();
