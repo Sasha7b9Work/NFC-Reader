@@ -164,7 +164,7 @@ void CLRC66303HN::DetectCard()
         {
             gf.num_result++;
 
-            if (Command::Card::SelectCL1(&uid))
+            if (Command::Card::SelectCL(1, &uid))
             {
                 gf.num_result++;
 
@@ -176,7 +176,7 @@ void CLRC66303HN::DetectCard()
                     {
                         gf.num_result++;
 
-                        if (Command::Card::SelectCL2(&uid))
+                        if (Command::Card::SelectCL(2, &uid))
                         {
                             gf.num_result++;
                         }

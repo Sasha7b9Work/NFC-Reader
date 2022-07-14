@@ -63,11 +63,9 @@ namespace CLRC66303HN
             // ѕосылают команду антиколлизии CL1 и ожидает ответ. ¬озвращает true в случае получени€ ответа
             bool AnticollisionCL1(UID *uid);
 
-            bool SelectCL1(UID *uid);
+            bool SelectCL(int cl, UID *uid);
 
             bool AnticollisionCL2(UID *uid);
-
-            bool SelectCL2(UID *uid);
         }
     }
 }

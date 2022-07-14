@@ -93,7 +93,7 @@ namespace CLRC66303HN
     }
 
 
-    bool Command::Card::SelectCL1(UID *uid)
+    bool Command::Card::SelectCL(int cl, UID *uid)
     {
         Command::Idle();
         fifo.Clear();
@@ -141,12 +141,6 @@ namespace CLRC66303HN
 
 
     bool Command::Card::AnticollisionCL2(UID *)
-    {
-        return false;
-    }
-
-
-    bool Command::Card::SelectCL2(UID *)
     {
         return false;
     }
