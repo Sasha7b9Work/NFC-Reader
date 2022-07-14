@@ -30,6 +30,8 @@ union BitSet32
 
 union BitSet16
 {
+    BitSet16() : half_word(0) { }
+
     uint16 half_word;
     uint8  byte[2];
 };

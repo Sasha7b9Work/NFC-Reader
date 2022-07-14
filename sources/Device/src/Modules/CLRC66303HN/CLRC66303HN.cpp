@@ -61,15 +61,13 @@ namespace CLRC66303HN
     }
 
 
-    bool DetectCard();
+    void DetectCard();
 
     static void LoadAntennaConfiguration106();
 
     static void LoadProtocol();
 
     static UID uid;
-
-    BitSet16 data;
 }
 
 
@@ -103,10 +101,8 @@ CLRC66303HN::UID &CLRC66303HN::GetUID()
 }
 
 
-bool CLRC66303HN::DetectCard()
+void CLRC66303HN::DetectCard()
 {
-    bool result = false;
-
     Command::Idle();
 
     LoadProtocol();
@@ -129,19 +125,20 @@ bool CLRC66303HN::DetectCard()
 
     Command::SendToCard(0x26);                          // REQA
 
-    while (meter.ElapsedUS() < 7000)                                                        // Запрос REQA
+    BitSet16 data;
+
+    while (meter.ElapsedUS() < 8000)                    // Запрос REQA
     {
         uint8 reg_0x06 = irq0.GetValue();
 
-        if (reg_0x06 & IRQ0::RxIRQ)                       // данные получены
+        if (reg_0x06 & IRQ0::RxIRQ)                     // данные получены
         {
-            if (reg_0x06 & IRQ0::ErrIRQ)                  // ошибка данных
+            if (reg_0x06 & IRQ0::ErrIRQ)                // ошибка данных
             {
                 break;
             }
-            else                                                    // данные верны
+            else                                        // данные верны
             {
-                result = true;
                 gf.num_result++;
 
                 data.byte[0] = fifo.Pop();
@@ -152,90 +149,50 @@ bool CLRC66303HN::DetectCard()
         }
     }
 
+    if (data.half_word == 0)
+    {
+        return;
+    }
+
     uid.Clear();
 
-    if (result)
+    if (data.half_word != 0)
     {
         gf.num_result++;
-        result = Request::AnticollisionCL1().Transceive(&uid);
-    }
 
-    if (result)
-    {
-        gf.num_result++;
-        result = Request::SelectCL1().Transceive(&uid);
-    }
-
-    if (!uid.calculated)
-    {
-        if (result)
+        if (Request::AnticollisionCL1().Transceive(&uid))
         {
             gf.num_result++;
-            result = Request::AnticollisionCL2().Transceive(&uid);
-        }
 
-        if (result)
-        {
-            gf.num_result++;
-            result = Request::SelectCL2().Transceive(&uid);
-        }
-    }
-
-    /*
-    if (result)                                                                         // Anticollision CL1
-    {
-        meter.Reset();
-
-        Register::RegisterCLRC663(0x00).Write(0x00);        // Cancels previous executions and the state machine returns into IDLE mode
-        Register::RegisterCLRC663(0x02).Write(0xB0);        // Flushes the FIFO and defines FIFO characteristics
-
-        Register::RegisterCLRC663(0x06).Write(0x7F);        // Clears all bits in IRQ0
-        Register::RegisterCLRC663(0x2E).Write(0x08);        // All bits will be sent via NFC
-
-        Register::RegisterCLRC663(0x05).Write(0x93);        // CL1  \ Anticollision 
-        Register::RegisterCLRC663(0x05).Write(0x20);        //      / CL1
-        Register::RegisterCLRC663(0x00).Write(0x07);        // Transceive routine
-
-        while (meter.ElapsedUS() < 10000)
-        {
-            reg_0x06 = Register::RegisterCLRC663(0x06).Read();
-
-            if (reg_0x06 & Register::IRQ0::RxIRQ)
+            if (Request::SelectCL1().Transceive(&uid))
             {
-                if (reg_0x06 & Register::IRQ0::ErrIRQ)
+                gf.num_result++;
+
+                if (!uid.calculated)
                 {
-                    readed = "error";
+                    gf.num_result++;
 
-                    result = false;
+                    if (Request::AnticollisionCL2().Transceive(&uid))
+                    {
+                        gf.num_result++;
 
-                    break;
-                }
-                else
-                {
-                    uid.byte0 = Register::RegisterCLRC663(0x05).Read();         // Читаем первый уровень UID
-                    uid.byte1 = Register::RegisterCLRC663(0x05).Read();
-                    uid.byte2 = Register::RegisterCLRC663(0x05).Read();
-                    uid.byte3 = Register::RegisterCLRC663(0x05).Read();
-                    uid.byte4 = Register::RegisterCLRC663(0x05).Read();
-
-                    readed = "yes";
-
-                    break;
+                        if (Request::SelectCL2().Transceive(&uid))
+                        {
+                            gf.num_result++;
+                        }
+                    }
                 }
             }
         }
     }
-    */
 
     RF::Off();
-
-    return result;
 }
 
 
 static void CLRC66303HN::LoadAntennaConfiguration106()
 {
-    RF::Off();                                      // DrvMode
+    Register::RegisterCLRC663(0x28).Write(0x86);    // DrvMode
     Register::RegisterCLRC663(0x29).Write(0x1F);    // TxAmp
     Register::RegisterCLRC663(0x2A).Write(0x39);    // DrvCon
     Register::RegisterCLRC663(0x2B).Write(0x0A);    // Txl
