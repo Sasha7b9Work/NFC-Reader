@@ -49,7 +49,7 @@ namespace CLRC66303HN
     }
 
 
-    bool Request::AnticollisionCL1::Transceive(UID *uid)
+    bool Command::Card::AnticollisionCL1::Transceive(UID *uid)
     {
         Command::Idle();
         fifo.Clear();
@@ -93,7 +93,7 @@ namespace CLRC66303HN
     }
 
 
-    bool Request::SelectCL1::Transceive(UID *uid)
+    bool Command::Card::SelectCL1::Transceive(UID *uid)
     {
         Command::Idle();
         fifo.Clear();
@@ -140,13 +140,13 @@ namespace CLRC66303HN
     }
 
 
-    bool Request::AnticollisionCL2::Transceive(UID *)
+    bool Command::Card::AnticollisionCL2::Transceive(UID *)
     {
         return false;
     }
 
 
-    bool Request::SelectCL2::Transceive(UID *)
+    bool Command::Card::SelectCL2::Transceive(UID *)
     {
         return false;
     }

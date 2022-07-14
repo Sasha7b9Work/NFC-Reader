@@ -59,31 +59,27 @@ namespace CLRC66303HN
             void Send(uint8, uint8);
 
             void Send(uint8, uint8, uint8, uint8, uint8, uint8, uint8);
+
+            // ѕосылают команду антиколлизии CL1 и ожидает ответ. ¬озвращает true в случае получени€ ответа
+            struct AnticollisionCL1
+            {
+                bool Transceive(UID *uid);
+            };
+
+            struct SelectCL1
+            {
+                bool Transceive(UID *uid);
+            };
+
+            struct AnticollisionCL2
+            {
+                bool Transceive(UID *uid);
+            };
+
+            struct SelectCL2
+            {
+                bool Transceive(UID *uid);
+            };
         }
-    }
-
-    //  оманды работы с картой
-    namespace Request
-    {
-        // ѕосылают команду антиколлизии CL1 и ожидает ответ. ¬озвращает true в случае получени€ ответа
-        struct AnticollisionCL1
-        {
-            bool Transceive(UID *uid);
-        };
-
-        struct SelectCL1
-        {
-            bool Transceive(UID *uid);
-        };
-
-        struct AnticollisionCL2
-        {
-            bool Transceive(UID *uid);
-        };
-
-        struct SelectCL2
-        {
-            bool Transceive(UID *uid);
-        };
     }
 }

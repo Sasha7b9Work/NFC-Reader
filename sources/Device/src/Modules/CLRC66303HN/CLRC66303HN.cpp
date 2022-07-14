@@ -160,11 +160,11 @@ void CLRC66303HN::DetectCard()
     {
         gf.num_result++;
 
-        if (Request::AnticollisionCL1().Transceive(&uid))
+        if (Command::Card::AnticollisionCL1().Transceive(&uid))
         {
             gf.num_result++;
 
-            if (Request::SelectCL1().Transceive(&uid))
+            if (Command::Card::SelectCL1().Transceive(&uid))
             {
                 gf.num_result++;
 
@@ -172,11 +172,11 @@ void CLRC66303HN::DetectCard()
                 {
                     gf.num_result++;
 
-                    if (Request::AnticollisionCL2().Transceive(&uid))
+                    if (Command::Card::AnticollisionCL2().Transceive(&uid))
                     {
                         gf.num_result++;
 
-                        if (Request::SelectCL2().Transceive(&uid))
+                        if (Command::Card::SelectCL2().Transceive(&uid))
                         {
                             gf.num_result++;
                         }
