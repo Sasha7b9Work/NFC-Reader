@@ -181,6 +181,18 @@ void CLRC66303HN::DetectCard()
         }
     }
 
+//    static TimeMeterMS meterMS;
+//
+//    if (meterMS.ElapsedTime() > 1000)
+//    {
+//        if (uid.Calcualted())
+//        {
+//            HAL_USART2::TransmitRAW(uid.ToString());
+//
+//            meterMS.Reset();
+//        }
+//    }
+
     RF::Off();
 }
 

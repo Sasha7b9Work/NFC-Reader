@@ -61,7 +61,7 @@ namespace CLRC66303HN
 
         irq0.Clear();
 
-        Command::Card::Send(cl == 1 ? 0x93 : 0x95, 0x20);
+        Command::Card::Send((cl == 1) ? 0x93U : 0x95U, 0x20U);
 
         TimeMeterMS meter;
 
@@ -80,12 +80,7 @@ namespace CLRC66303HN
                 }
                 else
                 {
-                    int i0 = 0;
-
-                    if (cl == 2)
-                    {
-                        i0 += 5;
-                    }
+                    int i0 = (cl == 1) ? 0 : 5;
 
                     uid->byte[i0 + 0] = fifo.Pop();
                     uid->byte[i0 + 1] = fifo.Pop();
@@ -114,14 +109,9 @@ namespace CLRC66303HN
 
         irq0.Clear();
 
-        int i0 = 0;
+        int i0 = (cl == 1) ? 0 : 5;
 
-        if (cl == 2)
-        {
-            i0 = 5;
-        }
-
-        Command::Card::Send(cl == 1 ? 0x93 : 0x95, 0x70,    uid->byte[i0 + 0],
+        Command::Card::Send(cl == 1 ? 0x93U : 0x95U, 0x70,  uid->byte[i0 + 0],
                                                             uid->byte[i0 + 1],
                                                             uid->byte[i0 + 2],
                                                             uid->byte[i0 + 3],
