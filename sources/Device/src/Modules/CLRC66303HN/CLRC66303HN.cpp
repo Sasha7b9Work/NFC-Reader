@@ -149,18 +149,13 @@ void CLRC66303HN::DetectCard()
         }
     }
 
-    if (data.half_word == 0)
-    {
-        return;
-    }
-
-    uid.Clear();
-
     if (data.half_word != 0)
     {
+        uid.Clear();
+
         gf.num_result++;
 
-        if (Command::Card::AnticollisionCL1(&uid))
+        if (Command::Card::AnticollisionCL(1, &uid))
         {
             gf.num_result++;
 
@@ -168,11 +163,11 @@ void CLRC66303HN::DetectCard()
             {
                 gf.num_result++;
 
-                if (!uid.calculated)
+                if (!uid.Calcualted())
                 {
                     gf.num_result++;
 
-                    if (Command::Card::AnticollisionCL2(&uid))
+                    if (Command::Card::AnticollisionCL(2, &uid))
                     {
                         gf.num_result++;
 

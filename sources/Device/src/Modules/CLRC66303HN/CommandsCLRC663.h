@@ -1,51 +1,31 @@
 // 2022/7/6 10:32:31 (c) Aleksandr Shevchenko e-mail : Sasha7b9@tut.by
 #pragma once
-#include <cstring>
-#include <cstdio>
 
 
 namespace CLRC66303HN
 {
     struct UID
     {
-        UID()
-        {
-            Clear();
-        }
+        UID();
 
-        void Clear()
-        {
-            calculated = false;
-            std::strcat(buffer, "null");
-        }
+        void Clear();
 
-        // –ассчиатать uid из 4 байт
-        void Calculate4Bytes()
-        {
-            calculated = true;
+        void Calculate();
 
-            std::sprintf(buffer, "%02X:%02X:%02X:%02X", byte0, byte1, byte2, byte3);
-        }
+        char *ToString() { return buffer; };
 
-        char *ToString()
-        {
-            return buffer;
-        }
+        bool Calcualted() const;
 
-        uint8 byte0;
-        uint8 byte1;
-        uint8 byte2;
-        uint8 byte3;
-        uint8 byte4;
+        // ѕервые 5 байт - 1 каскад, вторые 5 байт - второй каскад
+        uint8 byte[10];
 
-        uint8 uid0;
-        uint8 uid1;
-        uint8 uid2;
-        uint8 uid3;
+        uint8 uid[7];
+
+    private:
 
         bool calculated;
 
-        char buffer[30];
+        char buffer[50];
     };
 
     namespace Command
@@ -61,11 +41,9 @@ namespace CLRC66303HN
             void Send(uint8, uint8, uint8, uint8, uint8, uint8, uint8);
 
             // ѕосылают команду антиколлизии CL1 и ожидает ответ. ¬озвращает true в случае получени€ ответа
-            bool AnticollisionCL1(UID *uid);
+            bool AnticollisionCL(int cl, UID *uid);
 
             bool SelectCL(int cl, UID *uid);
-
-            bool AnticollisionCL2(UID *uid);
         }
     }
 }

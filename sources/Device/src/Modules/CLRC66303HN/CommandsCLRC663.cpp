@@ -4,6 +4,8 @@
 #include "Modules/CLRC66303HN/RegistersCLRC663.h"
 #include "Hardware/HAL/HAL.h"
 #include "Hardware/Timer.h"
+#include <cstring>
+#include <cstdio>
 
 
 namespace CLRC66303HN
@@ -49,7 +51,7 @@ namespace CLRC66303HN
     }
 
 
-    bool Command::Card::AnticollisionCL1(UID *uid)
+    bool Command::Card::AnticollisionCL(int cl, UID *uid)
     {
         Command::Idle();
         fifo.Clear();
@@ -59,7 +61,7 @@ namespace CLRC66303HN
 
         irq0.Clear();
 
-        Command::Card::Send(0x93, 0x20);
+        Command::Card::Send(cl == 1 ? 0x93 : 0x95, 0x20);
 
         TimeMeterMS meter;
 
@@ -78,11 +80,18 @@ namespace CLRC66303HN
                 }
                 else
                 {
-                    uid->byte0 = fifo.Pop();
-                    uid->byte1 = fifo.Pop();
-                    uid->byte2 = fifo.Pop();
-                    uid->byte3 = fifo.Pop();
-                    uid->byte4 = fifo.Pop();
+                    int i0 = 0;
+
+                    if (cl == 2)
+                    {
+                        i0 += 5;
+                    }
+
+                    uid->byte[i0 + 0] = fifo.Pop();
+                    uid->byte[i0 + 1] = fifo.Pop();
+                    uid->byte[i0 + 2] = fifo.Pop();
+                    uid->byte[i0 + 3] = fifo.Pop();
+                    uid->byte[i0 + 4] = fifo.Pop();
 
                     return true;
                 }
@@ -105,7 +114,18 @@ namespace CLRC66303HN
 
         irq0.Clear();
 
-        Command::Card::Send(0x93, 0x70, uid->byte0, uid->byte1, uid->byte2, uid->byte3, uid->byte4);
+        int i0 = 0;
+
+        if (cl == 2)
+        {
+            i0 = 5;
+        }
+
+        Command::Card::Send(cl == 1 ? 0x93 : 0x95, 0x70,    uid->byte[i0 + 0],
+                                                            uid->byte[i0 + 1],
+                                                            uid->byte[i0 + 2],
+                                                            uid->byte[i0 + 3],
+                                                            uid->byte[i0 + 4]);
 
         TimeMeterMS meter;
 
@@ -123,13 +143,12 @@ namespace CLRC66303HN
 
                     if (_GET_BIT(sak, 2) == 1)
                     {
-                        std::strcat(uid->buffer, "not complete");
                         return true;
                     }
 
                     if (_GET_BIT(sak, 2) == 0)
                     {
-                        uid->Calculate4Bytes();
+                        uid->Calculate();
                         return true;
                     }
                 }
@@ -140,8 +159,67 @@ namespace CLRC66303HN
     }
 
 
-    bool Command::Card::AnticollisionCL2(UID *)
+    UID::UID()
     {
-        return false;
+        Clear();
+    }
+
+    void UID::Clear()
+    {
+        std::memset(byte, 0, 10);
+        std::memset(uid, 0, 7);
+
+        std::strcpy(buffer, "null");
+
+        calculated = false;
+    }
+
+    void UID::Calculate()
+    {
+        calculated = false;
+
+        if (byte[0] != 0)
+        {
+            if (byte[0] == 0x88)
+            {
+                uid[0] = byte[1];
+                uid[1] = byte[2];
+                uid[2] = byte[3];
+                uid[3] = byte[5];
+                uid[4] = byte[6];
+                uid[5] = byte[7];
+                uid[6] = byte[8];
+            }
+            else
+            {
+                uid[0] = byte[0];
+                uid[1] = byte[1];
+                uid[2] = byte[2];
+                uid[3] = byte[3];
+            }
+
+            calculated = true;
+        }
+
+        if (!calculated)
+        {
+            std::strcpy(buffer, "null");
+        }
+        else
+        {
+            if (byte[0] == 0x88)
+            {
+                std::sprintf(buffer, "%02X:%02X:%02X:%02X:%02X:%02X:%02X", uid[0], uid[1], uid[2], uid[3], uid[4], uid[5], uid[6]);
+            }
+            else
+            {
+                std::sprintf(buffer, "%02X:%02X:%02X:%02X", uid[0], uid[1], uid[2], uid[3]);
+            }
+        }
+    }
+
+    bool UID::Calcualted() const
+    {
+        return calculated;
     }
 }
