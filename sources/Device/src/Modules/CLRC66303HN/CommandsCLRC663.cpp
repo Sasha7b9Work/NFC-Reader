@@ -49,7 +49,7 @@ namespace CLRC66303HN
     }
 
 
-    bool Command::Card::AnticollisionCL1::Transceive(UID *uid)
+    bool Command::Card::AnticollisionCL1(UID *uid)
     {
         Command::Idle();
         fifo.Clear();
