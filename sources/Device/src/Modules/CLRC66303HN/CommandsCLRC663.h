@@ -43,8 +43,13 @@ namespace CLRC66303HN
         char buffer[30];
     };
 
-    // Команды работы с CLRC663
     namespace Command
+    {
+        void Idle();
+    }
+
+    // Команды работы с CLRC663
+    namespace Command_
     {
         struct CommandCLRC663
         {
@@ -53,12 +58,6 @@ namespace CLRC66303HN
             void Run();
 
             uint8 command;
-        };
-
-
-        struct Idle : public CommandCLRC663
-        {
-            Idle() : CommandCLRC663(0x00) { }
         };
 
 

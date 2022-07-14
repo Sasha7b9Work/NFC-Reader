@@ -60,6 +60,7 @@ namespace CLRC66303HN
         }
     }
 
+
     bool DetectCard1();
 
     bool DetectCard();
@@ -125,7 +126,7 @@ bool CLRC66303HN::DetectCard()
 {
     bool result = false;
 
-    TimeMeterUS meter;
+    Command::Idle();
 
     Register::RegisterCLRC663(0x00).Write(0x00);        // Cancels previous executions and the state machine returns into IDLE mode
     Register::RegisterCLRC663(0x02).Write(0xB0);        // Flushes the FIFO and defines FIFO characteristics
@@ -134,6 +135,8 @@ bool CLRC66303HN::DetectCard()
 
     Register::RegisterCLRC663(0x02).Write(0xB0);        // Flushes the FIFO and defines FIFO characteristics
     RF::On();                                           // Switches the RF filed ON.
+
+    TimeMeterUS meter;
 
     while (meter.ElapsedUS() < 5100)
     {
@@ -334,7 +337,7 @@ bool CLRC66303HN::DetectCard1()
 
     TimeMeterUS meter;
 
-    Command::Idle().Run();                                                          // 1
+    Command::Idle();                                                          // 1
 
     Register::FIFOControl().Write(Register::FIFOControl::Size::_255, true, 0);      // 5
 
@@ -345,7 +348,7 @@ bool CLRC66303HN::DetectCard1()
     Register::IRQ0 reg_irq0;                                                        // 7 Очистка битов irq0
     reg_irq0.Write(0x7F);
 
-    Command::Transceive().Run(0x26);    // REQA                                     // 11, 12  Запрос на карту
+    Command_::Transceive().Run(0x26);    // REQA                                     // 11, 12  Запрос на карту
 
     while (meter.ElapsedUS() < 6000)
     {

@@ -8,7 +8,17 @@
 
 namespace CLRC66303HN
 {
-    void Command::CommandCLRC663::Run()
+    uint8 ReadRegister(uint8);
+
+    void WriteRegister(uint8 reg, uint8 value);
+
+    void Command::Idle()
+    {
+        WriteRegister(0x00, 0x00);
+    }
+
+
+    void Command_::CommandCLRC663::Run()
     {
         uint8 buffer[2] = { 0x00, command };
 
@@ -16,7 +26,7 @@ namespace CLRC66303HN
     }
 
 
-    void Command::Transceive::Run(uint8 data)
+    void Command_::Transceive::Run(uint8 data)
     {
         Register::FIFOData().Write(data);
 
@@ -24,7 +34,7 @@ namespace CLRC66303HN
     }
 
 
-    void Command::Transceive::Run()
+    void Command_::Transceive::Run()
     {
         CommandCLRC663::Run();
     }
@@ -35,7 +45,7 @@ namespace CLRC66303HN
         Register::IRQ0 irq0;
         Register::FIFOData fifo;
 
-        Command::Idle().Run();
+        Command::Idle();
         Register::FIFOControl().Clear256();
         irq0.Clear();
 
@@ -46,7 +56,7 @@ namespace CLRC66303HN
 
         irq0.Clear();
 
-        Command::Transceive().Run();
+        Command_::Transceive().Run();
 
         TimeMeterMS meter;
 
@@ -85,7 +95,7 @@ namespace CLRC66303HN
         Register::IRQ0 irq0;
         Register::FIFOData fifo;
 
-        Command::Idle().Run();
+        Command::Idle();
         Register::FIFOControl().Clear256();
 
         Register::RegisterCLRC663(0x2C).Write(0x19);        // Switches the CRC extention ON in tx direction
@@ -105,7 +115,7 @@ namespace CLRC66303HN
 
         irq0.Clear();
 
-        Command::Transceive().Run();
+        Command_::Transceive().Run();
 
         TimeMeterMS meter;
 

@@ -7,7 +7,6 @@
 
 namespace CLRC66303HN
 {
-
     void Register::RegisterCLRC663::Write()
     {
         uint8 buffer[2] = { (uint8)(address << 1), (uint8)data };
