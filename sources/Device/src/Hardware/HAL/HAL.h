@@ -33,6 +33,8 @@ namespace HAL_ADC
 namespace HAL_FLASH
 {
     void LoadAntennaConfiguration106();
+
+    void LoadProtocol();
 }
 
 

@@ -7,24 +7,27 @@
 
 namespace HAL_FLASH
 {
-    static uint start_address = 0x8000000 + 0x0FF28;
+    static uint addressAntenna  = 0x8000000 + 0x0FF28;
+    static uint addressProtocol = 0x8000000 + 0x0FF48;
 
     // Возвращает true, если конфигурация антенны уже есть в памяти
-    bool ConfigExist();
+    static bool ConfigExistAntenna();
+    static bool ConfigExistProtocol();
 
     // Сохранить конфиг в память
-    void SaveConfig();
+    static void SaveConfigAntenna();
+    static void SaveConfigProtocol();
 }
 
 
 void HAL_FLASH::LoadAntennaConfiguration106()
 {
-    if (!ConfigExist())
+    if (!ConfigExistAntenna())
     {
-        SaveConfig();
+        SaveConfigAntenna();
     }
 
-    uint8 *address = (uint8 *)start_address;
+    uint8 *address = (uint8 *)addressAntenna;
 
     uint8 reg = 0x28;
 
@@ -37,15 +40,43 @@ void HAL_FLASH::LoadAntennaConfiguration106()
 }
 
 
-bool HAL_FLASH::ConfigExist()
+void HAL_FLASH::LoadProtocol()
 {
-    uint8 *address = (uint8 *)start_address;
+    if (!ConfigExistProtocol())
+    {
+        SaveConfigProtocol();
+    }
+
+    uint8 *address = (uint8 *)addressProtocol;
+
+    uint8 reg = 0x48;
+
+    while (reg <= 0x5F)
+    {
+        CLRC66303HN::Register::RegisterCLRC663(reg).Write(*address);
+        reg++;
+        address++;
+    }
+}
+
+
+bool HAL_FLASH::ConfigExistAntenna()
+{
+    uint8 *address = (uint8 *)addressAntenna;
 
     return (*address) != 0xFF;
 }
 
 
-void HAL_FLASH::SaveConfig()
+bool HAL_FLASH::ConfigExistProtocol()
+{
+    uint8 *address = (uint8 *)addressProtocol;
+
+    return (*address) != 0xFF;
+}
+
+
+void HAL_FLASH::SaveConfigAntenna()
 {
     CLRC66303HN::Register::RegisterCLRC663(0x28).Write(0x86);    // DrvMode
     CLRC66303HN::Register::RegisterCLRC663(0x29).Write(0x1F);    // TxAmp
@@ -68,16 +99,16 @@ void HAL_FLASH::SaveConfig()
 
     HAL_FLASH_Unlock();
 
-    uint address = start_address;
+    uint address = addressAntenna;
 
     uint8 reg = 0x28;
 
     while (reg <= 0x39)
     {
         uint8 reg_lo = CLRC66303HN::Register::RegisterCLRC663(reg).Read();
-        uint8 reg_hi = CLRC66303HN::Register::RegisterCLRC663(reg + 1).Read();
+        uint8 reg_hi = CLRC66303HN::Register::RegisterCLRC663((uint8)(reg + 1)).Read();
 
-        uint16 value = (reg_hi << 8) | reg_lo;
+        uint16 value = (uint16)((reg_hi << 8) | reg_lo);
 
         HAL_FLASH_Program(FLASH_TYPEPROGRAM_HALFWORD, address, value);
 
@@ -86,4 +117,52 @@ void HAL_FLASH::SaveConfig()
     }
 
     HAL_FLASH_Lock();
+}
+
+
+void HAL_FLASH::SaveConfigProtocol()
+{
+    CLRC66303HN::Register::RegisterCLRC663(0x48).Write(0x20);    // TxBitMod     20
+    CLRC66303HN::Register::RegisterCLRC663(0x49).Write(0x00);    // RFU          00
+    CLRC66303HN::Register::RegisterCLRC663(0x4A).Write(0x04);    // TxDataCon    04
+    CLRC66303HN::Register::RegisterCLRC663(0x4B).Write(0x50);    // TxDataMod    50
+    CLRC66303HN::Register::RegisterCLRC663(0x4C).Write(0x40);    // TxSymFreq    40
+    CLRC66303HN::Register::RegisterCLRC663(0x4D).Write(0x00);    // TxSym0H      00
+    CLRC66303HN::Register::RegisterCLRC663(0x4E).Write(0x00);    // TxSym0L      00
+    CLRC66303HN::Register::RegisterCLRC663(0x4F).Write(0x00);    // TxSym1H      00
+    CLRC66303HN::Register::RegisterCLRC663(0x50).Write(0x00);    // TxSym1L      00
+    CLRC66303HN::Register::RegisterCLRC663(0x51).Write(0x00);    // TxSym2       00
+    CLRC66303HN::Register::RegisterCLRC663(0x52).Write(0x00);    // TxSym3       00
+    CLRC66303HN::Register::RegisterCLRC663(0x53).Write(0x00);    // TxSym10Len   00
+    CLRC66303HN::Register::RegisterCLRC663(0x54).Write(0x00);    // TxSym32Len   00
+    CLRC66303HN::Register::RegisterCLRC663(0x55).Write(0x00);    // TxSym10BurstCtrl 00
+    CLRC66303HN::Register::RegisterCLRC663(0x56).Write(0x00);    // TxSym10Mod   00
+    CLRC66303HN::Register::RegisterCLRC663(0x57).Write(0x50);    // TxSym32Mod   50
+    CLRC66303HN::Register::RegisterCLRC663(0x58).Write(0x02);    // RxBitMod     02
+    CLRC66303HN::Register::RegisterCLRC663(0x59).Write(0x00);    // RxEofSym     00
+    CLRC66303HN::Register::RegisterCLRC663(0x5A).Write(0x00);    // RxSyncValH   00
+    CLRC66303HN::Register::RegisterCLRC663(0x5B).Write(0x01);    // RxSyncVaIL   01
+    CLRC66303HN::Register::RegisterCLRC663(0x5C).Write(0x00);    // RxSyncMod    00
+    CLRC66303HN::Register::RegisterCLRC663(0x5D).Write(0x08);    // RxMod        08
+    CLRC66303HN::Register::RegisterCLRC663(0x5E).Write(0x80);    // RxCorr       80
+    CLRC66303HN::Register::RegisterCLRC663(0x5F).Write(0xB2);    // FabCal       B2
+
+    HAL_FLASH_Unlock();
+
+    uint address = addressProtocol;
+
+    uint8 reg = 0x48;
+
+    while (reg <= 0x5F)
+    {
+        uint8 reg_lo = CLRC66303HN::Register::RegisterCLRC663(reg).Read();
+        uint8 reg_hi = CLRC66303HN::Register::RegisterCLRC663((uint8)(reg + 1)).Read();
+
+        uint16 value = (uint16)((reg_hi << 8) | reg_lo);
+
+        HAL_FLASH_Program(FLASH_TYPEPROGRAM_HALFWORD, address, value);
+
+        reg += 2;
+        address += 2;
+    }
 }

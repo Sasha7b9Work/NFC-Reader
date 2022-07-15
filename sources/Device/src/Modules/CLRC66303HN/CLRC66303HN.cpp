@@ -65,7 +65,7 @@ namespace CLRC66303HN
 
     void LoadAntennaConfiguration106();
 
-    static void LoadProtocol();
+    void LoadProtocol();
 
     static UID uid;
 }
@@ -82,6 +82,8 @@ void CLRC66303HN::Init()
     RF::Off();
 
     HAL_FLASH::LoadAntennaConfiguration106();
+
+    HAL_FLASH::LoadProtocol();
 
     fifo.Init();
 
@@ -120,8 +122,6 @@ CLRC66303HN::UID &CLRC66303HN::GetUID()
 void CLRC66303HN::DetectCard()
 {
     Command::Idle();
-
-    LoadProtocol();
 
     fifo.Clear();
     RF::On();
@@ -207,7 +207,7 @@ void CLRC66303HN::LoadAntennaConfiguration106()
 }
 
 
-static void CLRC66303HN::LoadProtocol()
+void CLRC66303HN::LoadProtocol()
 {
     Register::RegisterCLRC663(0x48).Write(0x20);    // TxBitMod     20
     Register::RegisterCLRC663(0x49).Write(0x00);    // RFU          00
