@@ -83,7 +83,7 @@ void CLRC66303HN::Init()
 
     LoadAntennaConfiguration106();
 
-    HAL_FLASH::LoadAntennaConfiguration106();
+//    HAL_FLASH::LoadAntennaConfiguration106();
 
     fifo.Init();
 }
@@ -118,6 +118,7 @@ void CLRC66303HN::DetectCard()
     {
     }
 
+    WriteRegister(0x09, 0xC0);                          // ¬ключаем пин прерывание в Push-Pull
     WriteRegister(0x08, 0x04);                          // ¬ключаем "железное прерываниие" IRQ на чтение данных
 
     irq0.Clear();
