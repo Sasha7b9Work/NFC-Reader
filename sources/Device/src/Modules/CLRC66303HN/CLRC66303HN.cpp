@@ -89,15 +89,19 @@ void CLRC66303HN::Init()
 
     WriteRegister(0x09, 0xC0);      // IRQ1En           // ¬ключаем пин прерывание в Push-Pull
 
-    while (irq0.GetValue() & IRQ0::IdleIRQ)
+    while ((irq0.GetValue() & IRQ0::IdleIRQ) == 0)
     {
     }
 
-    WriteRegister(0x08, 0x04);      // IRQ0En           // ¬ключаем "железное прерываниие" IRQ на чтение данных
+    Timer::Delay(10);
 
-    while (irq0.GetValue() & IRQ0::IdleIRQ)
+    WriteRegister(0x08, 0x84);      // IRQ0En           // ¬ключаем "железное прерываниие" IRQ на чтение данных. »нвертируем
+
+    while ((irq0.GetValue() & IRQ0::IdleIRQ) == 0)
     {
     }
+
+    Timer::Delay(10);
 }
 
 
