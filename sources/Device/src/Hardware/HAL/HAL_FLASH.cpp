@@ -47,7 +47,6 @@ bool HAL_FLASH::ConfigExist()
 
 void HAL_FLASH::SaveConfig()
 {
-    /*
     CLRC66303HN::Register::RegisterCLRC663(0x28).Write(0x86);    // DrvMode
     CLRC66303HN::Register::RegisterCLRC663(0x29).Write(0x1F);    // TxAmp
     CLRC66303HN::Register::RegisterCLRC663(0x2A).Write(0x39);    // DrvCon
@@ -75,20 +74,16 @@ void HAL_FLASH::SaveConfig()
 
     while (reg <= 0x39)
     {
-        HAL_FLASH_Program(FLASH_TYPEPROGRAM_HALFWORD)
+        uint8 reg_lo = CLRC66303HN::Register::RegisterCLRC663(reg).Read();
+        uint8 reg_hi = CLRC66303HN::Register::RegisterCLRC663(reg + 1).Read();
+
+        uint16 value = (reg_hi << 8) | reg_lo;
+
+        HAL_FLASH_Program(FLASH_TYPEPROGRAM_HALFWORD, address, value);
+
+        reg += 2;
+        address += 2;
     }
 
     HAL_FLASH_Lock();
-    */
-
-    /*
-    HAL_FLASH_Unlock();
-
-    FLASH_EraseInitTypeDef is;
-    is.TypeErase = FLASH_TYPEERASE_PAGES;
-    is.PageAddress = 0x0800FC00;
-    is.NbPages = 1;
-
-    HAL_FLASHEx_Erase(&is)
-    */
 }

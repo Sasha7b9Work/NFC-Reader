@@ -63,7 +63,7 @@ namespace CLRC66303HN
 
     void DetectCard();
 
-    static void LoadAntennaConfiguration106();
+    void LoadAntennaConfiguration106();
 
     static void LoadProtocol();
 
@@ -81,9 +81,7 @@ void CLRC66303HN::Init()
 
     RF::Off();
 
-    LoadAntennaConfiguration106();
-
-//    HAL_FLASH::LoadAntennaConfiguration106();
+    HAL_FLASH::LoadAntennaConfiguration106();
 
     fifo.Init();
 
@@ -186,7 +184,7 @@ void CLRC66303HN::DetectCard()
 }
 
 
-static void CLRC66303HN::LoadAntennaConfiguration106()
+void CLRC66303HN::LoadAntennaConfiguration106()
 {
     Register::RegisterCLRC663(0x28).Write(0x86);    // DrvMode
     Register::RegisterCLRC663(0x29).Write(0x1F);    // TxAmp

@@ -6,7 +6,7 @@
   <Header>### uVision Project, (C) Keil Software</Header>
 
   <PrjGuiSettings>
-    <LastAddFilePath>E:\My\GitHub\_work\FNC-Reader\sources\Device\src\Hardware\HAL</LastAddFilePath>
+    <LastAddFilePath>E:\My\GitHub\_work\FNC-Reader\sources\common\STM32Cube_F1\Drivers\STM32F1xx_HAL_Driver\Src</LastAddFilePath>
   </PrjGuiSettings>
 
   <ViewPool/>
@@ -15,7 +15,7 @@
     <View>
       <WinId>38003</WinId>
       <ViewName>Registers</ViewName>
-      <TableColWidths>158 144</TableColWidths>
+      <TableColWidths>188 114</TableColWidths>
     </View>
     <View>
       <WinId>346</WinId>
@@ -93,8 +93,8 @@
       <flags>2</flags>
       <showCmd>3</showCmd>
       <MinPosition>
-        <xPos>-32000</xPos>
-        <yPos>-32000</yPos>
+        <xPos>-1</xPos>
+        <yPos>-1</yPos>
       </MinPosition>
       <MaxPosition>
         <xPos>-1</xPos>
