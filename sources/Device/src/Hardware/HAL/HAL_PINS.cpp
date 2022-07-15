@@ -43,13 +43,24 @@ void HAL_PINS::Init()
 
     HAL_GPIO_Init(GPIOB, &is2);
 
+    //                                  IRQ_SNS INT1 от акселерометра
+
     is2.Pin = GPIO_PIN_0;
     is2.Pull = GPIO_PULLDOWN;
 
-    HAL_GPIO_Init(GPIOD, &is2);     // IRQ_SNS INT1 от акселерометра
+    HAL_GPIO_Init(GPIOD, &is2);
     uint data = GPIOD->ODR;
     _CLEAR_BIT(data, 0);
     GPIOD->ODR = data;              // «аписываем ноль в ODR0
 
     __HAL_AFIO_REMAP_PD01_ENABLE();
+
+    //                                  IRQ_TRX IRQ от CLRC663
+
+    is2.Pin = GPIO_PIN_4;
+
+    HAL_GPIO_Init(GPIOA, &is2);
+    uint data = GPIOA->ODR;
+    _CLEAR_BIT(data, 4);            // «аписываем ноль в  ORD4
+    GPIOA->ODR = data;
 }
