@@ -89,8 +89,6 @@ void CLRC66303HN::Init()
 
 void CLRC66303HN::Update()
 {
-    gf.Clear();
-
     uid.Clear();
 
     DetectCard();
@@ -141,8 +139,6 @@ void CLRC66303HN::DetectCard()
             }
             else                                        // данные верны
             {
-                gf.num_result++;
-
                 data.byte[0] = fifo.Pop();
                 data.byte[1] = fifo.Pop();
 
@@ -153,45 +149,20 @@ void CLRC66303HN::DetectCard()
 
     if (data.half_word != 0)
     {
-        gf.num_result++;
-
         if (Command::Card::AnticollisionCL(1, &uid))
         {
-            gf.num_result++;
-
             if (Command::Card::SelectCL(1, &uid))
             {
-                gf.num_result++;
-
                 if (!uid.Calcualted())
                 {
-                    gf.num_result++;
-
                     if (Command::Card::AnticollisionCL(2, &uid))
                     {
-                        gf.num_result++;
-
-                        if (Command::Card::SelectCL(2, &uid))
-                        {
-                            gf.num_result++;
-                        }
+                        Command::Card::SelectCL(2, &uid);
                     }
                 }
             }
         }
     }
-
-//    static TimeMeterMS meterMS;
-//
-//    if (meterMS.ElapsedTime() > 1000)
-//    {
-//        if (uid.Calcualted())
-//        {
-//            HAL_USART2::TransmitRAW(uid.ToString());
-//
-//            meterMS.Reset();
-//        }
-//    }
 
     RF::Off();
 }

@@ -57,17 +57,3 @@ union BitSet16
   (((uint8)((uint)bits / 010000000) % 010) << 7)))
 
 #define BINARY_U8( bits ) _bitset(0##bits)
-
-
-struct GlobalFlags
-{
-    void Clear();
-
-    char *ToString();
-
-    int num_result;
-
-    char buffer[128];
-};
-
-extern GlobalFlags gf;
