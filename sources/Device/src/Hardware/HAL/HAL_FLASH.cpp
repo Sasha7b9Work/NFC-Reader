@@ -17,6 +17,9 @@ namespace HAL_FLASH
     // Сохранить конфиг в память
     static void SaveConfigAntenna();
     static void SaveConfigProtocol();
+
+    static void SaveRegisters(uint8 reg_first, uint8 reg_last, uint address);
+    static void LoadRegisters(uint8 reg_first, uint8 reg_last, uint address);
 }
 
 
@@ -27,16 +30,7 @@ void HAL_FLASH::LoadAntennaConfiguration106()
         SaveConfigAntenna();
     }
 
-    uint8 *address = (uint8 *)addressAntenna;
-
-    uint8 reg = 0x28;
-
-    while (reg <= 0x39)
-    {
-        CLRC66303HN::Register::RegisterCLRC663(reg).Write(*address);
-        reg++;
-        address++;
-    }
+    LoadRegisters(0x28, 0x39, addressAntenna);
 }
 
 
@@ -47,16 +41,7 @@ void HAL_FLASH::LoadProtocol()
         SaveConfigProtocol();
     }
 
-    uint8 *address = (uint8 *)addressProtocol;
-
-    uint8 reg = 0x48;
-
-    while (reg <= 0x5F)
-    {
-        CLRC66303HN::Register::RegisterCLRC663(reg).Write(*address);
-        reg++;
-        address++;
-    }
+    LoadRegisters(0x48, 0x5F, addressProtocol);
 }
 
 
@@ -97,26 +82,7 @@ void HAL_FLASH::SaveConfigAntenna()
     CLRC66303HN::Register::RegisterCLRC663(0x38).Write(0x12);    // Rcv
     CLRC66303HN::Register::RegisterCLRC663(0x39).Write(0x0A);    // RxAna
 
-    HAL_FLASH_Unlock();
-
-    uint address = addressAntenna;
-
-    uint8 reg = 0x28;
-
-    while (reg <= 0x39)
-    {
-        uint8 reg_lo = CLRC66303HN::Register::RegisterCLRC663(reg).Read();
-        uint8 reg_hi = CLRC66303HN::Register::RegisterCLRC663((uint8)(reg + 1)).Read();
-
-        uint16 value = (uint16)((reg_hi << 8) | reg_lo);
-
-        HAL_FLASH_Program(FLASH_TYPEPROGRAM_HALFWORD, address, value);
-
-        reg += 2;
-        address += 2;
-    }
-
-    HAL_FLASH_Lock();
+    SaveRegisters(0x28, 0x39, addressAntenna);
 }
 
 
@@ -147,13 +113,17 @@ void HAL_FLASH::SaveConfigProtocol()
     CLRC66303HN::Register::RegisterCLRC663(0x5E).Write(0x80);    // RxCorr       80
     CLRC66303HN::Register::RegisterCLRC663(0x5F).Write(0xB2);    // FabCal       B2
 
+    SaveRegisters(0x48, 0x5F, addressProtocol);
+}
+
+
+static void HAL_FLASH::SaveRegisters(uint8 reg_first, uint8 reg_last, uint address)
+{
     HAL_FLASH_Unlock();
 
-    uint address = addressProtocol;
+    uint8 reg = reg_first;
 
-    uint8 reg = 0x48;
-
-    while (reg <= 0x5F)
+    while (reg <= reg_last)
     {
         uint8 reg_lo = CLRC66303HN::Register::RegisterCLRC663(reg).Read();
         uint8 reg_hi = CLRC66303HN::Register::RegisterCLRC663((uint8)(reg + 1)).Read();
@@ -164,5 +134,22 @@ void HAL_FLASH::SaveConfigProtocol()
 
         reg += 2;
         address += 2;
+    }
+
+    HAL_FLASH_Lock();
+}
+
+
+static void HAL_FLASH::LoadRegisters(uint8 reg_first, uint8 reg_last, uint _address)
+{
+    uint8 *address = (uint8 *)_address;
+
+    uint8 reg = reg_first;
+
+    while (reg <= reg_last)
+    {
+        CLRC66303HN::Register::RegisterCLRC663(reg).Write(*address);
+        reg++;
+        address++;
     }
 }

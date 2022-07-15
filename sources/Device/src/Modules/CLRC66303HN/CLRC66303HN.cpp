@@ -63,9 +63,9 @@ namespace CLRC66303HN
 
     void DetectCard();
 
-    void LoadAntennaConfiguration106();
+//    void LoadAntennaConfiguration106();
 
-    void LoadProtocol();
+//    void LoadProtocol();
 
     static UID uid;
 }
@@ -184,6 +184,7 @@ void CLRC66303HN::DetectCard()
 }
 
 
+/*
 void CLRC66303HN::LoadAntennaConfiguration106()
 {
     Register::RegisterCLRC663(0x28).Write(0x86);    // DrvMode
@@ -234,6 +235,7 @@ void CLRC66303HN::LoadProtocol()
     Register::RegisterCLRC663(0x5E).Write(0x80);    // RxCorr       80
     Register::RegisterCLRC663(0x5F).Write(0xB2);    // FabCal       B2
 }
+*/
 
 
 uint8 CLRC66303HN::ReadRegister(uint8 reg)
