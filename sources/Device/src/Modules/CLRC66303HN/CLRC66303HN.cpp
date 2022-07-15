@@ -61,13 +61,15 @@ namespace CLRC66303HN
     }
 
 
-    void DetectCard();
+    bool DetectCard();
 
 //    void LoadAntennaConfiguration106();
 
 //    void LoadProtocol();
 
     static UID uid;
+
+    static bool detected = false;
 }
 
 
@@ -109,7 +111,19 @@ void CLRC66303HN::Update()
 {
     uid.Clear();
 
-    DetectCard();
+    if (DetectCard())
+    {
+        if (!detected)
+        {
+            HAL_USART2::Transmit("%s", uid.ToString());
+        }
+
+        detected = true;
+    }
+    else
+    {
+        detected = false;
+    }
 }
 
 
@@ -119,7 +133,7 @@ CLRC66303HN::UID &CLRC66303HN::GetUID()
 }
 
 
-void CLRC66303HN::DetectCard()
+bool CLRC66303HN::DetectCard()
 {
     Command::Idle();
 
@@ -181,6 +195,8 @@ void CLRC66303HN::DetectCard()
     }
 
     RF::Off();
+
+    return uid.Calcualted();
 }
 
 
