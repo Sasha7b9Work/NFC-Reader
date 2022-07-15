@@ -22,13 +22,15 @@ namespace CLRC66303HN
         static const int LoAlertIRQ = (1 << 5);
         static const int IdleIRQ = (1 << 4);
         static const int TxIRQ = (1 << 3);
-        static const int RxIRQ = (1 << 2);
+//        static const int RxIRQ = (1 << 2);
         static const int ErrIRQ = (1 << 1);
         static const int RxSOFIRQ = (1 << 0);
 
         void Clear();
 
         uint8 GetValue();
+
+        bool DataReady();
     };
 
     extern FIFO fifo;

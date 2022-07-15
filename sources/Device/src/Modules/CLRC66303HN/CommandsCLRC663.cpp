@@ -70,7 +70,7 @@ namespace CLRC66303HN
 
         while (meter.ElapsedTime() < 10)
         {
-            if (irq0.GetValue() & IRQ0::RxIRQ)
+            if (irq0.DataReady())
             {
                 if (Register::Error().Read() & Register::Error::CollDet)
                 {
@@ -124,7 +124,7 @@ namespace CLRC66303HN
 
         while (meter.ElapsedTime() < 10)
         {
-            if (irq0.GetValue() & IRQ0::RxIRQ)
+            if (irq0.DataReady())
             {
                 if (irq0.GetValue() & IRQ0::ErrIRQ)
                 {

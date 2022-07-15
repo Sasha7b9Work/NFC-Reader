@@ -60,7 +60,7 @@ void HAL_PINS::Init()
     is2.Pin = GPIO_PIN_4;
 
     HAL_GPIO_Init(GPIOA, &is2);
-    uint data = GPIOA->ODR;
+    data = GPIOA->ODR;
     _CLEAR_BIT(data, 4);            // Записываем ноль в  ORD4
     GPIOA->ODR = data;
 }

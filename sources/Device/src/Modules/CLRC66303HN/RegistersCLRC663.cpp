@@ -2,6 +2,7 @@
 #include "defines.h"
 #include "Modules/CLRC66303HN/RegistersCLRC663.h"
 #include "Hardware/HAL/HAL.h"
+#include <stm32f1xx_hal.h>
 #include <cstring>
 
 
@@ -98,5 +99,11 @@ namespace CLRC66303HN
     uint8 IRQ0::GetValue()
     {
         return ReadRegister(0x06);
+    }
+
+
+    bool IRQ0::DataReady()
+    {
+        return HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_4) == GPIO_PIN_SET;
     }
 }

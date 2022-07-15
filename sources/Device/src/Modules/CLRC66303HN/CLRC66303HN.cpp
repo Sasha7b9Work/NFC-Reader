@@ -129,10 +129,10 @@ void CLRC66303HN::DetectCard()
 
     while (meter.ElapsedUS() < 8000)                    // Запрос REQA
     {
-        uint8 reg_0x06 = irq0.GetValue();
-
-        if (reg_0x06 & IRQ0::RxIRQ)                     // данные получены
+        if (irq0.DataReady())                           // данные получены
         {
+            uint8 reg_0x06 = irq0.GetValue();
+
             if (reg_0x06 & IRQ0::ErrIRQ)                // ошибка данных
             {
                 break;
