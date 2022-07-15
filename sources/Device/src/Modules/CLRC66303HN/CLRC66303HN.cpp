@@ -116,6 +116,8 @@ void CLRC66303HN::DetectCard()
     {
     }
 
+    WriteRegister(0x08, 0x04);                          // ¬ключаем "железное прерываниие" IRQ на чтение данных
+
     irq0.Clear();
 
     Register::RegisterCLRC663(0x2C).Write(0x18);        // Switches the CRC extention OFF in tx direction
