@@ -603,6 +603,11 @@
               <FileType>5</FileType>
               <FilePath>.\src\Hardware\HAL\HAL_PINS.h</FilePath>
             </File>
+            <File>
+              <FileName>HAL_FLASH.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\Hardware\HAL\HAL_FLASH.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1318,6 +1323,11 @@
               <FileName>HAL_PINS.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\src\Hardware\HAL\HAL_PINS.h</FilePath>
+            </File>
+            <File>
+              <FileName>HAL_FLASH.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\src\Hardware\HAL\HAL_FLASH.cpp</FilePath>
             </File>
           </Files>
         </Group>

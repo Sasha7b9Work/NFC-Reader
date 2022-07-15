@@ -83,6 +83,8 @@ void CLRC66303HN::Init()
 
     LoadAntennaConfiguration106();
 
+    HAL_FLASH::LoadAntennaConfiguration106();
+
     fifo.Init();
 }
 
