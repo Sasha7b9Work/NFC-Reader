@@ -18,6 +18,17 @@
 
 namespace HAL_USART2
 {
+    struct Type                     // Направление выдачи
+    {
+        enum E
+        {
+            WG26,
+            UART
+        };
+    };
+
+    Type::E type = Type::WG26;
+
     UART_HandleTypeDef handleUART;
 
     void *handle = (void *)&handleUART;
@@ -127,6 +138,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *)
 
             if (pointer == (int)std::strlen(request))
             {
+                HAL_USART2::type = HAL_USART2::Type::UART;
+
                 char message[100];
 
                 std::sprintf(message, "OK;%02Xh;%3.1fV;%3.2fg;%3.2fg;%3.2fg;%3.1fC;uid:%s\x0D\x0A",
