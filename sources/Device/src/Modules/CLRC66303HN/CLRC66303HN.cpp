@@ -86,6 +86,18 @@ void CLRC66303HN::Init()
 //    HAL_FLASH::LoadAntennaConfiguration106();
 
     fifo.Init();
+
+    WriteRegister(0x09, 0xC0);      // IRQ1En           // ¬ключаем пин прерывание в Push-Pull
+
+    while (irq0.GetValue() & IRQ0::IdleIRQ)
+    {
+    }
+
+    WriteRegister(0x08, 0x04);      // IRQ0En           // ¬ключаем "железное прерываниие" IRQ на чтение данных
+
+    while (irq0.GetValue() & IRQ0::IdleIRQ)
+    {
+    }
 }
 
 
@@ -118,10 +130,7 @@ void CLRC66303HN::DetectCard()
     {
     }
 
-    WriteRegister(0x09, 0xC0);                          // ¬ключаем пин прерывание в Push-Pull
-    WriteRegister(0x08, 0x04);                          // ¬ключаем "железное прерываниие" IRQ на чтение данных
-
-    irq0.Clear();
+    irq0.Clear();                   // IRQ0
 
     Register::RegisterCLRC663(0x2C).Write(0x18);        // Switches the CRC extention OFF in tx direction
     Register::RegisterCLRC663(0x2D).Write(0x18);        // Switches the CRC extention OFF in rx direction
