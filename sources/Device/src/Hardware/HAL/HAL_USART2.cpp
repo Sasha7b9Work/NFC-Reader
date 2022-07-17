@@ -193,6 +193,12 @@ void HAL_USART2_WG26::WG26::Init()
 }
 
 
+void HAL_USART2_WG26::WG26::Transmit(CLRC66303HN::UID &uid)
+{
+
+}
+
+
 void HAL_USART2_WG26::UART::Init()
 {
     __HAL_RCC_USART2_CLK_ENABLE();
