@@ -24,7 +24,7 @@ namespace HAL_USART2_WG26
 
     void *handle = (void *)&handleUART;
 
-    static uint8 data = 0;
+    static uint8 buffer = 0;                    // Буфер для передачи данных через UART
 
     namespace Mode
     {
@@ -107,7 +107,7 @@ void HAL_USART2_WG26::SetType(Type::E _type)
             HAL_NVIC_SetPriority(USART2_IRQn, 0, 1);
             HAL_NVIC_EnableIRQ(USART2_IRQn);
 
-            HAL_UART_Receive_IT(&handleUART, &data, 1);
+            HAL_UART_Receive_IT(&handleUART, &buffer, 1);
         }
         break;
     }
@@ -161,13 +161,13 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *)
 
     static int pointer = 0;
 
-    if (HAL_USART2_WG26::data == ' ')
+    if (HAL_USART2_WG26::buffer == ' ')
     {
 
     }
     else
     {
-        int symbol = std::toupper((int)HAL_USART2_WG26::data);
+        int symbol = std::toupper((int)HAL_USART2_WG26::buffer);
 
         if (request[pointer] == symbol)
         {
@@ -198,7 +198,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *)
         }
     }
 
-    HAL_UART_Receive_IT(&HAL_USART2_WG26::handleUART, &HAL_USART2_WG26::data, 1);
+    HAL_UART_Receive_IT(&HAL_USART2_WG26::handleUART, &HAL_USART2_WG26::buffer, 1);
 }
 
 
