@@ -42,6 +42,8 @@ namespace HAL_USART2_WG26
     {
         void Init();
 
+        void Transmit(CLRC66303HN::UID &);
+
         namespace D0        // без инверсии
         {
             void Hi();
@@ -113,6 +115,9 @@ void HAL_USART2_WG26::TransmitUID(CLRC66303HN::UID &uid)
         break;
 
     case Type::WG26:
+        SetType(Type::WG26);
+        WG26::Transmit(uid);
+        SetType(Type::UART);
         break;
 
     case Type::UART:
