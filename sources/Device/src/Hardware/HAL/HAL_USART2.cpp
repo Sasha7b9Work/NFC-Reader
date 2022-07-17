@@ -12,8 +12,8 @@
 #include <cstdarg>
 
 
-    // PA2     ------> USART2_TX
-    // PA3     ------> USART2_RX
+    // PA2     ------> USART2_TX / DI / A / D0 - без инверсии
+    // PA3     ------> USART2_RX / RO / B / D1- с инверсией
 
 
 namespace HAL_USART2_WG26
@@ -40,6 +40,37 @@ namespace HAL_USART2_WG26
             HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET);
         }
     }
+
+    namespace WG26
+    {
+        void Init();
+
+        namespace D0        // без инверсии
+        {
+            void Hi()
+            {
+                HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
+            }
+
+            void Lo()
+            {
+                HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_RESET);
+            }
+        }
+
+        namespace D1        // с инверсией
+        {
+            void Hi()
+            {
+                HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, GPIO_PIN_RESET);
+            }
+
+            void Lo()
+            {
+                HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, GPIO_PIN_SET);
+            }
+        }
+    }
 }
 
 
@@ -51,6 +82,11 @@ void HAL_USART2_WG26::SetType(Type::E _type)
     {
     case HAL_USART2_WG26::Type::None:
         break;
+
+    case HAL_USART2_WG26::Type::WG26:
+        WG26::Init();
+        break;
+
     case HAL_USART2_WG26::Type::UART:
         {
             __HAL_RCC_USART2_CLK_ENABLE();
@@ -93,8 +129,6 @@ void HAL_USART2_WG26::SetType(Type::E _type)
             HAL_UART_Receive_IT(&handleUART, &data, 1);
         }
         break;
-    default:
-        break;
     }
 }
 
@@ -123,6 +157,17 @@ void HAL_USART2_WG26::Transmit(char *format, ...)
 
 void HAL_USART2_WG26::TransmitUID(CLRC66303HN::UID &uid)
 {
+    switch (type)
+    {
+    case Type::None:
+        break;
+
+    case Type::WG26:
+        break;
+
+    case Type::UART:
+        break;
+    }
 }
 
 
@@ -170,4 +215,23 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *)
     }
 
     HAL_UART_Receive_IT(&HAL_USART2_WG26::handleUART, &HAL_USART2_WG26::data, 1);
+}
+
+
+void HAL_USART2_WG26::WG26::Init()
+{
+    GPIO_InitTypeDef is =
+    {
+        GPIO_PIN_2 |                // A / D0 - без инверсии
+        GPIO_PIN_3,                 // B / D1 - с инверсией
+        GPIO_MODE_OUTPUT_PP,
+        GPIO_NOPULL
+    };
+
+    HAL_GPIO_Init(GPIOA, &is);
+
+    D0::Hi();
+    D1::Hi();
+
+    HAL_USART2_WG26::Mode::Transmit();
 }
