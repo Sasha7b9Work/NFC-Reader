@@ -1,9 +1,10 @@
-// 2022/6/14 22:08:35 (c) Aleksandr Shevchenko e-mail : Sasha7b9@tut.by
+﻿// 2022/6/14 22:08:35 (c) Aleksandr Shevchenko e-mail : Sasha7b9@tut.by
 #include "defines.h"
 #include "Hardware/HAL/HAL.h"
 #include "Modules/LIS2DH12/LIS2DH12.h"
 #include "Modules/W25Q80DV/W25Q80DV.h"
 #include "Modules/CLRC66303HN/CLRC66303HN.h"
+#include "Hardware/Timer.h"
 #include "Hardware/Power.h"
 #include <stm32f1xx_hal.h>
 #include <cstring>
@@ -12,8 +13,8 @@
 #include <cstdarg>
 
 
-    // PA2     ------> USART2_TX / DI / A / D0 - ��� ��������
-    // PA3     ------> USART2_RX / RO / B / D1- � ���������
+    // PA2     ------> USART2_TX / DI / A / D0 - без инверсии
+    // PA3     ------> USART2_RX / RO / B / D1- с инверсией
 
 
 namespace HAL_USART2_WG26
@@ -22,10 +23,10 @@ namespace HAL_USART2_WG26
 
     namespace Mode
     {
-        // �������� ����� ��������
+        // Включить режим передачи
         void Transmit();
 
-        // �������� ����� �����
+        // Включить режим приёма
         void Receive();
     }
 
@@ -33,25 +34,45 @@ namespace HAL_USART2_WG26
     {
         static UART_HandleTypeDef handle;
 
-        static uint8 buffer = 0;                    // ����� ��� �������� ������ ����� UART
+        static uint8 buffer = 0;                    // Буфер для передачи данных через UART
 
         void Init();
     }
 
     namespace WG26
     {
+        /*
+        *  Старшие байты первые.
+        *  Старшие биты первые.
+        *  Длительность бита 100 мкс.
+        *  Расстояние между битами 1 мс.
+        *  1-й контрольный бит:
+        *       если сложение значений первых 12 бит является нечетным числом, контрольному биту присваивается значение 1, чтобы результат сложения 13 бит был четным.
+        *  2-й контрольный бит:
+        *       последние 13 бит всегда дают в сумме нечетное число.
+        */
+
         void Init();
 
         void Transmit(CLRC66303HN::UID &);
 
-        namespace D0        // ��� ��������
+        // Передать 26 бит, начиная со старшего
+        void Transmit26bit(uint);
+
+        // Передать один бит. По meter отмеряют время до старта передачи (1мс)
+        void TransmitBit(bool, TimeMeterMS &meter);
+
+        // Возвращает количество единиц в value от bit_start до bit_end
+        int NumOnes(uint8 value, int bit_start, int bit_end);
+
+        namespace D0        // без инверсии
         {
             void Hi();
 
             void Lo();
         }
 
-        namespace D1        // � ���������
+        namespace D1        // с инверсией
         {
             void Hi();
 
@@ -178,8 +199,8 @@ void HAL_USART2_WG26::WG26::Init()
 {
     GPIO_InitTypeDef is =
     {
-        GPIO_PIN_2 |                // A / D0 - ��� ��������
-        GPIO_PIN_3,                 // B / D1 - � ���������
+        GPIO_PIN_2 |                // A / D0 - без инверсии
+        GPIO_PIN_3,                 // B / D1 - с инверсией
         GPIO_MODE_OUTPUT_PP,
         GPIO_NOPULL
     };
@@ -195,7 +216,90 @@ void HAL_USART2_WG26::WG26::Init()
 
 void HAL_USART2_WG26::WG26::Transmit(CLRC66303HN::UID &uid)
 {
+    Mode::Transmit();
 
+    uint8 bytes[3] = { uid.byte[2], uid.byte[1], uid.byte[0] };
+
+    // Вычисляем бит чётности. Он должен быть таким, чтобы количество единиц в первых 13 битах было чётным
+
+    int num_ones = NumOnes(bytes[0], 0, 7) + NumOnes(bytes[1], 4, 7);            // Количество единиц
+
+    int bit_parity_start = (num_ones % 2) ? 1 : 0;
+
+    // Вычисляем бит нечётности. Он должен быть таким, чтобы количество единиц в последних 13 битах было нечётным
+
+    num_ones = NumOnes(bytes[1], 0, 3) + NumOnes(bytes[2], 0, 7);
+
+    int bit_parity_end = (num_ones % 2) ? 0 : 1;
+
+    uint value = (uint)(bit_parity_start << 31);        // Бит чётности первых 13 передаваемых бит
+    value |= (bytes[0] << 23);                          // \ 
+    value |= (bytes[1] << 15);                          // | Три байта от старшего к младшему
+    value |= (bytes[2] << 7);                           // /
+    value |= (bit_parity_end << 6);                     // Бит нечётности последних 13 передаваемых бит 
+
+    Transmit26bit(value);
+
+    Mode::Receive();
+}
+
+
+void HAL_USART2_WG26::WG26::Transmit26bit(uint value)
+{
+    D0::Hi();
+    D1::Hi();
+
+    TimeMeterMS meter;
+
+    for (int i = 31; i >= 6; i--)
+    {
+        TransmitBit(value & (1 << i), meter);
+    }
+
+    D0::Hi();
+    D1::Hi();
+
+    meter.WaitFor(1);
+}
+
+
+void HAL_USART2_WG26::WG26::TransmitBit(bool bit, TimeMeterMS &meter)
+{
+    meter.WaitFor(1);
+
+    meter.Reset();
+
+    TimeMeterUS meterDuration;              // Для отмерения длительности импульса
+
+    if (bit)
+    {
+        D1::Lo();
+    }
+    else
+    {
+        D0::Lo();
+    }
+
+    meterDuration.WaitFor(100);
+
+    D0::Hi();
+    D1::Hi();
+}
+
+
+int HAL_USART2_WG26::WG26::NumOnes(uint8 value, int bit_start, int bit_end)
+{
+    int result = 0;
+
+    for (int i = bit_start; i <= bit_end; i++)
+    {
+        if (value & (1 << i))
+        {
+            result++;
+        }
+    }
+
+    return result;
 }
 
 
@@ -228,7 +332,7 @@ void HAL_USART2_WG26::UART::Init()
 
     HAL_UART_Init(&handle);
 
-    is.Pin = GPIO_PIN_9;                    // ����/��������
+    is.Pin = GPIO_PIN_9;                    // Приём/передача
     is.Mode = GPIO_MODE_OUTPUT_PP;
     is.Pull = GPIO_PULLUP;
 

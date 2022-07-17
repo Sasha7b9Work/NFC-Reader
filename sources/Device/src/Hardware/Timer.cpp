@@ -64,6 +64,14 @@ void TimeMeterMS::Reset()
 }
 
 
+void TimeMeterMS::WaitFor(uint ms)
+{
+    while (ElapsedTime() < ms)
+    {
+    }
+}
+
+
 void TimeMeterMS::Pause()
 {
     time_pause = TIME_MS;
@@ -87,6 +95,14 @@ void TimeMeterUS::Reset()
     TIM4->CR1 &= ~TIM_CR1_CEN;
     TIM4->CNT = 0;
     TIM4->CR1 |= TIM_CR1_CEN;
+}
+
+
+void TimeMeterUS::WaitFor(uint us)
+{
+    while (ElapsedUS() < us)
+    {
+    }
 }
 
 

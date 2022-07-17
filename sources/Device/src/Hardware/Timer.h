@@ -29,6 +29,9 @@ struct TimeMeterMS
 
     void Continue();
 
+    // Ождиать ms миллисекунд с момента последнего Reset()
+    void WaitFor(uint ms);
+
     // Столько миллисекунд прошло с момента вызова Reset()
     uint ElapsedTime();
 
@@ -47,6 +50,9 @@ struct TimeMeterUS
     }
 
     void Reset();
+
+    // Ожидать us микросекунд с момента последнего Reset()
+    void WaitFor(uint us);
 
     uint ElapsedUS();
 };
