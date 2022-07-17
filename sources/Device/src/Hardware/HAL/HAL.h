@@ -1,5 +1,6 @@
 // (c) Aleksandr Shevchenko e-mail : Sasha7b9@tut.by
 #pragma once
+#include "Modules/CLRC66303HN/CommandsCLRC663.h"
 
 
 struct DirectionSPI
@@ -63,11 +64,23 @@ namespace HAL_I2C1
 
 namespace HAL_USART2_WG26
 {
-    void Init();
+    struct Type                 // Режим выдачи
+    {
+        enum E
+        {
+            None,
+            WG26,
+            UART
+        };
+    };
+
+    void SetType(Type::E);
 
     void TransmitRAW(char *);
 
     void Transmit(char *format, ...);
+
+    void TransmitUID(CLRC66303HN::UID &);
 
     extern void *handle;       // UART_HandleTypeDef
 }

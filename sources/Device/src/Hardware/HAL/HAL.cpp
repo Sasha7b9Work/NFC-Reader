@@ -17,11 +17,11 @@ void HAL::Init()
     __HAL_RCC_AFIO_CLK_ENABLE();
     __HAL_RCC_PWR_CLK_ENABLE();
 
-    __HAL_AFIO_REMAP_SWJ_NOJTAG();
+    __HAL_AFIO_REMAP_SWJ_DISABLE();
 
     HAL_PINS::Init();
 
-    HAL_USART2_WG26::Init();
+    HAL_USART2_WG26::SetType(HAL_USART2_WG26::Type::WG26);
 
     HAL_ADC::Init();
 }
