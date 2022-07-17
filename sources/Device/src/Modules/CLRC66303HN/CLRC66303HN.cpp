@@ -112,17 +112,6 @@ void CLRC66303HN::Update()
         if (!detected)
         {
             HAL_USART2_WG26::TransmitUID(uid);
-
-            /*
-            if (HAL_USART2_WG26::InModeUART())
-            {
-                HAL_USART2_WG26::Transmit("%s\x0D\x0A", uid.ToString());
-            }
-            else
-            {
-                HAL_USART2_WG26::TransmitRAW(uid.uid[0], uid.ui)
-            }
-            */
         }
 
         detected = true;

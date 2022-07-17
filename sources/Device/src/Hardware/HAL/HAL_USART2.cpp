@@ -29,16 +29,10 @@ namespace HAL_USART2_WG26
     namespace Mode
     {
         // ¬ключить режим передачи
-        void Transmit()
-        {
-            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);
-        }
+        void Transmit();
 
         // ¬ключить режим приЄма
-        void Receive()
-        {
-            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET);
-        }
+        void Receive();
     }
 
     namespace WG26
@@ -47,28 +41,16 @@ namespace HAL_USART2_WG26
 
         namespace D0        // без инверсии
         {
-            void Hi()
-            {
-                HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
-            }
+            void Hi();
 
-            void Lo()
-            {
-                HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_RESET);
-            }
+            void Lo();
         }
 
         namespace D1        // с инверсией
         {
-            void Hi()
-            {
-                HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, GPIO_PIN_RESET);
-            }
+            void Hi();
 
-            void Lo()
-            {
-                HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, GPIO_PIN_SET);
-            }
+            void Lo();
         }
     }
 }
@@ -122,7 +104,6 @@ void HAL_USART2_WG26::SetType(Type::E _type)
 
             HAL_GPIO_Init(GPIOA, &is);
 
-            Mode::Receive();
             HAL_NVIC_SetPriority(USART2_IRQn, 0, 1);
             HAL_NVIC_EnableIRQ(USART2_IRQn);
 
@@ -130,6 +111,8 @@ void HAL_USART2_WG26::SetType(Type::E _type)
         }
         break;
     }
+
+    Mode::Receive();
 }
 
 
@@ -166,6 +149,7 @@ void HAL_USART2_WG26::TransmitUID(CLRC66303HN::UID &uid)
         break;
 
     case Type::UART:
+        Transmit("%s\x0D\x0A", uid.ToString());
         break;
     }
 }
@@ -234,4 +218,40 @@ void HAL_USART2_WG26::WG26::Init()
     D1::Hi();
 
     HAL_USART2_WG26::Mode::Transmit();
+}
+
+
+void HAL_USART2_WG26::WG26::D0::Hi()
+{
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
+}
+
+
+void HAL_USART2_WG26::WG26::D0::Lo()
+{
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_RESET);
+}
+
+
+void HAL_USART2_WG26::WG26::D1::Hi()
+{
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, GPIO_PIN_RESET);
+}
+
+
+void HAL_USART2_WG26::WG26::D1::Lo()
+{
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, GPIO_PIN_SET);
+}
+
+
+void HAL_USART2_WG26::Mode::Transmit()
+{
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);
+}
+
+
+void HAL_USART2_WG26::Mode::Receive()
+{
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET);
 }
