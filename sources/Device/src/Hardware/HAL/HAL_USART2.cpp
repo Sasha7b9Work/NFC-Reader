@@ -20,12 +20,6 @@ namespace HAL_USART2_WG26
 {
     static Type::E type = Type::None;
 
-    UART_HandleTypeDef handleUART;
-
-    void *handle = (void *)&handleUART;
-
-    static uint8 buffer = 0;                    // Буфер для передачи данных через UART
-
     namespace Mode
     {
         // Включить режим передачи
@@ -33,6 +27,15 @@ namespace HAL_USART2_WG26
 
         // Включить режим приёма
         void Receive();
+    }
+
+    namespace UART
+    {
+        static UART_HandleTypeDef handle;
+
+        static uint8 buffer = 0;                    // Буфер для передачи данных через UART
+
+        void Init();
     }
 
     namespace WG26
@@ -53,6 +56,8 @@ namespace HAL_USART2_WG26
             void Lo();
         }
     }
+
+    void *handle = (void *)&UART::handle;
 }
 
 
@@ -70,45 +75,7 @@ void HAL_USART2_WG26::SetType(Type::E _type)
         break;
 
     case HAL_USART2_WG26::Type::UART:
-        {
-            __HAL_RCC_USART2_CLK_ENABLE();
-            __HAL_RCC_GPIOA_CLK_ENABLE();
-
-            GPIO_InitTypeDef is = { 0 };
-
-            is.Pin = GPIO_PIN_2;        // TX
-            is.Mode = GPIO_MODE_AF_PP;
-            is.Pull = GPIO_PULLUP;
-            is.Speed = GPIO_SPEED_FREQ_HIGH;
-            HAL_GPIO_Init(GPIOA, &is);
-
-            is.Pin = GPIO_PIN_3;        // RX
-            is.Mode = GPIO_MODE_INPUT;
-            is.Pull = GPIO_NOPULL;
-            HAL_GPIO_Init(GPIOA, &is);
-
-            handleUART.Instance = USART2;
-            handleUART.Init.BaudRate = 115200;
-            handleUART.Init.WordLength = UART_WORDLENGTH_8B;
-            handleUART.Init.StopBits = UART_STOPBITS_1;
-            handleUART.Init.Parity = UART_PARITY_NONE;
-            handleUART.Init.Mode = UART_MODE_TX_RX;
-            handleUART.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-            handleUART.Init.OverSampling = UART_OVERSAMPLING_16;
-
-            HAL_UART_Init(&handleUART);
-
-            is.Pin = GPIO_PIN_9;                    // Приём/передача
-            is.Mode = GPIO_MODE_OUTPUT_PP;
-            is.Pull = GPIO_PULLUP;
-
-            HAL_GPIO_Init(GPIOA, &is);
-
-            HAL_NVIC_SetPriority(USART2_IRQn, 0, 1);
-            HAL_NVIC_EnableIRQ(USART2_IRQn);
-
-            HAL_UART_Receive_IT(&handleUART, &buffer, 1);
-        }
+        UART::Init();
         break;
     }
 
@@ -120,7 +87,7 @@ void HAL_USART2_WG26::TransmitRAW(char *message)
 {
     Mode::Transmit();
 
-    HAL_UART_Transmit(&handleUART, (uint8 *)message, (uint16)std::strlen(message), 1000);
+    HAL_UART_Transmit(&UART::handle, (uint8 *)message, (uint16)std::strlen(message), 1000);
 
     Mode::Receive();
 }
@@ -161,13 +128,13 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *)
 
     static int pointer = 0;
 
-    if (HAL_USART2_WG26::buffer == ' ')
+    if (HAL_USART2_WG26::UART::buffer == ' ')
     {
 
     }
     else
     {
-        int symbol = std::toupper((int)HAL_USART2_WG26::buffer);
+        int symbol = std::toupper((int)HAL_USART2_WG26::UART::buffer);
 
         if (request[pointer] == symbol)
         {
@@ -198,7 +165,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *)
         }
     }
 
-    HAL_UART_Receive_IT(&HAL_USART2_WG26::handleUART, &HAL_USART2_WG26::buffer, 1);
+    HAL_UART_Receive_IT(&HAL_USART2_WG26::UART::handle, &HAL_USART2_WG26::UART::buffer, 1);
 }
 
 
@@ -218,6 +185,48 @@ void HAL_USART2_WG26::WG26::Init()
     D1::Hi();
 
     HAL_USART2_WG26::Mode::Transmit();
+}
+
+
+void HAL_USART2_WG26::UART::Init()
+{
+    __HAL_RCC_USART2_CLK_ENABLE();
+    __HAL_RCC_GPIOA_CLK_ENABLE();
+
+    GPIO_InitTypeDef is = { 0 };
+
+    is.Pin = GPIO_PIN_2;        // TX
+    is.Mode = GPIO_MODE_AF_PP;
+    is.Pull = GPIO_PULLUP;
+    is.Speed = GPIO_SPEED_FREQ_HIGH;
+    HAL_GPIO_Init(GPIOA, &is);
+
+    is.Pin = GPIO_PIN_3;        // RX
+    is.Mode = GPIO_MODE_INPUT;
+    is.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(GPIOA, &is);
+
+    handle.Instance = USART2;
+    handle.Init.BaudRate = 115200;
+    handle.Init.WordLength = UART_WORDLENGTH_8B;
+    handle.Init.StopBits = UART_STOPBITS_1;
+    handle.Init.Parity = UART_PARITY_NONE;
+    handle.Init.Mode = UART_MODE_TX_RX;
+    handle.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+    handle.Init.OverSampling = UART_OVERSAMPLING_16;
+
+    HAL_UART_Init(&handle);
+
+    is.Pin = GPIO_PIN_9;                    // Приём/передача
+    is.Mode = GPIO_MODE_OUTPUT_PP;
+    is.Pull = GPIO_PULLUP;
+
+    HAL_GPIO_Init(GPIOA, &is);
+
+    HAL_NVIC_SetPriority(USART2_IRQn, 0, 1);
+    HAL_NVIC_EnableIRQ(USART2_IRQn);
+
+    HAL_UART_Receive_IT(&handle, &buffer, 1);
 }
 
 
