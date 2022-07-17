@@ -115,7 +115,7 @@ void CLRC66303HN::Update()
     {
         if (!detected)
         {
-            HAL_USART2::Transmit("%s\x0D\x0A", uid.ToString());
+            HAL_USART2_WG26::Transmit("%s\x0D\x0A", uid.ToString());
         }
 
         detected = true;

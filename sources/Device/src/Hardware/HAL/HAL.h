@@ -61,7 +61,7 @@ namespace HAL_I2C1
 }
 
 
-namespace HAL_USART2
+namespace HAL_USART2_WG26
 {
     void Init();
 

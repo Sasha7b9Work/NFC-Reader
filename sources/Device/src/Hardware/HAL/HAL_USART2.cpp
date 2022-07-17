@@ -16,7 +16,7 @@
     // PA3     ------> USART2_RX
 
 
-namespace HAL_USART2
+namespace HAL_USART2_WG26
 {
     struct Type                     // Направление выдачи
     {
@@ -52,8 +52,7 @@ namespace HAL_USART2
 }
 
 
-
-void HAL_USART2::Init()
+void HAL_USART2_WG26::Init()
 {
     __HAL_RCC_USART2_CLK_ENABLE();
     __HAL_RCC_GPIOA_CLK_ENABLE();
@@ -96,7 +95,7 @@ void HAL_USART2::Init()
 }
 
 
-void HAL_USART2::TransmitRAW(char *message)
+void HAL_USART2_WG26::TransmitRAW(char *message)
 {
     Mode::Transmit();
 
@@ -106,7 +105,7 @@ void HAL_USART2::TransmitRAW(char *message)
 }
 
 
-void HAL_USART2::Transmit(char *format, ...)
+void HAL_USART2_WG26::Transmit(char *format, ...)
 {
     char message[128];
     std::va_list args;
@@ -124,13 +123,13 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *)
 
     static int pointer = 0;
 
-    if (HAL_USART2::data == ' ')
+    if (HAL_USART2_WG26::data == ' ')
     {
 
     }
     else
     {
-        int symbol = std::toupper((int)HAL_USART2::data);
+        int symbol = std::toupper((int)HAL_USART2_WG26::data);
 
         if (request[pointer] == symbol)
         {
@@ -138,7 +137,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *)
 
             if (pointer == (int)std::strlen(request))
             {
-                HAL_USART2::type = HAL_USART2::Type::UART;
+                HAL_USART2_WG26::type = HAL_USART2_WG26::Type::UART;
 
                 char message[100];
 
@@ -150,7 +149,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *)
                     LIS2DH12::GetAccelerationZ().ToAccelearation(),
                     LIS2DH12::GetRawTemperature().ToTemperatrue());
 
-                HAL_USART2::TransmitRAW(message);
+                HAL_USART2_WG26::TransmitRAW(message);
 
                 pointer = 0;
             }
@@ -161,5 +160,5 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *)
         }
     }
 
-    HAL_UART_Receive_IT(&HAL_USART2::handleUART, &HAL_USART2::data, 1);
+    HAL_UART_Receive_IT(&HAL_USART2_WG26::handleUART, &HAL_USART2_WG26::data, 1);
 }
