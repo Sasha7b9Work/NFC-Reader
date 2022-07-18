@@ -83,9 +83,6 @@ namespace HAL_USART2_WG26
 
         // Возвращает количество единиц в value от bit_start до bit_end
         int NumOnes(uint8 value, int bit_start, int bit_end);
-
-        // Установить выход в состояние 0 или 1
-        void SetOut(bool);
     }
 
     void *handle = (void *)&UART::handle;
@@ -192,8 +189,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *)
 
 void HAL_USART2_WG26::WG26::Transmit(CLRC66303HN::UID &uid)
 {
-    Mode::Transmit();
-
     uint8 bytes[3] = { uid.byte[2], uid.byte[1], uid.byte[0] };
 
     // Вычисляем бит чётности. Он должен быть таким, чтобы количество единиц в первых 13 битах было чётным
@@ -215,8 +210,6 @@ void HAL_USART2_WG26::WG26::Transmit(CLRC66303HN::UID &uid)
     value |= (bit_parity_end << 6);                     // Бит нечётности последних 13 передаваемых бит 
 
     Transmit26bit(value);
-
-    Mode::Receive();
 }
 
 
@@ -245,7 +238,7 @@ void HAL_USART2_WG26::WG26::TransmitBit(bool bit, TimeMeterMS &meter)
 
     TimeMeterUS meterDuration;              // Для отмерения длительности импульса
 
-    SetOut(bit);
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, bit ? GPIO_PIN_SET : GPIO_PIN_RESET);
 
     Mode::WG::Bit();
 
@@ -349,10 +342,4 @@ void HAL_USART2_WG26::Mode::WG::Bit()
 void HAL_USART2_WG26::Mode::WG::Interval()
 {
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET);
-}
-
-
-void HAL_USART2_WG26::WG26::SetOut(bool bit)
-{
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, bit ? GPIO_PIN_SET : GPIO_PIN_RESET);
 }
