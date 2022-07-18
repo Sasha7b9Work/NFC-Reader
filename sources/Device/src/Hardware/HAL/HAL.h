@@ -64,17 +64,10 @@ namespace HAL_I2C1
 
 namespace HAL_USART2_WG26
 {
-    struct TypeOUT
-    {
-        enum E
-        {
-            None,
-            WG26,
-            UART
-        };
-    };
+    void Init();
 
-    void SetTypeOUT(TypeOUT::E);
+    // Переключиться в режим UART
+    void SwitchToUART();
 
     void TransmitRAW(char *);
 

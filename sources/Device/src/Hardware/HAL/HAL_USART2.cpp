@@ -19,7 +19,16 @@
 
 namespace HAL_USART2_WG26
 {
-    static TypeOUT::E type = TypeOUT::None;
+    struct TypeOUT      // В каком виде передаём информацию.
+    {
+        enum E
+        {
+            WG26,   // В этом режиме находимся псле подачи питания. При обнаружении карты выводим первые три байта в WG26
+            UART    // В этот режим переходим после получения команды по UART. Вся передача идёт по UART
+        };
+    };
+
+    static TypeOUT::E type = TypeOUT::WG26;
 
     namespace Mode
     {
@@ -83,25 +92,15 @@ namespace HAL_USART2_WG26
 }
 
 
-void HAL_USART2_WG26::SetTypeOUT(TypeOUT::E _type)
+void HAL_USART2_WG26::Init()
 {
-    type = _type;
+    UART::Init();
+}
 
-    switch (type)
-    {
-    case HAL_USART2_WG26::TypeOUT::None:
-        break;
 
-    case HAL_USART2_WG26::TypeOUT::WG26:
-        WG26::Init();
-        break;
-
-    case HAL_USART2_WG26::TypeOUT::UART:
-        UART::Init();
-        break;
-    }
-
-    Mode::Receive();
+void HAL_USART2_WG26::SwitchToUART()
+{
+    type = TypeOUT::UART;
 }
 
 
@@ -131,9 +130,6 @@ void HAL_USART2_WG26::TransmitUID(CLRC66303HN::UID &uid)
 {
     switch (type)
     {
-    case TypeOUT::None:
-        break;
-
     case TypeOUT::WG26:
         WG26::Init();
         WG26::Transmit(uid);
@@ -167,7 +163,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *)
 
             if (pointer == (int)std::strlen(request))
             {
-                HAL_USART2_WG26::SetTypeOUT(HAL_USART2_WG26::TypeOUT::UART);
+                HAL_USART2_WG26::SwitchToUART();
 
                 char message[100];
 
@@ -327,6 +323,8 @@ void HAL_USART2_WG26::UART::Init()
     HAL_NVIC_EnableIRQ(USART2_IRQn);
 
     HAL_UART_Receive_IT(&handle, &buffer, 1);
+
+    Mode::Receive();
 }
 
 

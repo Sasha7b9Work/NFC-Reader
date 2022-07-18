@@ -21,7 +21,7 @@ void HAL::Init()
 
     HAL_PINS::Init();
 
-    HAL_USART2_WG26::SetTypeOUT(HAL_USART2_WG26::TypeOUT::WG26);
+    HAL_USART2_WG26::Init();
 
     HAL_ADC::Init();
 }
