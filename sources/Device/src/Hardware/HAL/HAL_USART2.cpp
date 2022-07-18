@@ -13,8 +13,8 @@
 #include <cstdarg>
 
 
-    // PA2     ------> USART2_TX / DI / A / D0 - без инверсии
-    // PA3     ------> USART2_RX / RO / B / D1- с инверсией
+    // PA2     ------> USART2_TX / Сюда подаётся последовательность в режиме WG26
+    // PA3     ------> USART2_RX
 
 
 namespace HAL_USART2_WG26
@@ -28,6 +28,16 @@ namespace HAL_USART2_WG26
 
         // Включить режим приёма
         void Receive();
+
+        // Здесь в режиме WG мы вибираем режим бита либо режим между битами
+        namespace WG
+        {
+            // Уровень, соотвествующий передаче бита
+            void Bit();
+
+            // Уровень, соотвествующий промежутку между битами
+            void 
+        }
     }
 
     namespace UART
@@ -64,20 +74,6 @@ namespace HAL_USART2_WG26
 
         // Возвращает количество единиц в value от bit_start до bit_end
         int NumOnes(uint8 value, int bit_start, int bit_end);
-
-        namespace D0        // без инверсии
-        {
-            void Hi();
-
-            void Lo();
-        }
-
-        namespace D1        // с инверсией
-        {
-            void Hi();
-
-            void Lo();
-        }
     }
 
     void *handle = (void *)&UART::handle;
@@ -195,25 +191,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *)
 }
 
 
-void HAL_USART2_WG26::WG26::Init()
-{
-    GPIO_InitTypeDef is =
-    {
-        GPIO_PIN_2 |                // A / D0 - без инверсии
-        GPIO_PIN_3,                 // B / D1 - с инверсией
-        GPIO_MODE_OUTPUT_PP,
-        GPIO_NOPULL
-    };
-
-    HAL_GPIO_Init(GPIOA, &is);
-
-    D0::Hi();
-    D1::Hi();
-
-    HAL_USART2_WG26::Mode::Transmit();
-}
-
-
 void HAL_USART2_WG26::WG26::Transmit(CLRC66303HN::UID &uid)
 {
     Mode::Transmit();
@@ -300,6 +277,22 @@ int HAL_USART2_WG26::WG26::NumOnes(uint8 value, int bit_start, int bit_end)
     }
 
     return result;
+}
+
+
+void HAL_USART2_WG26::WG26::Init()
+{
+    GPIO_InitTypeDef is =
+    {
+        GPIO_PIN_2 |                // A / D0 - без инверсии
+        GPIO_MODE_OUTPUT_PP,
+        GPIO_NOPULL
+    };
+
+    HAL_GPIO_Init(GPIOA, &is);
+
+    D0::Hi();
+    D1::Hi();
 }
 
 
