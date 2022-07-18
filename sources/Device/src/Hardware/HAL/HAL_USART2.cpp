@@ -19,7 +19,7 @@
 
 namespace HAL_USART2_WG26
 {
-    static Type::E type = Type::None;
+    static TypeOUT::E type = TypeOUT::None;
 
     namespace Mode
     {
@@ -83,20 +83,20 @@ namespace HAL_USART2_WG26
 }
 
 
-void HAL_USART2_WG26::SetType(Type::E _type)
+void HAL_USART2_WG26::SetTypeOUT(TypeOUT::E _type)
 {
     type = _type;
 
     switch (type)
     {
-    case HAL_USART2_WG26::Type::None:
+    case HAL_USART2_WG26::TypeOUT::None:
         break;
 
-    case HAL_USART2_WG26::Type::WG26:
+    case HAL_USART2_WG26::TypeOUT::WG26:
         WG26::Init();
         break;
 
-    case HAL_USART2_WG26::Type::UART:
+    case HAL_USART2_WG26::TypeOUT::UART:
         UART::Init();
         break;
     }
@@ -131,16 +131,16 @@ void HAL_USART2_WG26::TransmitUID(CLRC66303HN::UID &uid)
 {
     switch (type)
     {
-    case Type::None:
+    case TypeOUT::None:
         break;
 
-    case Type::WG26:
-        SetType(Type::WG26);
+    case TypeOUT::WG26:
+        WG26::Init();
         WG26::Transmit(uid);
-        SetType(Type::UART);
+        UART::Init();
         break;
 
-    case Type::UART:
+    case TypeOUT::UART:
         Transmit("%s\x0D\x0A", uid.ToString());
         break;
     }
@@ -167,7 +167,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *)
 
             if (pointer == (int)std::strlen(request))
             {
-                HAL_USART2_WG26::SetType(HAL_USART2_WG26::Type::UART);
+                HAL_USART2_WG26::SetTypeOUT(HAL_USART2_WG26::TypeOUT::UART);
 
                 char message[100];
 

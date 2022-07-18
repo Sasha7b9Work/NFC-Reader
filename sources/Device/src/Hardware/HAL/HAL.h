@@ -64,7 +64,7 @@ namespace HAL_I2C1
 
 namespace HAL_USART2_WG26
 {
-    struct Type                 // Режим выдачи
+    struct TypeOUT
     {
         enum E
         {
@@ -74,7 +74,7 @@ namespace HAL_USART2_WG26
         };
     };
 
-    void SetType(Type::E);
+    void SetTypeOUT(TypeOUT::E);
 
     void TransmitRAW(char *);
 
