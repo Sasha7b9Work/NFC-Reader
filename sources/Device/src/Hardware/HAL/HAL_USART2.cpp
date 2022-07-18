@@ -36,7 +36,7 @@ namespace HAL_USART2_WG26
             void Bit();
 
             // Уровень, соотвествующий промежутку между битами
-            void 
+            void Interval();
         }
     }
 
@@ -74,6 +74,9 @@ namespace HAL_USART2_WG26
 
         // Возвращает количество единиц в value от bit_start до bit_end
         int NumOnes(uint8 value, int bit_start, int bit_end);
+
+        // Установить выход в состояние 0 или 1
+        void SetOut(bool);
     }
 
     void *handle = (void *)&UART::handle;
@@ -223,8 +226,7 @@ void HAL_USART2_WG26::WG26::Transmit(CLRC66303HN::UID &uid)
 
 void HAL_USART2_WG26::WG26::Transmit26bit(uint value)
 {
-    D0::Hi();
-    D1::Hi();
+    Mode::WG::Interval();
 
     TimeMeterMS meter;
 
@@ -233,8 +235,7 @@ void HAL_USART2_WG26::WG26::Transmit26bit(uint value)
         TransmitBit(value & (1 << i), meter);
     }
 
-    D0::Hi();
-    D1::Hi();
+    Mode::WG::Interval();
 
     meter.WaitFor(1);
 }
@@ -248,19 +249,13 @@ void HAL_USART2_WG26::WG26::TransmitBit(bool bit, TimeMeterMS &meter)
 
     TimeMeterUS meterDuration;              // Для отмерения длительности импульса
 
-    if (bit)
-    {
-        D1::Lo();
-    }
-    else
-    {
-        D0::Lo();
-    }
+    SetOut(bit);
+
+    Mode::WG::Bit();
 
     meterDuration.WaitFor(100);
 
-    D0::Hi();
-    D1::Hi();
+    Mode::WG::Interval();
 }
 
 
@@ -284,15 +279,12 @@ void HAL_USART2_WG26::WG26::Init()
 {
     GPIO_InitTypeDef is =
     {
-        GPIO_PIN_2 |                // A / D0 - без инверсии
+        GPIO_PIN_2,                     // Сюда будем подавать последовательность бит
         GPIO_MODE_OUTPUT_PP,
         GPIO_NOPULL
     };
 
     HAL_GPIO_Init(GPIOA, &is);
-
-    D0::Hi();
-    D1::Hi();
 }
 
 
@@ -338,30 +330,6 @@ void HAL_USART2_WG26::UART::Init()
 }
 
 
-void HAL_USART2_WG26::WG26::D0::Hi()
-{
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
-}
-
-
-void HAL_USART2_WG26::WG26::D0::Lo()
-{
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_RESET);
-}
-
-
-void HAL_USART2_WG26::WG26::D1::Hi()
-{
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, GPIO_PIN_RESET);
-}
-
-
-void HAL_USART2_WG26::WG26::D1::Lo()
-{
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, GPIO_PIN_SET);
-}
-
-
 void HAL_USART2_WG26::Mode::Transmit()
 {
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);
@@ -371,4 +339,22 @@ void HAL_USART2_WG26::Mode::Transmit()
 void HAL_USART2_WG26::Mode::Receive()
 {
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET);
+}
+
+
+void HAL_USART2_WG26::Mode::WG::Bit()
+{
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);
+}
+
+
+void HAL_USART2_WG26::Mode::WG::Interval()
+{
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET);
+}
+
+
+void HAL_USART2_WG26::WG26::SetOut(bool bit)
+{
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, bit ? GPIO_PIN_SET : GPIO_PIN_RESET);
 }
