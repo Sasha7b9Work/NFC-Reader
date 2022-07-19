@@ -1,6 +1,7 @@
 // 2022/6/24 23:13:00 (c) Aleksandr Shevchenko e-mail : Sasha7b9@tut.by
 #include "defines.h"
 #include "Hardware/HAL/HAL.h"
+#include "Hardware/Timer.h"
 #include <stm32f1xx_hal.h>
 
 
@@ -71,7 +72,9 @@ int8 HAL_I2C1::Read(uint8 dev_id, uint8 reg_addr, uint8* reg_data, uint16 len)
 {
     Init();
 
-    while (HAL_I2C_GetState(&hi2c1) != HAL_I2C_STATE_READY)
+    TimeMeterMS meter;
+
+    while (HAL_I2C_GetState(&hi2c1) != HAL_I2C_STATE_READY && (meter.ElapsedTime() < 10))
     {
     }
 
@@ -95,13 +98,15 @@ int8 HAL_I2C1::Read16(uint8 dev_id, uint8* data)
 {
     Init();
 
-    while (HAL_I2C_GetState(&hi2c1) != HAL_I2C_STATE_READY)
+    TimeMeterMS meter;
+
+    while (HAL_I2C_GetState(&hi2c1) != HAL_I2C_STATE_READY && (meter.ElapsedTime() < 10))
     {
     }
 
     HAL_StatusTypeDef status = HAL_I2C_Master_Receive(&hi2c1, (uint16)((dev_id << 1) + 1), data, 2, 1);
 
-    while (HAL_I2C_GetState(&hi2c1) != HAL_I2C_STATE_READY)
+    while (HAL_I2C_GetState(&hi2c1) != HAL_I2C_STATE_READY && meter.ElapsedTime() < 20)
     {
     }
 
@@ -113,7 +118,9 @@ int8 HAL_I2C1::Write(uint8 dev_id, uint8 reg_addr, const uint8 *reg_data, uint16
 {
     Init();
 
-    while (HAL_I2C_GetState(&hi2c1) != HAL_I2C_STATE_READY)
+    TimeMeterMS meter;
+
+    while (HAL_I2C_GetState(&hi2c1) != HAL_I2C_STATE_READY && (meter.ElapsedTime() < 10))
     {
 
     }
@@ -138,13 +145,15 @@ int8 HAL_I2C1::Write8(uint8 dev_id, uint8 data)
 {
     Init();
 
-    while (HAL_I2C_GetState(&hi2c1) != HAL_I2C_STATE_READY)
+    TimeMeterMS meter;
+
+    while (HAL_I2C_GetState(&hi2c1) != HAL_I2C_STATE_READY && (meter.ElapsedTime() < 10))
     {
     }
 
     HAL_StatusTypeDef status = HAL_I2C_Master_Transmit(&hi2c1, (uint16)(dev_id << 1), &data, 1, 10);
 
-    while (HAL_I2C_GetState(&hi2c1) != HAL_I2C_STATE_READY)
+    while (HAL_I2C_GetState(&hi2c1) != HAL_I2C_STATE_READY && (meter.ElapsedTime() < 20))
     {
     }
 

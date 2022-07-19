@@ -56,11 +56,3 @@ static void SystemClock_Config()
 
     HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit);
 }
-
-
-void Error_Handler()
-{
-    while(1)
-    {
-    }
-}
