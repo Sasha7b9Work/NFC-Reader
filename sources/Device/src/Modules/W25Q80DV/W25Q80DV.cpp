@@ -2,6 +2,7 @@
 #include "defines.h"
 #include "Modules/W25Q80DV/W25Q80DV.h"
 #include "Hardware/HAL/HAL.h"
+#include "Hardware/Timer.h"
 #include "Utils/Buffer.h"
 
 
@@ -114,7 +115,9 @@ bool W25Q80DV::IsBusy()
 
 void W25Q80DV::WaitRelease()
 {
-    while (IsBusy())
+    TimeMeterMS meter;
+
+    while (IsBusy() && (meter.ElapsedTime() < 10))
     {
     }
 }
