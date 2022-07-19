@@ -232,7 +232,7 @@ void HAL_USART2_WG26::WG26::Transmit26bit(uint value)
 }
 
 
-void HAL_USART2_WG26::WG26::TransmitBit(bool bit, TimeMeterMS &meter)
+void HAL_USART2_WG26::WG26::TransmitBit(bool /* bit */, TimeMeterMS &meter)
 {
     meter.WaitFor(1);
 
@@ -240,7 +240,7 @@ void HAL_USART2_WG26::WG26::TransmitBit(bool bit, TimeMeterMS &meter)
 
     TimeMeterUS meterDuration;              // Для отмерения длительности импульса
 
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, bit ? GPIO_PIN_SET : GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
 
     Mode::WG::Bit();
 
@@ -268,6 +268,8 @@ int HAL_USART2_WG26::WG26::NumOnes(uint8 value, int bit_start, int bit_end)
 
 void HAL_USART2_WG26::WG26::Init()
 {
+    HAL_GPIO_DeInit(GPIOA, GPIO_PIN_2);
+
     GPIO_InitTypeDef is =
     {
         GPIO_PIN_2,                     // Сюда будем подавать последовательность бит
