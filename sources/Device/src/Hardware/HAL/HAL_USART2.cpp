@@ -215,13 +215,15 @@ void HAL_USART2_WG26::WG26::Transmit(CLRC66303HN::UID &uid)
 
 void HAL_USART2_WG26::WG26::Transmit26bit(uint value)
 {
+    value = 0xAAAAAAAA;
+
     Mode::WG::Interval();
 
     TimeMeterMS meter;
 
     for (int i = 31; i >= 6; i--)
     {
-        TransmitBit(value & (1 << i), meter);
+        TransmitBit((value & (1 << i)) != 0, meter);
     }
 
     Mode::WG::Interval();
