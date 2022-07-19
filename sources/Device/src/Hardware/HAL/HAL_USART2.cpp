@@ -276,6 +276,10 @@ void HAL_USART2_WG26::WG26::Init()
     };
 
     HAL_GPIO_Init(GPIOA, &is);
+
+    uint data = GPIOA->ODR;
+    _SET_BIT(data, 2);
+    GPIOA->ODR = data;
 }
 
 
