@@ -270,18 +270,19 @@ void HAL_USART2_WG26::WG26::Init()
 {
     HAL_GPIO_DeInit(GPIOA, GPIO_PIN_2);
 
-    GPIO_InitTypeDef is =
-    {
-        GPIO_PIN_2,                     // Сюда будем подавать последовательность бит
-        GPIO_MODE_OUTPUT_PP,
-        GPIO_NOPULL
-    };
+    uint ctrl = GPIOA->CRL;
 
-    HAL_GPIO_Init(GPIOA, &is);
+    _CLEAR_BIT(ctrl, 10);   // \ CNF2 = 00  Push-Pull
+    _CLEAR_BIT(ctrl, 11);   // /
 
-    uint data = GPIOA->ODR;
-    _SET_BIT(data, 2);
-    GPIOA->ODR = data;
+    _SET_BIT(ctrl, 8);      // \ MODE2 = 11 max speed 50 MHz
+    _SET_BIT(ctrl, 9);      // /
+
+    GPIOA->CRL = ctrl;
+
+    uint odr = GPIOA->ODR;
+    _SET_BIT(odr, 2);
+    GPIOA->ODR = odr;
 }
 
 
