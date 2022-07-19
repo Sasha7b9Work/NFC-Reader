@@ -215,8 +215,6 @@ void HAL_USART2_WG26::WG26::Transmit(CLRC66303HN::UID &uid)
 
 void HAL_USART2_WG26::WG26::Transmit26bit(uint value)
 {
-    value = 0xAAAAAAAA;
-
     Mode::WG::Interval();
 
     TimeMeterMS meter;
@@ -232,7 +230,7 @@ void HAL_USART2_WG26::WG26::Transmit26bit(uint value)
 }
 
 
-void HAL_USART2_WG26::WG26::TransmitBit(bool /* bit */, TimeMeterMS &meter)
+void HAL_USART2_WG26::WG26::TransmitBit(bool bit, TimeMeterMS &meter)
 {
     meter.WaitFor(1);
 
@@ -240,7 +238,7 @@ void HAL_USART2_WG26::WG26::TransmitBit(bool /* bit */, TimeMeterMS &meter)
 
     TimeMeterUS meterDuration;              // Для отмерения длительности импульса
 
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, bit ? GPIO_PIN_SET : GPIO_PIN_RESET);
 
     Mode::WG::Bit();
 
