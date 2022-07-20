@@ -117,7 +117,7 @@ void W25Q80DV::WaitRelease()
 {
     TimeMeterMS meter;
 
-    while (IsBusy() && (meter.ElapsedTime() < 10))
+    while (IsBusy() && (meter.ElapsedTime() < 1000))
     {
     }
 }
