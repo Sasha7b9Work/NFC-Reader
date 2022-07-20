@@ -16,13 +16,6 @@ namespace LIS2DH12
     static StructDataRaw raw_acce_y;
     static StructDataRaw raw_acce_z;
 
-    // Initialize mems driver interface
-    static stmdev_ctx_t dev_ctx;
-
-    static int32_t platform_write(void *handle, uint8_t reg, const uint8_t *bufp, uint16_t len);
-
-    static int32_t platform_read(void *handle, uint8_t reg, uint8_t *bufp, uint16_t len);
-
     static void Write(uint8 reg, uint8 data)
     {
         HAL_I2C1::Write(0x19, reg, &data, 1);
@@ -39,19 +32,6 @@ namespace LIS2DH12
 
 void LIS2DH12::Init()
 {
-    dev_ctx.write_reg = platform_write;
-    dev_ctx.read_reg = platform_read;
-
-    // Check device ID
-    uint8 whoamI = 0;
-    lis2dh12_device_id_get(&dev_ctx, &whoamI);
-
-    if (whoamI != LIS2DH12_ID) {
-        while (1) {
-            /* manage here device not found */
-        }
-    }
-
     uint8 data = 0;
     _SET_BIT(data, 4);                              // I1_ZYXDA = 1 - разрешаем прерывания INT1 по полученным измерениям
     Write(LIS2DH12_CTRL_REG3, data);
@@ -126,36 +106,4 @@ StructDataRaw LIS2DH12::GetAccelerationY()
 StructDataRaw LIS2DH12::GetAccelerationZ()
 {
     return raw_acce_z;
-}
-
-
-/*
- * @brief  Write generic device register (platform dependent)
- *
- * @param  handle    customizable argument. In this examples is used in
- *                   order to select the correct sensor bus handler.
- * @param  reg       register to write
- * @param  bufp      pointer to data to write in register reg
- * @param  len       number of consecutive register to write
- *
- */
-static int32_t LIS2DH12::platform_write(void * /*handle*/, uint8_t reg, const uint8_t *buf, uint16_t len)
-{
-    return (int)HAL_I2C1::Write(0x19, reg, buf, len);
-}
-
-
-/*
- * @brief  Read generic device register (platform dependent)
- *
- * @param  handle    customizable argument. In this examples is used in
- *                   order to select the correct sensor bus handler.
- * @param  reg       register to read
- * @param  bufp      pointer to buffer that store the data read
- * @param  len       number of consecutive register to reads
- *
- */
-static int32_t LIS2DH12::platform_read(void * /*handle*/, uint8_t reg, uint8_t *buf, uint16_t len)
-{
-    return (int)HAL_I2C1::Read(0x19, reg, buf, len);
 }
