@@ -669,11 +669,6 @@
               <FilePath>.\src\Modules\LIS2DH12\LIS2DH12.h</FilePath>
             </File>
             <File>
-              <FileName>LIS2DH12_reg.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\Modules\LIS2DH12\LIS2DH12_reg.cpp</FilePath>
-            </File>
-            <File>
               <FileName>LIS2DH12_reg.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\src\Modules\LIS2DH12\LIS2DH12_reg.h</FilePath>
@@ -682,16 +677,6 @@
               <FileName>CONTRIBUTING.md</FileName>
               <FileType>5</FileType>
               <FilePath>.\src\Modules\LIS2DH12\CONTRIBUTING.md</FilePath>
-            </File>
-            <File>
-              <FileName>README.md</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\Modules\LIS2DH12\README.md</FilePath>
-            </File>
-            <File>
-              <FileName>Release_Notes.md</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\Modules\LIS2DH12\Release_Notes.md</FilePath>
             </File>
           </Files>
         </Group>
@@ -1400,11 +1385,6 @@
               <FilePath>.\src\Modules\LIS2DH12\LIS2DH12.h</FilePath>
             </File>
             <File>
-              <FileName>LIS2DH12_reg.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\src\Modules\LIS2DH12\LIS2DH12_reg.cpp</FilePath>
-            </File>
-            <File>
               <FileName>LIS2DH12_reg.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\src\Modules\LIS2DH12\LIS2DH12_reg.h</FilePath>
@@ -1413,16 +1393,6 @@
               <FileName>CONTRIBUTING.md</FileName>
               <FileType>5</FileType>
               <FilePath>.\src\Modules\LIS2DH12\CONTRIBUTING.md</FilePath>
-            </File>
-            <File>
-              <FileName>README.md</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\Modules\LIS2DH12\README.md</FilePath>
-            </File>
-            <File>
-              <FileName>Release_Notes.md</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\Modules\LIS2DH12\Release_Notes.md</FilePath>
             </File>
           </Files>
         </Group>
