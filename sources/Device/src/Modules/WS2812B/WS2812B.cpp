@@ -104,7 +104,8 @@ void WS2812B::FireRED()
 
     color = Color::RED;
 
-    Fire(127, 0, 0);
+    //Fire(127, 0, 0);
+    Fire(255, 136, 0);      // Оранжевый
 }
 
 
@@ -117,7 +118,8 @@ void WS2812B::FireGREEN()
 
     color = Color::GREEN;
 
-    Fire(0, 127, 0);
+    //Fire(0, 127, 0);
+    Fire(0, 191, 255);      // Синий
 }
 
 
