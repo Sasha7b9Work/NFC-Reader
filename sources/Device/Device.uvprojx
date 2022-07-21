@@ -673,11 +673,6 @@
               <FileType>5</FileType>
               <FilePath>.\src\Modules\LIS2DH12\LIS2DH12_reg.h</FilePath>
             </File>
-            <File>
-              <FileName>CONTRIBUTING.md</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\Modules\LIS2DH12\CONTRIBUTING.md</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -1388,11 +1383,6 @@
               <FileName>LIS2DH12_reg.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\src\Modules\LIS2DH12\LIS2DH12_reg.h</FilePath>
-            </File>
-            <File>
-              <FileName>CONTRIBUTING.md</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\Modules\LIS2DH12\CONTRIBUTING.md</FilePath>
             </File>
           </Files>
         </Group>
