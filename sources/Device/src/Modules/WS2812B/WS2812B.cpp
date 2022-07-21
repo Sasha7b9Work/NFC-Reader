@@ -132,7 +132,7 @@ void WS2812B::FireBLUE()
 
     color = Color::BLUE;
 
-    Fire(0, 0, 127);
+    Fire(0, 0, 255);
 }
 
 
