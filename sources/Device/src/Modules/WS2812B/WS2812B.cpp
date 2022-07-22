@@ -104,8 +104,8 @@ void WS2812B::FireRED()
 
     color = Color::RED;
 
-    //Fire(127, 0, 0);
-    Fire(255, 136, 0);      // Оранжевый
+    Fire(127, 0, 0);
+//    Fire(127, 68, 0);      // Оранжевый
 }
 
 
@@ -118,8 +118,8 @@ void WS2812B::FireGREEN()
 
     color = Color::GREEN;
 
-    //Fire(0, 127, 0);
-    Fire(0, 191, 255);      // Синий
+    Fire(0, 127, 0);
+//    Fire(63, 191, 255);      // Синий
 }
 
 
@@ -171,7 +171,7 @@ void WS2812B::Fire(uint8 red, uint8 green, uint8 blue)
 
         for (int i = 0; i < 24; i++)
         {
-            if (col & 0x80000000)     // единица
+            if (col & 0x80000000)       // единица
             {
                 ADD_AND_WRITE(dT1H);
                 ADD_AND_WRITE(dT1L);
