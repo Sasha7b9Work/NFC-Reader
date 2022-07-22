@@ -10,10 +10,12 @@ namespace CLRC66303HN
 
         void Clear();
 
+        // –асчитать UID исход€ из считнных с карты данных byte[0...9]
         void Calculate();
 
         char *ToString() { return buffer; };
 
+        // ¬озвращает true, если UID рассчитан
         bool Calcualted() const;
 
         // ѕервые 5 байт - 1 каскад, вторые 5 байт - второй каскад

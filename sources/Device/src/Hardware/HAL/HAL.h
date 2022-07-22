@@ -26,8 +26,7 @@ namespace HAL_ADC
 
     void Update();
 
-    // Возвращает напряжение в вольтах
-    float GetValue();
+    float GetVoltage();
 }
 
 

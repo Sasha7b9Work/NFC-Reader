@@ -51,17 +51,17 @@ void W25Q80DV::Write1024bytes(const uint8 *buffer, int size)
     Buffer<uint8, 1024> data;
 
     data[0] = PROGRAM_PAGE;
-    data[1] = 0;
-    data[2] = 0;
-    data[3] = 0;
+    data[1] = 0;                // \ 
+    data[2] = 0;                // | Адрес
+    data[3] = 0;                // /
 
     for (int i = 0; i < size; i++)
     {
         data[4 + i] = buffer[i];
     }
 
-    //                                команда адрес
-    HAL_SPI::Write(DirectionSPI::Memory, data.Data(), size +   1   +  3);     // Page program
+    //                                                       команда   адрес
+    HAL_SPI::Write(DirectionSPI::Memory, data.Data(), size +    1    +   3);     // Page program
 
     HAL_SPI::Write(DirectionSPI::Memory, WRITE_DISABLE);              // Write disable
 }

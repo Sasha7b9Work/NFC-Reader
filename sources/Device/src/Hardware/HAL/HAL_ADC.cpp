@@ -59,7 +59,7 @@ void HAL_ADC::Update()
 }
 
 
-float HAL_ADC::GetValue()
+float HAL_ADC::GetVoltage()
 {
     return 33.0f / (float)0xFFF * (float)value;
 }

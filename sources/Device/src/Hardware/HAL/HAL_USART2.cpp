@@ -166,7 +166,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *)
 
                 std::sprintf(message, "OK;%02Xh;%3.1fV;%3.2fg;%3.2fg;%3.2fg;%3.1fC\x0D\x0A",
                     W25Q80DV::TestValue(),
-                    HAL_ADC::GetValue(),
+                    HAL_ADC::GetVoltage(),
                     LIS2DH12::GetAccelerationX().ToAccelearation(),
                     LIS2DH12::GetAccelerationY().ToAccelearation(),
                     LIS2DH12::GetAccelerationZ().ToAccelearation(),

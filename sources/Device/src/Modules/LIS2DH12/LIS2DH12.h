@@ -2,6 +2,7 @@
 #pragma once
 
 
+// Структура содержит нативные данные, считанные из акселерометра
 union StructDataRaw
 {
     struct

@@ -102,7 +102,7 @@ namespace CLRC66303HN
     }
 
 
-    bool IRQ0::DataReady()
+    bool IRQ0::DataReadyHardware()
     {
         return HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_4) == GPIO_PIN_RESET;
     }

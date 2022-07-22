@@ -28,7 +28,7 @@ void Timer::Init()
     __HAL_RCC_TIM4_CLK_ENABLE();
 
     handleTIM4.Instance = TIM4;                             // Для отсчёта микросекунд
-    handleTIM4.Init.Prescaler = 60;                         // Тепрье
+    handleTIM4.Init.Prescaler = 60;                         // Каждые 60 тиков будет срабатывать - 1 мкс
     handleTIM4.Init.CounterMode = TIM_COUNTERMODE_UP;
     handleTIM4.Init.Period = 65535;
     handleTIM4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;

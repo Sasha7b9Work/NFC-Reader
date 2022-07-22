@@ -30,7 +30,8 @@ namespace CLRC66303HN
 
         uint8 GetValue();
 
-        bool DataReady();
+        // Возвращает true, если "железячный" вывод IRQ сигнализирует о готовности данных
+        bool DataReadyHardware();
     };
 
     extern FIFO fifo;

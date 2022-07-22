@@ -61,7 +61,7 @@ namespace CLRC66303HN
     }
 
 
-    bool DetectCard();
+    static bool DetectCard();
 
     static UID uid;
 
@@ -87,19 +87,19 @@ void CLRC66303HN::Init()
 
     WriteRegister(0x09, 0xC0);      // IRQ1En           // Включаем пин прерывание в Push-Pull
 
-    while ((irq0.GetValue() & IRQ0::IdleIRQ) == 0)
+    while ((irq0.GetValue() & IRQ0::IdleIRQ) == 0)      // Ждём, пока отработают внутренние схемы
     {
     }
 
-    Timer::Delay(10);
+    Timer::Delay(10);                                   // На всякий случай ждём ещё. Потом можно убрать
 
     WriteRegister(0x08, 0x84);      // IRQ0En           // Включаем "железное прерываниие" IRQ на чтение данных. Инвертируем
 
-    while ((irq0.GetValue() & IRQ0::IdleIRQ) == 0)
+    while ((irq0.GetValue() & IRQ0::IdleIRQ) == 0)      // Ждём, пока отработают внутренние схемы
     {
     }
 
-    Timer::Delay(10);
+    Timer::Delay(10);                                   // На всякий случай ждём ещё. Потом можно убрать
 }
 
 
@@ -138,11 +138,9 @@ bool CLRC66303HN::DetectCard()
 
     TimeMeterUS meter;
 
-    while (meter.ElapsedUS() < 5100)
-    {
-    }
+    meter.WaitFor(5100);
 
-    irq0.Clear();                   // IRQ0
+    irq0.Clear();                                       // Очищаем флаги
 
     Register::RegisterCLRC663(0x2C).Write(0x18);        // Switches the CRC extention OFF in tx direction
     Register::RegisterCLRC663(0x2D).Write(0x18);        // Switches the CRC extention OFF in rx direction
@@ -155,7 +153,7 @@ bool CLRC66303HN::DetectCard()
 
     while (meter.ElapsedUS() < 8000)                    // Запрос REQA
     {
-        if (irq0.DataReady())                           // данные получены
+        if (irq0.DataReadyHardware())                           // данные получены
         {
             uint8 reg_0x06 = irq0.GetValue();
 
